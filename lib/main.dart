@@ -1,14 +1,14 @@
-import 'package:app/pages/landing.dart';
 import 'package:app/pages/dashboard.dart';
 import 'package:app/pages/login.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'utils/palette.dart';
-import 'model/user_model.dart';
+import 'model/user_repository.dart';
 
 void main() {
-  runApp(MultiProvider(
-    providers: [ChangeNotifierProvider(create: (_) => UserModel())],
+  runApp(
+      MultiProvider(
+    providers: [ChangeNotifierProvider(create: (context) => UserRepository())],
     child: const SuperAlgoApp(),
   ));
 }
@@ -20,21 +20,44 @@ class SuperAlgoApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool _loggedIn = Provider.of<UserModel>(context, listen: false).isLoggedIn;
 
     return MaterialApp(
       title: 'Superalgos',
-      routes: {
-        '/login': (context) => const LoginScreen(),
-        '/home': (context) => const Dashboard(),
-      },
-      initialRoute: _loggedIn ? "/home" : "/login",
       theme: ThemeData(
         primarySwatch: Palette.saBlue,
       ),
+      home: const Home()
     );
   }
 }
 
 
+class Home extends StatelessWidget {
+  const Home({Key? key}) : super(key: key);
 
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<UserRepository>(
+        builder: (context, UserRepository user, _) {
+          switch(user.status) {
+            case Status.Uninitialized:
+              return const Splash();
+            case Status.Authenticated:
+              return const Dashboard();
+            case Status.Authenticating:
+            case Status.Unauthenticated:
+              return const LoginScreen();
+          }
+        }
+    );
+  }
+}
+
+class Splash extends StatelessWidget {
+  const Splash({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(body: Center(child: Text("Welcome to Superalgos")));
+  }
+}

@@ -1,34 +1,7 @@
+import 'package:app/model/user_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import 'package:github/github.dart';
-import 'package:oauth2_client/github_oauth2_client.dart';
-import 'package:oauth2_client/oauth2_helper.dart';
-
-GitHubOAuth2Client client =
-    GitHubOAuth2Client(redirectUri: "sa://auth", customUriScheme: "sa");
-
-//TODO: Obfuscate code for obvious reasons
-OAuth2Helper oauth2Helper = OAuth2Helper(client,
-    grantType: OAuth2Helper.AUTHORIZATION_CODE,
-    clientId: '855f1d6bdce2d9b6fe92',
-    clientSecret: 'c88786e93b95f8905f7e05a14786150edafb301a',
-    scopes: ['repo', 'user']);
-
-Future<void> fetchUserProfile(BuildContext context) async {
-  var token = await oauth2Helper.getToken();
-  var github = GitHub(auth: Authentication.withToken(token!.accessToken));
-
-  Repository repo = await github.repositories
-      .getRepository(RepositorySlug("Superalgos", "superalgos"));
-
-  print(repo.description);
-
-  // if (userProfile != null) {
-  //   context.read<UserModel>().loggedInSuccessful();
-  // }
-  // var userProfile =
-  // await oauth2Helper.get('https://api.github.com/users/alexandrustefan');
-}
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -40,7 +13,7 @@ class LoginScreen extends StatelessWidget {
 
     return Scaffold(
         appBar: AppBar(
-          title: const Text("Superalgos"),
+          title: const Text("Login to continue"),
         ),
         body: Login(style: loginButtonStyle));
   }
@@ -56,15 +29,17 @@ class Login extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final userRepository = Provider.of<UserRepository>(context);
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          // const SizedBox(height: 30),
+          userRepository.status == Status.Authenticating ?
+          const Center(child: CircularProgressIndicator()) :
           ElevatedButton(
             style: style,
-            onPressed: () {
-              fetchUserProfile(context);
+            onPressed: () async {
+              userRepository.signIn();
             },
             child: const Text('Login with Github'),
           ),
