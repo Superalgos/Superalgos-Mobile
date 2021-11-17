@@ -18,8 +18,13 @@ class Dashboard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(Provider.of<UserRepository>(context).user!.login!),
+            Text(Provider.of<UserRepository>(context).saRepository == null ? "ceva" : "altceva"),
             ElevatedButton(
-              child: Text("Sign out"),
+              child: const Text("Get SA Repo"),
+              onPressed: () => Provider.of<UserRepository>(context, listen: false).getSAForkedRepo(),
+            ),
+            ElevatedButton(
+              child: const Text("Sign out"),
               onPressed: () => Provider.of<UserRepository>(context, listen: false).signOut(),
             )
           ],
