@@ -1,20 +1,30 @@
+import 'dart:convert';
+
 import 'package:github/github.dart';
-import 'package:oauth2_client/github_oauth2_client.dart';
-import 'package:oauth2_client/oauth2_helper.dart';
 
 class GithubServices {
   String token;
   String authenticatedUsername;
   GitHub instance;
+  RepositorySlug saRepoSlug;
+  String jsonFileExt = '.json';
+  String userProfileBranch = 'develop';
 
   GithubServices(this.token, this.authenticatedUsername)
-      : instance = GitHub(auth: Authentication.withToken(token));
+      : instance = GitHub(auth: Authentication.withToken(token)),
+        saRepoSlug = RepositorySlug(authenticatedUsername, "superalgos");
 
   Future<Repository> getSAFork() async {
-    RepositorySlug repoSlug =
-        RepositorySlug(authenticatedUsername, "superalgos");
-    var repository = await instance.repositories.getRepository(repoSlug);
+    var repository = await instance.repositories.getRepository(saRepoSlug);
     return repository;
+  }
+
+  Future<RepositoryContents> getUserProfileFromGit() async {
+    var fileContent = instance.repositories.getContents(saRepoSlug,
+        'Projects/Governance/Plugins/User-Profiles/${authenticatedUsername + jsonFileExt}',
+        ref: userProfileBranch);
+
+    return fileContent;
   }
 
   void updateSAFork() {}

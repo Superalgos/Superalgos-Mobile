@@ -4,10 +4,12 @@ import 'package:github/github.dart';
 import 'package:oauth2_client/access_token_response.dart';
 import 'package:oauth2_client/github_oauth2_client.dart';
 import 'package:oauth2_client/oauth2_helper.dart';
+import 'dart:convert';
 
 enum Status { Uninitialized, Authenticated, Authenticating, Unauthenticated }
 
 class UserRepository extends ChangeNotifier {
+  Codec<String, String> stringToBase64 = utf8.fuse(base64);
   OAuth2Helper oAuth2Helper = OAuth2Helper(
       GitHubOAuth2Client(redirectUri: "sa://auth", customUriScheme: "sa"),
       grantType: OAuth2Helper.AUTHORIZATION_CODE,
@@ -18,6 +20,7 @@ class UserRepository extends ChangeNotifier {
   CurrentUser? _user;
   Status _status = Status.Uninitialized;
   Repository? _saRepository;
+  String? _gitUserProfile;
 
   UserRepository() {
     _autoLogin();
@@ -28,6 +31,8 @@ class UserRepository extends ChangeNotifier {
   CurrentUser? get user => _user;
 
   Repository? get saRepository => _saRepository;
+
+  String? get gitUserProfile => _gitUserProfile;
 
   Future<bool> signIn() async {
     try {
@@ -46,6 +51,7 @@ class UserRepository extends ChangeNotifier {
   Future<void> _autoLogin() async {
     var token = await oAuth2Helper.getToken();
     _getGithubUser(token);
+    _getSAUserProfile();
   }
 
   Future<void> getSAForkedRepo() async {
@@ -53,9 +59,26 @@ class UserRepository extends ChangeNotifier {
       var token = await oAuth2Helper.getToken();
       GithubServices gh = GithubServices(token!.accessToken!, _user!.login!);
       Repository saRepo = await gh.getSAFork();
-      print(saRepo.fullName);
       _saRepository = saRepo;
+
       notifyListeners();
+    } catch (e) {
+      return;
+    }
+  }
+
+  void _getSAUserProfile() {
+    try {
+      oAuth2Helper.getToken().then((token) {
+        GithubServices gh = GithubServices(token!.accessToken!, _user!.login!);
+        gh.getUserProfileFromGit().then((repoContent) {
+          _gitUserProfile = repoContent.isFile
+              ? stringToBase64.decode(repoContent.file!.content!)
+              : "";
+          print(_gitUserProfile);
+          notifyListeners();
+        });
+      });
     } catch (e) {
       return;
     }
