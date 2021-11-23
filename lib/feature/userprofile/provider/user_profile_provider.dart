@@ -3,6 +3,7 @@ import 'package:app/feature/userprofile/model/user_model.dart';
 import 'package:app/feature/userprofile/state/user_profile_state.dart';
 import 'package:app/services/github_service_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'dart:convert';
 
 final userProfileProvider =
     StateNotifierProvider<UserProfileProvider, UserProfileState>((ref) {
@@ -27,11 +28,18 @@ class UserProfileProvider extends StateNotifier<UserProfileState> {
     final userName =
         await githubService.userName().then((value) => value.login!);
     final saFork = await githubService.getSAFork();
+    final userProfileContent = await githubService.getUserProfileFromGit();
+
+    Codec<String, String> stringToBase64 = utf8.fuse(base64);
+    //TODO: Proper checks needed
+    var file = userProfileContent.file!.content!;
+    var contents = stringToBase64.decode(file.replaceAll(RegExp("(\\n)"), ""));
 
     state = UserProfileState.profileLoaded(UserModel(
         userName: userName,
         hasSAFork: saFork == null ? false : true,
-        hasSAUserProfile: false,
+        hasSAUserProfile: true, // TODO: check
+        userProfileContent: contents,
         saFork: saFork));
   }
 }

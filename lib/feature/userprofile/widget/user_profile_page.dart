@@ -1,6 +1,5 @@
 import 'package:app/feature/userprofile/provider/user_profile_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class UserProfilePage extends ConsumerWidget {
@@ -8,7 +7,6 @@ class UserProfilePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ;
     return Scaffold(
       appBar: AppBar(
         title: Text("User profile"),
@@ -38,7 +36,10 @@ class UserProfilePage extends ConsumerWidget {
           children: [
             Text(user.saFork!.description),
           ],
-        )
+        ),
+        Row(children: [
+          Text(user.userProfileContent!),
+        ],)
       ]);
     }, loggedOut: () {
       //TODO: have to extract it in an upper state
