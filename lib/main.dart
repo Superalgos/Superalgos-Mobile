@@ -1,63 +1,41 @@
-import 'package:app/pages/dashboard.dart';
-import 'package:app/pages/login.dart';
+import 'package:app/route/router.dart';
+import 'package:app/route/router.gr.dart';
+import 'package:app/utils/logger.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'utils/palette.dart';
-import 'model/user_repository.dart';
 
-void main() {
-  runApp(
-      MultiProvider(
-    providers: [ChangeNotifierProvider(create: (context) => UserRepository())],
-    child: const SuperAlgoApp(),
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(ProviderScope(
+    observers: [Logger()],
+    child: SuperAlgoApp(),
   ));
 }
 
 class SuperAlgoApp extends StatelessWidget {
-  const SuperAlgoApp({
+  SuperAlgoApp({
     Key? key,
   }) : super(key: key);
 
+  final _appRouter = AppRouter();
+
   @override
   Widget build(BuildContext context) {
-
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'Superalgos',
       theme: ThemeData(
         primarySwatch: Palette.saBlue,
       ),
-      home: const Home()
+      routerDelegate: AutoRouterDelegate(
+        _appRouter,
+        navigatorObservers: () => [AppRouteObserver()],
+      ),
+      routeInformationProvider: _appRouter.routeInfoProvider(),
+      routeInformationParser: _appRouter.defaultRouteParser(),
     );
   }
 }
 
-
-class Home extends StatelessWidget {
-  const Home({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Consumer<UserRepository>(
-        builder: (context, UserRepository user, _) {
-          switch(user.status) {
-            case Status.Uninitialized:
-              return const Splash();
-            case Status.Authenticated:
-              return const Dashboard();
-            case Status.Authenticating:
-            case Status.Unauthenticated:
-              return const LoginScreen();
-          }
-        }
-    );
-  }
-}
-
-class Splash extends StatelessWidget {
-  const Splash({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(body: Center(child: Text("Welcome to Superalgos")));
-  }
-}
