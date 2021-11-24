@@ -25,21 +25,11 @@ class UserProfilePage extends ConsumerWidget {
         Row(
           children: [
             Text(user.userName),
+            ElevatedButton(onPressed: (){
+              ref.read(userProfileProvider.notifier).getWalletBalance();
+            }, child: Text("Get balance")),
           ],
         ),
-        Row(
-          children: [
-            Text(user.saFork!.name),
-          ],
-        ),
-        Row(
-          children: [
-            Text(user.saFork!.description),
-          ],
-        ),
-        Row(children: [
-          Text(user.userProfileContent!),
-        ],)
       ]);
     }, loggedOut: () {
       //TODO: have to extract it in an upper state
