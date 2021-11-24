@@ -26,10 +26,6 @@ class _$UserProfileStateTearOff {
       user,
     );
   }
-
-  _LoggedOut loggedOut() {
-    return const _LoggedOut();
-  }
 }
 
 /// @nodoc
@@ -41,21 +37,18 @@ mixin _$UserProfileState {
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
     required TResult Function(UserModel user) profileLoaded,
-    required TResult Function() loggedOut,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(UserModel user)? profileLoaded,
-    TResult Function()? loggedOut,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(UserModel user)? profileLoaded,
-    TResult Function()? loggedOut,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -63,21 +56,18 @@ mixin _$UserProfileState {
   TResult map<TResult extends Object?>({
     required TResult Function(_Loading value) loading,
     required TResult Function(_Loaded value) profileLoaded,
-    required TResult Function(_LoggedOut value) loggedOut,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(_Loading value)? loading,
     TResult Function(_Loaded value)? profileLoaded,
-    TResult Function(_LoggedOut value)? loggedOut,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Loading value)? loading,
     TResult Function(_Loaded value)? profileLoaded,
-    TResult Function(_LoggedOut value)? loggedOut,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -140,7 +130,6 @@ class _$_Loading implements _Loading {
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
     required TResult Function(UserModel user) profileLoaded,
-    required TResult Function() loggedOut,
   }) {
     return loading();
   }
@@ -150,7 +139,6 @@ class _$_Loading implements _Loading {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(UserModel user)? profileLoaded,
-    TResult Function()? loggedOut,
   }) {
     return loading?.call();
   }
@@ -160,7 +148,6 @@ class _$_Loading implements _Loading {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(UserModel user)? profileLoaded,
-    TResult Function()? loggedOut,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -174,7 +161,6 @@ class _$_Loading implements _Loading {
   TResult map<TResult extends Object?>({
     required TResult Function(_Loading value) loading,
     required TResult Function(_Loaded value) profileLoaded,
-    required TResult Function(_LoggedOut value) loggedOut,
   }) {
     return loading(this);
   }
@@ -184,7 +170,6 @@ class _$_Loading implements _Loading {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(_Loading value)? loading,
     TResult Function(_Loaded value)? profileLoaded,
-    TResult Function(_LoggedOut value)? loggedOut,
   }) {
     return loading?.call(this);
   }
@@ -194,7 +179,6 @@ class _$_Loading implements _Loading {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Loading value)? loading,
     TResult Function(_Loaded value)? profileLoaded,
-    TResult Function(_LoggedOut value)? loggedOut,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -280,7 +264,6 @@ class _$_Loaded implements _Loaded {
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
     required TResult Function(UserModel user) profileLoaded,
-    required TResult Function() loggedOut,
   }) {
     return profileLoaded(user);
   }
@@ -290,7 +273,6 @@ class _$_Loaded implements _Loaded {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(UserModel user)? profileLoaded,
-    TResult Function()? loggedOut,
   }) {
     return profileLoaded?.call(user);
   }
@@ -300,7 +282,6 @@ class _$_Loaded implements _Loaded {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(UserModel user)? profileLoaded,
-    TResult Function()? loggedOut,
     required TResult orElse(),
   }) {
     if (profileLoaded != null) {
@@ -314,7 +295,6 @@ class _$_Loaded implements _Loaded {
   TResult map<TResult extends Object?>({
     required TResult Function(_Loading value) loading,
     required TResult Function(_Loaded value) profileLoaded,
-    required TResult Function(_LoggedOut value) loggedOut,
   }) {
     return profileLoaded(this);
   }
@@ -324,7 +304,6 @@ class _$_Loaded implements _Loaded {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(_Loading value)? loading,
     TResult Function(_Loaded value)? profileLoaded,
-    TResult Function(_LoggedOut value)? loggedOut,
   }) {
     return profileLoaded?.call(this);
   }
@@ -334,7 +313,6 @@ class _$_Loaded implements _Loaded {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Loading value)? loading,
     TResult Function(_Loaded value)? profileLoaded,
-    TResult Function(_LoggedOut value)? loggedOut,
     required TResult orElse(),
   }) {
     if (profileLoaded != null) {
@@ -350,114 +328,4 @@ abstract class _Loaded implements UserProfileState {
   UserModel get user;
   @JsonKey(ignore: true)
   _$LoadedCopyWith<_Loaded> get copyWith => throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class _$LoggedOutCopyWith<$Res> {
-  factory _$LoggedOutCopyWith(
-          _LoggedOut value, $Res Function(_LoggedOut) then) =
-      __$LoggedOutCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$LoggedOutCopyWithImpl<$Res>
-    extends _$UserProfileStateCopyWithImpl<$Res>
-    implements _$LoggedOutCopyWith<$Res> {
-  __$LoggedOutCopyWithImpl(_LoggedOut _value, $Res Function(_LoggedOut) _then)
-      : super(_value, (v) => _then(v as _LoggedOut));
-
-  @override
-  _LoggedOut get _value => super._value as _LoggedOut;
-}
-
-/// @nodoc
-
-class _$_LoggedOut implements _LoggedOut {
-  const _$_LoggedOut();
-
-  @override
-  String toString() {
-    return 'UserProfileState.loggedOut()';
-  }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _LoggedOut);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() loading,
-    required TResult Function(UserModel user) profileLoaded,
-    required TResult Function() loggedOut,
-  }) {
-    return loggedOut();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? loading,
-    TResult Function(UserModel user)? profileLoaded,
-    TResult Function()? loggedOut,
-  }) {
-    return loggedOut?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? loading,
-    TResult Function(UserModel user)? profileLoaded,
-    TResult Function()? loggedOut,
-    required TResult orElse(),
-  }) {
-    if (loggedOut != null) {
-      return loggedOut();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Loading value) loading,
-    required TResult Function(_Loaded value) profileLoaded,
-    required TResult Function(_LoggedOut value) loggedOut,
-  }) {
-    return loggedOut(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_Loading value)? loading,
-    TResult Function(_Loaded value)? profileLoaded,
-    TResult Function(_LoggedOut value)? loggedOut,
-  }) {
-    return loggedOut?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Loading value)? loading,
-    TResult Function(_Loaded value)? profileLoaded,
-    TResult Function(_LoggedOut value)? loggedOut,
-    required TResult orElse(),
-  }) {
-    if (loggedOut != null) {
-      return loggedOut(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _LoggedOut implements UserProfileState {
-  const factory _LoggedOut() = _$_LoggedOut;
 }

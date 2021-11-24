@@ -3,7 +3,9 @@ import 'package:app/app/state/app_start_state.dart';
 import 'package:app/feature/auth/model/auth_state.dart';
 import 'package:app/feature/auth/provider/auth_provider.dart';
 import 'package:app/feature/auth/repository/auth_repository.dart';
+import 'package:app/feature/userprofile/provider/user_profile_page_provider.dart';
 import 'package:app/feature/userprofile/provider/user_profile_provider.dart';
+import 'package:app/feature/userprofile/state/user_profile_page_state.dart';
 import 'package:app/feature/userprofile/state/user_profile_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:oauth2_client/oauth2_helper.dart';
@@ -11,20 +13,20 @@ import 'package:oauth2_client/oauth2_helper.dart';
 final appStartProvider =
     StateNotifierProvider<AppStartNotifier, AppStartState>((ref) {
   final loginState = ref.watch(authProvider);
-  final userProfileState = ref.watch(userProfileProvider);
+  final userProfilePageState = ref.watch(userProfilePageProvider);
 
   late AppStartState appStartState;
   appStartState = loginState is AppAuthenticated
       ? const AppStartState.authenticated()
       : const AppStartState.initial();
 
-  return AppStartNotifier(appStartState, ref.read, loginState, userProfileState);
+  return AppStartNotifier(appStartState, ref.read, loginState, userProfilePageState);
 });
 
 class AppStartNotifier extends StateNotifier<AppStartState> {
 
   AppStartNotifier(AppStartState appStartState, this._reader, this._authState,
-      this._userProfileState)
+      this._userProfilePageState)
       : super(appStartState) {
     _init();
   }
@@ -33,7 +35,7 @@ class AppStartNotifier extends StateNotifier<AppStartState> {
       _reader(oauth2HelperProvider);
 
   final AuthState _authState;
-  final UserProfileState _userProfileState;
+  final UserProfilePageState _userProfilePageState;
   final Reader _reader;
 
   Future<void> _init() async {
@@ -43,7 +45,7 @@ class AppStartNotifier extends StateNotifier<AppStartState> {
         },
         orElse: () {});
 
-    _userProfileState.maybeWhen(
+    _userProfilePageState.maybeWhen(
         loggedOut: () {
           state = const AppStartState.unauthenticated();
         },

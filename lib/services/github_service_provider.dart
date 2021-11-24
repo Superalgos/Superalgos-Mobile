@@ -7,8 +7,14 @@ import 'package:oauth2_client/oauth2_helper.dart';
 
 abstract class GithubService {
   Future<Repository?> getSAFork();
+
+  Future<Repository> createSAFork();
+
   Future<CurrentUser> userName();
-  Future<RepositoryContents> getUserProfileFromGit();
+
+  Future<RepositoryContents?> getUserProfileFromGit();
+
+  Future<ContentCreation> addUserProfileToSAFork();
 }
 
 final githubServiceProvider =
@@ -20,6 +26,7 @@ class GithubServiceProvider implements GithubService {
   String jsonFileExt = '.json';
   String userProfileBranch = 'develop';
   String superAlgosOrg = 'superalgos';
+  String userProfileLocation = 'Projects/Governance/Plugins/User-Profiles/';
 
   GithubServiceProvider(this._reader);
 
@@ -29,36 +36,63 @@ class GithubServiceProvider implements GithubService {
     var instance = GitHub(auth: Authentication.withToken(token!.accessToken));
     var currentUser = await instance.users.getCurrentUser();
     var repoSlug = RepositorySlug(currentUser.login!, superAlgosOrg);
-    var repository = await instance.repositories.getRepository(repoSlug);
-    return repository;
+    try {
+      var repository = await instance.repositories.getRepository(repoSlug);
+      return repository;
+    } catch (_) {
+      return null;
+    }
   }
 
   @override
-  Future<RepositoryContents> getUserProfileFromGit() async {
+  Future<Repository> createSAFork() async {
     var token = await oAuth2Helper.getToken();
     var instance = GitHub(auth: Authentication.withToken(token!.accessToken));
-    var currentUser = await instance.users.getCurrentUser();
-    var repoSlug = RepositorySlug(currentUser.login!, superAlgosOrg);
-    var fileContent = instance.repositories.getContents(repoSlug,
-        'Projects/Governance/Plugins/User-Profiles/${currentUser.login! + jsonFileExt}',
-        ref: userProfileBranch);
+    var repoSlug = RepositorySlug(superAlgosOrg, superAlgosOrg);
 
-    return fileContent;
+    return instance.repositories.createFork(repoSlug);
+  }
+
+  @override
+  Future<RepositoryContents?> getUserProfileFromGit() async {
+    try {
+      var token = await oAuth2Helper.getToken();
+      var instance = GitHub(auth: Authentication.withToken(token!.accessToken));
+      var currentUser = await instance.users.getCurrentUser();
+      var repoSlug = RepositorySlug(currentUser.login!, superAlgosOrg);
+      var fileContent = await instance.repositories.getContents(
+          repoSlug, userProfileLocation + currentUser.login! + jsonFileExt,
+          ref: userProfileBranch);
+
+      return fileContent;
+    } catch (_) {
+      return null;
+    }
   }
 
   @override
   Future<CurrentUser> userName() async {
     var token = await oAuth2Helper.getToken();
     var instance = GitHub(auth: Authentication.withToken(token!.accessToken));
-    return instance.users.getCurrentUser();
 
+    return instance.users.getCurrentUser();
   }
 
-  void updateSAFork() {}
+  @override
+  Future<ContentCreation> addUserProfileToSAFork() async {
+    var token = await oAuth2Helper.getToken();
+    var instance = GitHub(auth: Authentication.withToken(token!.accessToken));
+    var currentUser = await instance.users.getCurrentUser();
+    var repoSlug = RepositorySlug(currentUser.login!, superAlgosOrg);
 
-  void createSAForkIfNotExist() {}
+    final Codec<String, String> stringToBase64 = utf8.fuse(base64);
+    var file = CreateFile(
+        message: "create user profile",
+        path: userProfileLocation + currentUser.login! + jsonFileExt,
+        content: stringToBase64.encode("{}"));
 
-  void addUserProfileToSAFork() {}
+    var content =  await instance.repositories.createFile(repoSlug, file);
 
-  void createPRToSAOriginFromSAFork() {}
+    return content;
+  }
 }

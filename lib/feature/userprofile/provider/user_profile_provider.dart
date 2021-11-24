@@ -21,16 +21,8 @@ class UserProfileProvider extends StateNotifier<UserProfileState> {
   }
 
   final Reader _reader;
-  late final AuthRepository _authRepository = _reader(authRepositoryProvider);
-
-  Future<void> logout() async {
-    await _authRepository.signOut();
-    state = const UserProfileState.loggedOut();
-  }
 
   Future<void> getWalletBalance() async {
-
-
     final client = Web3Client("https://bsc-dataseed.binance.org", Client());
 
     final credentials = EthPrivateKey.fromHex('0x01480a1f95282f9cd8ecd58e16b722678a17738f633c1b0e4459c091c69c2e89');
@@ -42,15 +34,18 @@ class UserProfileProvider extends StateNotifier<UserProfileState> {
   }
 
   Future<void> _init() async {
+    print("init user profile state");
     final githubService = _reader(githubServiceProvider);
     final userName =
         await githubService.userName().then((value) => value.login!);
     final saFork = await githubService.getSAFork();
     final userProfileContent = await githubService.getUserProfileFromGit();
 
-    Codec<String, String> stringToBase64 = utf8.fuse(base64);
-    //TODO: Proper checks needed
-    var file = userProfileContent.file!.content!;
+    final Codec<String, String> stringToBase64 = utf8.fuse(base64);
+    // We know for sure that we have a profile created
+    // so it's safe to get it
+    // information is being checked at the User Profile Page provider
+    var file = userProfileContent!.file!.content!;
     var contents = stringToBase64.decode(file.replaceAll(RegExp("(\\n)"), ""));
 
     state = UserProfileState.profileLoaded(UserModel(
