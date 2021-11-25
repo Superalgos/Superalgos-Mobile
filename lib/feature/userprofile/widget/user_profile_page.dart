@@ -1,5 +1,7 @@
 import 'package:app/feature/userprofile/provider/user_profile_page_provider.dart';
 import 'package:app/feature/userprofile/provider/user_profile_provider.dart';
+import 'package:app/services/web3_service_provider.dart';
+import 'package:app/utils/palette.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:introduction_screen/introduction_screen.dart';
@@ -13,7 +15,7 @@ class UserProfilePage extends ConsumerWidget {
 
     return state.maybeWhen(
         userProfile: () => _userProfile(context, ref),
-        onboarding: () => _onboarding(context, ref),
+        onboarding: () => Container(),
         loading: () => Container(
               child: Text("Loading..."),
             ),
@@ -21,31 +23,6 @@ class UserProfilePage extends ConsumerWidget {
               child: Text("Logged out"),
             ),
         orElse: () => Container());
-  }
-
-  Widget _onboarding(BuildContext context, WidgetRef ref) {
-    return Container(
-        child: IntroductionScreen(
-      pages: [
-        PageViewModel(
-          title: "Create your Superalgos profile",
-          body:
-              "It seems that it is the first time you are interacting with Superalgos, in order to continue we need to create a new user profile for you",
-          image: const Center(
-              child: Image(
-                  image: AssetImage('assets/onboarding.png'), height: 175.0)),
-        ),
-      ],
-      isProgress: false,
-      showDoneButton: true,
-      showNextButton: false,
-      showSkipButton: false,
-      onDone: () {
-        ref.read(userProfilePageProvider.notifier).createUserProfile();
-      },
-      done: const Text("Create profile",
-          style: TextStyle(fontWeight: FontWeight.w600)),
-    ));
   }
 
   Widget _userProfile(BuildContext context, WidgetRef ref) {
@@ -62,18 +39,37 @@ class UserProfilePage extends ConsumerWidget {
             Row(
               children: [
                 Text(user.userName),
+              ],
+            ),
+            Row(
+              children: [
                 ElevatedButton(
                     onPressed: () {
-                      ref.read(userProfileProvider.notifier).getWalletBalance();
+                      ref
+                          .read(web3ServiceProvider)
+                          .getWalletBalanceForUserAndSignature(user.userName,
+                              "0x38ce12d4391a0c55e024b84b2f33bf12067d12d79a05480b840f092f0447fa5407f4f5911fa4e1bcc5f9787ce0f4ba6674f6ab9dda8a872ad05ed4047669bac41b");
                     },
                     child: Text("Get balance")),
+              ],
+            ),
+            Row(children: [
+              ElevatedButton(
+                  onPressed: () {
+                    ref.read(web3ServiceProvider).signData(user.userName,
+                        "***REMOVED***");
+                  },
+                  child: Text("Get signed data")),
+            ]),
+            Row(
+              children: [
                 ElevatedButton(
                     onPressed: () {
                       ref.read(userProfilePageProvider.notifier).logout();
                     },
                     child: Text("Logout")),
               ],
-            ),
+            )
           ]));
     });
   }

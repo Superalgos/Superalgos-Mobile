@@ -19,6 +19,7 @@ OAuth2Helper oAuth2Helper = OAuth2Helper(
     grantType: OAuth2Helper.AUTHORIZATION_CODE,
     clientId: '855f1d6bdce2d9b6fe92',
     clientSecret: 'c88786e93b95f8905f7e05a14786150edafb301a',
+    enableState: false,
     scopes: ['repo', 'user']);
 
 final oauth2HelperProvider = Provider((ref) => oAuth2Helper);

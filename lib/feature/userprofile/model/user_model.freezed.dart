@@ -19,14 +19,10 @@ class _$UserModelTearOff {
 
   _UserModel call(
       {required String userName,
-      required bool hasSAFork,
-      required bool hasSAUserProfile,
       String? userProfileContent,
       Repository? saFork}) {
     return _UserModel(
       userName: userName,
-      hasSAFork: hasSAFork,
-      hasSAUserProfile: hasSAUserProfile,
       userProfileContent: userProfileContent,
       saFork: saFork,
     );
@@ -39,8 +35,6 @@ const $UserModel = _$UserModelTearOff();
 /// @nodoc
 mixin _$UserModel {
   String get userName => throw _privateConstructorUsedError;
-  bool get hasSAFork => throw _privateConstructorUsedError;
-  bool get hasSAUserProfile => throw _privateConstructorUsedError;
   String? get userProfileContent => throw _privateConstructorUsedError;
   Repository? get saFork => throw _privateConstructorUsedError;
 
@@ -53,12 +47,7 @@ mixin _$UserModel {
 abstract class $UserModelCopyWith<$Res> {
   factory $UserModelCopyWith(UserModel value, $Res Function(UserModel) then) =
       _$UserModelCopyWithImpl<$Res>;
-  $Res call(
-      {String userName,
-      bool hasSAFork,
-      bool hasSAUserProfile,
-      String? userProfileContent,
-      Repository? saFork});
+  $Res call({String userName, String? userProfileContent, Repository? saFork});
 }
 
 /// @nodoc
@@ -72,8 +61,6 @@ class _$UserModelCopyWithImpl<$Res> implements $UserModelCopyWith<$Res> {
   @override
   $Res call({
     Object? userName = freezed,
-    Object? hasSAFork = freezed,
-    Object? hasSAUserProfile = freezed,
     Object? userProfileContent = freezed,
     Object? saFork = freezed,
   }) {
@@ -82,14 +69,6 @@ class _$UserModelCopyWithImpl<$Res> implements $UserModelCopyWith<$Res> {
           ? _value.userName
           : userName // ignore: cast_nullable_to_non_nullable
               as String,
-      hasSAFork: hasSAFork == freezed
-          ? _value.hasSAFork
-          : hasSAFork // ignore: cast_nullable_to_non_nullable
-              as bool,
-      hasSAUserProfile: hasSAUserProfile == freezed
-          ? _value.hasSAUserProfile
-          : hasSAUserProfile // ignore: cast_nullable_to_non_nullable
-              as bool,
       userProfileContent: userProfileContent == freezed
           ? _value.userProfileContent
           : userProfileContent // ignore: cast_nullable_to_non_nullable
@@ -108,12 +87,7 @@ abstract class _$UserModelCopyWith<$Res> implements $UserModelCopyWith<$Res> {
           _UserModel value, $Res Function(_UserModel) then) =
       __$UserModelCopyWithImpl<$Res>;
   @override
-  $Res call(
-      {String userName,
-      bool hasSAFork,
-      bool hasSAUserProfile,
-      String? userProfileContent,
-      Repository? saFork});
+  $Res call({String userName, String? userProfileContent, Repository? saFork});
 }
 
 /// @nodoc
@@ -128,8 +102,6 @@ class __$UserModelCopyWithImpl<$Res> extends _$UserModelCopyWithImpl<$Res>
   @override
   $Res call({
     Object? userName = freezed,
-    Object? hasSAFork = freezed,
-    Object? hasSAUserProfile = freezed,
     Object? userProfileContent = freezed,
     Object? saFork = freezed,
   }) {
@@ -138,14 +110,6 @@ class __$UserModelCopyWithImpl<$Res> extends _$UserModelCopyWithImpl<$Res>
           ? _value.userName
           : userName // ignore: cast_nullable_to_non_nullable
               as String,
-      hasSAFork: hasSAFork == freezed
-          ? _value.hasSAFork
-          : hasSAFork // ignore: cast_nullable_to_non_nullable
-              as bool,
-      hasSAUserProfile: hasSAUserProfile == freezed
-          ? _value.hasSAUserProfile
-          : hasSAUserProfile // ignore: cast_nullable_to_non_nullable
-              as bool,
       userProfileContent: userProfileContent == freezed
           ? _value.userProfileContent
           : userProfileContent // ignore: cast_nullable_to_non_nullable
@@ -162,19 +126,11 @@ class __$UserModelCopyWithImpl<$Res> extends _$UserModelCopyWithImpl<$Res>
 
 class _$_UserModel extends _UserModel {
   const _$_UserModel(
-      {required this.userName,
-      required this.hasSAFork,
-      required this.hasSAUserProfile,
-      this.userProfileContent,
-      this.saFork})
+      {required this.userName, this.userProfileContent, this.saFork})
       : super._();
 
   @override
   final String userName;
-  @override
-  final bool hasSAFork;
-  @override
-  final bool hasSAUserProfile;
   @override
   final String? userProfileContent;
   @override
@@ -182,7 +138,7 @@ class _$_UserModel extends _UserModel {
 
   @override
   String toString() {
-    return 'UserModel(userName: $userName, hasSAFork: $hasSAFork, hasSAUserProfile: $hasSAUserProfile, userProfileContent: $userProfileContent, saFork: $saFork)';
+    return 'UserModel(userName: $userName, userProfileContent: $userProfileContent, saFork: $saFork)';
   }
 
   @override
@@ -192,18 +148,14 @@ class _$_UserModel extends _UserModel {
             other is _UserModel &&
             (identical(other.userName, userName) ||
                 other.userName == userName) &&
-            (identical(other.hasSAFork, hasSAFork) ||
-                other.hasSAFork == hasSAFork) &&
-            (identical(other.hasSAUserProfile, hasSAUserProfile) ||
-                other.hasSAUserProfile == hasSAUserProfile) &&
             (identical(other.userProfileContent, userProfileContent) ||
                 other.userProfileContent == userProfileContent) &&
             (identical(other.saFork, saFork) || other.saFork == saFork));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, userName, hasSAFork,
-      hasSAUserProfile, userProfileContent, saFork);
+  int get hashCode =>
+      Object.hash(runtimeType, userName, userProfileContent, saFork);
 
   @JsonKey(ignore: true)
   @override
@@ -214,18 +166,12 @@ class _$_UserModel extends _UserModel {
 abstract class _UserModel extends UserModel {
   const factory _UserModel(
       {required String userName,
-      required bool hasSAFork,
-      required bool hasSAUserProfile,
       String? userProfileContent,
       Repository? saFork}) = _$_UserModel;
   const _UserModel._() : super._();
 
   @override
   String get userName;
-  @override
-  bool get hasSAFork;
-  @override
-  bool get hasSAUserProfile;
   @override
   String? get userProfileContent;
   @override
