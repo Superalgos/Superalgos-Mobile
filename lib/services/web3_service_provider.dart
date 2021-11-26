@@ -1,6 +1,6 @@
 import 'dart:convert';
+import 'dart:math';
 
-import 'package:eth_sig_util/model/ecdsa_signature.dart';
 import 'package:eth_sig_util/util/bytes.dart';
 import 'package:eth_sig_util/util/utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,10 +17,24 @@ abstract class Web3Service {
       String userName, String signature);
 
   Future<Signature> signData(String message, String privateKey);
+
+  Future<ETHAccount> createAccount();
 }
 
 final web3ServiceProvider =
     Provider<Web3ServiceProvider>((ref) => Web3ServiceProvider());
+
+class ETHAccount {
+  final String privateKey;
+  final String address;
+
+  ETHAccount(this.privateKey, this.address);
+
+  @override
+  String toString() {
+    return 'Account{privateKey: $privateKey, address: $address}';
+  }
+}
 
 class Signature {
   final String message;
@@ -44,6 +58,7 @@ class Signature {
 // It should not be modified unless you really know what are you doing :)
 
 class Web3ServiceProvider implements Web3Service {
+
   @override
   Future<Signature> signData(String message, String privateKey) async {
     Uint8List bytes = Uint8List.fromList(message.codeUnits);
@@ -60,13 +75,12 @@ class Web3ServiceProvider implements Web3Service {
 
     var signatureObject = Signature(
         message,
-        extractMessageHashFromUint8List(_getPersonalMessage(bytes)),
+        extractStringFromUint8List(_getPersonalMessage(bytes)),
         stringSigValues["v"]!,
         stringSigValues["r"]!,
         stringSigValues["s"]!,
         signatureString);
 
-    print(signatureObject);
 
     return signatureObject;
   }
@@ -98,6 +112,17 @@ class Web3ServiceProvider implements Web3Service {
     return EtherAmount.fromUnitAndValue(EtherUnit.wei, balance[0]).getInEther;
   }
 
+  @override
+  Future<ETHAccount> createAccount() async {
+
+    final rng = Random.secure();
+    final key = EthPrivateKey.createRandom(rng);
+    final address =  await key.extractAddress();
+
+    return ETHAccount(extractStringFromUint8List(key.privateKey), address.hexEip55);
+
+  }
+
   static Map<String, String> extractStringFromSig(BigInt r, BigInt s, int v) {
     var map = <String, String>{};
 
@@ -119,7 +144,7 @@ class Web3ServiceProvider implements Web3Service {
     return map;
   }
 
-  static String extractMessageHashFromUint8List(Uint8List message) {
+  static String extractStringFromUint8List(Uint8List message) {
     var msgHash = fromSigned(message);
     var msgHashStr = _padWithZeroes(hex.encode(toUnsigned(msgHash)), 64);
 
@@ -139,4 +164,5 @@ class Web3ServiceProvider implements Web3Service {
     final prefixBytes = ascii.encode(prefix);
     return keccak256(Uint8List.fromList(prefixBytes + message));
   }
+
 }
