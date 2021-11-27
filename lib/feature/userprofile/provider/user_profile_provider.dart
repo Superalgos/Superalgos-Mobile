@@ -23,7 +23,6 @@ class UserProfileProvider extends StateNotifier<UserProfileState> {
 
 
   Future<void> _init() async {
-    print("init user profile state");
     final githubService = _reader(githubServiceProvider);
     final userName =
         await githubService.userName().then((value) => value.login!);

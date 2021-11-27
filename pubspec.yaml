@@ -24,6 +24,9 @@ dependencies:
   web3dart: ^2.3.3
   introduction_screen: ^2.1.0
   eth_sig_util: ^0.0.6
+  bip39: ^1.0.6
+  ed25519_hd_key: ^2.1.0
+  loading_indicator: ^3.0.2
 
 dev_dependencies:
   flutter_test:

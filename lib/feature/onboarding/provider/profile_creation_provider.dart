@@ -1,24 +1,31 @@
-import 'package:app/feature/userprofile/state/onboarding_state.dart';
+
+
+import 'package:app/feature/onboarding/state/profile_creation_state.dart';
 import 'package:app/services/github_service_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final onboardingProvider =
-    StateNotifierProvider<OnboardingProvider, OnboardingState>((ref) {
-  return OnboardingProvider(ref.read);
+
+final profileCreationProvider =
+StateNotifierProvider<ProfileCreationProvider, ProfileCreationState>((ref) {
+  return ProfileCreationProvider(ref.read);
 });
 
-class OnboardingProvider extends StateNotifier<OnboardingState> {
-  OnboardingProvider(this._reader) : super(const OnboardingState.present(1));
+class ProfileCreationProvider extends StateNotifier<ProfileCreationState> {
+  ProfileCreationProvider(this._reader) : super(const ProfileCreationState.loading());
 
   final Reader _reader;
 
+  void startONBActions(){
+    state = const ProfileCreationState.finalized("prvKey");
+
+  }
 
   Future<void> createSAFork() async {
     final githubService = _reader(githubServiceProvider);
     // Let's try to create the fork first time if it doesn't exist
     var saFork = await githubService.getSAFork();
     saFork ??= await githubService.createSAFork();
-    state = const OnboardingState.createFork(2);
+    // state = const OnboardingState.forkCreated();
   }
 
   // This function will create the user profile
@@ -30,6 +37,7 @@ class OnboardingProvider extends StateNotifier<OnboardingState> {
     var createdContent = await githubService.addUserProfileToSAFork();
     // TODO: create a Pull request to upstream, see https://stackoverflow.com/questions/40052992/github-pull-request-api-differs-from-the-web-workflow
     //Change the state so we can show the profile
-    state = const OnboardingState.createProfile(3);
+    // state = const OnboardingState.profileCreated("prvKey");
   }
+
 }

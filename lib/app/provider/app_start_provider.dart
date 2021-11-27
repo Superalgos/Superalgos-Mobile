@@ -1,4 +1,3 @@
-
 import 'package:app/app/state/app_start_state.dart';
 import 'package:app/feature/auth/model/auth_state.dart';
 import 'package:app/feature/auth/provider/auth_provider.dart';
@@ -7,6 +6,7 @@ import 'package:app/feature/userprofile/provider/user_profile_page_provider.dart
 import 'package:app/feature/userprofile/provider/user_profile_provider.dart';
 import 'package:app/feature/userprofile/state/user_profile_page_state.dart';
 import 'package:app/feature/userprofile/state/user_profile_state.dart';
+import 'package:app/services/github_service_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:oauth2_client/oauth2_helper.dart';
 
@@ -16,34 +16,28 @@ final appStartProvider =
   final userProfilePageState = ref.watch(userProfilePageProvider);
 
   late AppStartState appStartState;
-  appStartState = loginState is AppAuthenticated
+  appStartState = loginState is LoggedIn
       ? const AppStartState.authenticated()
       : const AppStartState.initial();
 
-  return AppStartNotifier(appStartState, ref.read, loginState, userProfilePageState);
+  return AppStartNotifier(
+      appStartState, ref.read, userProfilePageState);
 });
 
 class AppStartNotifier extends StateNotifier<AppStartState> {
-
-  AppStartNotifier(AppStartState appStartState, this._reader, this._authState,
+  AppStartNotifier(AppStartState appStartState, this._reader,
       this._userProfilePageState)
       : super(appStartState) {
     _init();
   }
 
-  late final OAuth2Helper _oAuth2Helper =
-      _reader(oauth2HelperProvider);
+  late final OAuth2Helper _oAuth2Helper = _reader(oauth2HelperProvider);
+  late final _githubService = _reader(githubServiceProvider);
 
-  final AuthState _authState;
   final UserProfilePageState _userProfilePageState;
   final Reader _reader;
 
   Future<void> _init() async {
-    _authState.maybeWhen(
-        loggedIn: () {
-          state = const AppStartState.authenticated();
-        },
-        orElse: () {});
 
     _userProfilePageState.maybeWhen(
         loggedOut: () {
@@ -52,9 +46,15 @@ class AppStartNotifier extends StateNotifier<AppStartState> {
         orElse: () {});
 
     final token = await _oAuth2Helper.getToken();
+    final saFork = await _githubService.getSAFork();
+    final userProfileContent = await _githubService.getUserProfileFromGit();
     if (token != null) {
       if (mounted) {
-        state = const AppStartState.authenticated();
+        if (saFork == null || userProfileContent == null) {
+          state = const AppStartState.onboarding();
+        } else {
+          state = const AppStartState.authenticated();
+        }
       }
     } else {
       if (mounted) {

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
-
+import 'package:bip39/bip39.dart' as bip39;
+import 'package:ed25519_hd_key/ed25519_hd_key.dart';
 import 'package:eth_sig_util/util/bytes.dart';
 import 'package:eth_sig_util/util/utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,6 +12,8 @@ import 'package:eth_sig_util/eth_sig_util.dart';
 import 'package:eth_sig_util/util/keccak.dart';
 import 'package:web3dart/web3dart.dart';
 import 'package:convert/convert.dart';
+import 'package:hex/hex.dart';
+
 
 abstract class Web3Service {
   Future<BigInt> getWalletBalanceForUserAndSignature(
@@ -19,6 +22,8 @@ abstract class Web3Service {
   Future<Signature> signData(String message, String privateKey);
 
   Future<ETHAccount> createAccount();
+
+  Future<String> mnemonicToAddr(String mnemonic);
 }
 
 final web3ServiceProvider =
@@ -113,14 +118,30 @@ class Web3ServiceProvider implements Web3Service {
   }
 
   @override
+  Future<String> mnemonicToAddr(String mnemonic) async {
+    final normalizedMnemonic = _mnemonicNormalise(mnemonic);
+    final bip39Mnemonic = bip39.mnemonicToEntropy(normalizedMnemonic);
+    final seed = bip39.mnemonicToSeed(bip39Mnemonic);
+    final master = await ED25519_HD_KEY.getMasterKeyFromSeed(seed,
+        masterSecret: 'Bitcoin seed');
+    final privateKey = HEX.encode(master.key);
+    final private = EthPrivateKey.fromHex(privateKey);
+    final address = await private.extractAddress();
+    print('address: ${address.hexEip55}');
+    return address.hexEip55;
+
+  }
+
+  @override
   Future<ETHAccount> createAccount() async {
 
     final rng = Random.secure();
     final key = EthPrivateKey.createRandom(rng);
     final address =  await key.extractAddress();
 
-    return ETHAccount(extractStringFromUint8List(key.privateKey), address.hexEip55);
+    var ethAcc = ETHAccount(extractStringFromUint8List(key.privateKey), address.hexEip55);
 
+    return ethAcc;
   }
 
   static Map<String, String> extractStringFromSig(BigInt r, BigInt s, int v) {
@@ -164,5 +185,18 @@ class Web3ServiceProvider implements Web3Service {
     final prefixBytes = ascii.encode(prefix);
     return keccak256(Uint8List.fromList(prefixBytes + message));
   }
+
+  String _mnemonicNormalise(String mnemonic) {
+    return _mnemonicWords(mnemonic).join(' ');
+  }
+
+  List<String> _mnemonicWords(String mnemonic) {
+    return mnemonic
+        .split(' ')
+        .where((item) => item != null && item.trim().isNotEmpty)
+        .map((item) => item.trim())
+        .toList();
+  }
+
 
 }
