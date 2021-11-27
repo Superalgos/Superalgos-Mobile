@@ -12,9 +12,7 @@ final userProfilePageProvider =
 
 class UserProfilePageProvider extends StateNotifier<UserProfilePageState> {
   UserProfilePageProvider(this._reader)
-      : super(const UserProfilePageState.loading()) {
-    _init();
-  }
+      : super(const UserProfilePageState.loading()) {}
 
   final Reader _reader;
   late final AuthRepository _authRepository = _reader(authRepositoryProvider);
@@ -24,12 +22,4 @@ class UserProfilePageProvider extends StateNotifier<UserProfilePageState> {
     state = const UserProfilePageState.loggedOut();
   }
 
-
-  Future<void> _init() async {
-    final githubService = _reader(githubServiceProvider);
-    final saFork = await githubService.getSAFork();
-    final userProfileContent = await githubService.getUserProfileFromGit();
-
-    state = const UserProfilePageState.userProfile();
-  }
 }

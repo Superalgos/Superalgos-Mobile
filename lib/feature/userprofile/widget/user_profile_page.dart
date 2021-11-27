@@ -11,17 +11,7 @@ class UserProfilePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(userProfilePageProvider);
 
-    return state.maybeWhen(
-        userProfile: () => _userProfile(context, ref),
-        loading: () => Scaffold(
-              key: UniqueKey(),
-              body: Center(child: Text("Loading user profile page")),
-            ),
-        loggedOut: () => Container( //REMOVE IT !!!
-              key: UniqueKey(),
-              child: Text("Logged out"),
-            ),
-        orElse: () => Container());
+    return _userProfile(context, ref);
   }
 
   Widget _userProfile(BuildContext context, WidgetRef ref) {
@@ -93,6 +83,6 @@ class UserProfilePage extends ConsumerWidget {
   }
 
   Widget _widgetShimmer(BuildContext context, WidgetRef ref) {
-    return Container();
+    return Container(child: const Text("Loading user profile"),);
   }
 }

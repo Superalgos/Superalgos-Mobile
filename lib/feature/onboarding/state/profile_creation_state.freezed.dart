@@ -17,8 +17,10 @@ final _privateConstructorUsedError = UnsupportedError(
 class _$ProfileCreationStateTearOff {
   const _$ProfileCreationStateTearOff();
 
-  _Loading loading() {
-    return const _Loading();
+  _Loading loading(String? mnemonic) {
+    return _Loading(
+      mnemonic,
+    );
   }
 
   _Finalized finalized(String prvKey) {
@@ -35,19 +37,19 @@ const $ProfileCreationState = _$ProfileCreationStateTearOff();
 mixin _$ProfileCreationState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() loading,
+    required TResult Function(String? mnemonic) loading,
     required TResult Function(String prvKey) finalized,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? loading,
+    TResult Function(String? mnemonic)? loading,
     TResult Function(String prvKey)? finalized,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? loading,
+    TResult Function(String? mnemonic)? loading,
     TResult Function(String prvKey)? finalized,
     required TResult orElse(),
   }) =>
@@ -94,6 +96,7 @@ class _$ProfileCreationStateCopyWithImpl<$Res>
 abstract class _$LoadingCopyWith<$Res> {
   factory _$LoadingCopyWith(_Loading value, $Res Function(_Loading) then) =
       __$LoadingCopyWithImpl<$Res>;
+  $Res call({String? mnemonic});
 }
 
 /// @nodoc
@@ -105,54 +108,77 @@ class __$LoadingCopyWithImpl<$Res>
 
   @override
   _Loading get _value => super._value as _Loading;
+
+  @override
+  $Res call({
+    Object? mnemonic = freezed,
+  }) {
+    return _then(_Loading(
+      mnemonic == freezed
+          ? _value.mnemonic
+          : mnemonic // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ));
+  }
 }
 
 /// @nodoc
 
 class _$_Loading implements _Loading {
-  const _$_Loading();
+  const _$_Loading(this.mnemonic);
+
+  @override
+  final String? mnemonic;
 
   @override
   String toString() {
-    return 'ProfileCreationState.loading()';
+    return 'ProfileCreationState.loading(mnemonic: $mnemonic)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _Loading);
+        (other.runtimeType == runtimeType &&
+            other is _Loading &&
+            (identical(other.mnemonic, mnemonic) ||
+                other.mnemonic == mnemonic));
   }
 
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode => Object.hash(runtimeType, mnemonic);
+
+  @JsonKey(ignore: true)
+  @override
+  _$LoadingCopyWith<_Loading> get copyWith =>
+      __$LoadingCopyWithImpl<_Loading>(this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() loading,
+    required TResult Function(String? mnemonic) loading,
     required TResult Function(String prvKey) finalized,
   }) {
-    return loading();
+    return loading(mnemonic);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? loading,
+    TResult Function(String? mnemonic)? loading,
     TResult Function(String prvKey)? finalized,
   }) {
-    return loading?.call();
+    return loading?.call(mnemonic);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? loading,
+    TResult Function(String? mnemonic)? loading,
     TResult Function(String prvKey)? finalized,
     required TResult orElse(),
   }) {
     if (loading != null) {
-      return loading();
+      return loading(mnemonic);
     }
     return orElse();
   }
@@ -190,7 +216,12 @@ class _$_Loading implements _Loading {
 }
 
 abstract class _Loading implements ProfileCreationState {
-  const factory _Loading() = _$_Loading;
+  const factory _Loading(String? mnemonic) = _$_Loading;
+
+  String? get mnemonic;
+  @JsonKey(ignore: true)
+  _$LoadingCopyWith<_Loading> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -256,7 +287,7 @@ class _$_Finalized implements _Finalized {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() loading,
+    required TResult Function(String? mnemonic) loading,
     required TResult Function(String prvKey) finalized,
   }) {
     return finalized(prvKey);
@@ -265,7 +296,7 @@ class _$_Finalized implements _Finalized {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? loading,
+    TResult Function(String? mnemonic)? loading,
     TResult Function(String prvKey)? finalized,
   }) {
     return finalized?.call(prvKey);
@@ -274,7 +305,7 @@ class _$_Finalized implements _Finalized {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? loading,
+    TResult Function(String? mnemonic)? loading,
     TResult Function(String prvKey)? finalized,
     required TResult orElse(),
   }) {

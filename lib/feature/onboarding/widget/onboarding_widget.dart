@@ -1,16 +1,15 @@
-import 'dart:html';
 
 import 'package:app/feature/onboarding/provider/onboarding_provider.dart';
 import 'package:app/feature/onboarding/provider/profile_creation_provider.dart';
-import 'package:app/route/router.gr.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/palette.dart';
-import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:loading_indicator/loading_indicator.dart';
+
+import 'loading_screen_widget.dart';
 
 class OnboardingPage extends ConsumerWidget {
   const OnboardingPage({Key? key}) : super(key: key);
@@ -61,6 +60,7 @@ class OnboardingPage extends ConsumerWidget {
             style: TextStyles.onbLargeTextStyle,
             textAlign: TextAlign.justify,
           ),
+          footer: const MnemonicCaptureWidget(),
           image: const Center(
               child: Image(
                   image: AssetImage('assets/onboarding_3.png'), height: 175.0)),
@@ -88,113 +88,21 @@ class OnboardingPage extends ConsumerWidget {
   }
 }
 
-class CreateProfileLoading extends ConsumerStatefulWidget {
-  const CreateProfileLoading({Key? key}) : super(key: key);
+final mnemonicProvider =
+StateProvider<TextEditingController>((ref) => TextEditingController());
+
+class MnemonicCaptureWidget extends ConsumerWidget {
+  const MnemonicCaptureWidget({Key? key}) : super(key: key);
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() =>
-      _CreateProfileLoadingState();
-}
-
-class _CreateProfileLoadingState extends ConsumerState<CreateProfileLoading> {
-  final TextEditingController _textController = TextEditingController();
-
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
-
-  Future<void> _copyToClipboard() async {
-    await Clipboard.setData(ClipboardData(text: _textController.text));
-
-    ScaffoldMessenger.of(context)
-        .showSnackBar((SnackBar(content: Text('Copied to clipboard'))));
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    Future.microtask(
-        () => ref.read(profileCreationProvider.notifier).startONBActions());
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final pcp = ref.watch(profileCreationProvider);
-
-    
-
-    return Scaffold(
-      key: _scaffoldKey,
-      body: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: const [
-            Text(
-              "Waiting for the profile to be created",
-              style: TextStyles.onbLargeTextStyle,
-            )
-          ],
-        ),
-        Container(
-          margin: EdgeInsets.all(30),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: const [
-                  SizedBox(
-                      height: 80,
-                      width: 80,
-                      child: LoadingIndicator(
-                        indicatorType: Indicator.lineScalePulseOut,
-                        colors: UIColors.loadingColors,
-                      ))
-                ]),
-          ],
-        ),
-        Container(
-          margin: EdgeInsets.all(30),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: const [
-            Flexible(
-                child: Padding(
-                    padding: EdgeInsets.all(20),
-                    child: Text(
-                      "Before going further, please make sure you copy the private key and save it in a secure place.",
-                      style: TextStyles.onbSmallTextStyle,
-                    )))
-          ],
-        ),
-        Container(
-          margin: EdgeInsets.all(30),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Flexible(
-                child: Padding(
-              padding: EdgeInsets.all(10),
-              child: TextField(
-                  enabled: true,
-                  controller: _textController,
-                  decoration: InputDecoration(
-                    labelText: "Private key",
-                    icon: IconButton(
-                      icon: Icon(Icons.copy),
-                      onPressed: _copyToClipboard,
-                    ),
-                  )),
-            )),
-          ],
-        )
-      ]),
+  Widget build(BuildContext context, WidgetRef ref) {
+    var ctrl = ref.read(mnemonicProvider);
+    return TextField(
+      controller: ctrl,
+      decoration: const InputDecoration(
+          labelText: "Enter your mnemonic: ",
+      ),
+      autocorrect: false,
     );
   }
 }

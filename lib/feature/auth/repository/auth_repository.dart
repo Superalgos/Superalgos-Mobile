@@ -46,6 +46,7 @@ class AuthRepository implements AuthRepositoryInterface {
   Future<void> signOut() async {
     final oAuth2Helper = _reader(oauth2HelperProvider);
     var response = await oAuth2Helper.disconnect();
+
   }
 
 // void _getSAUserProfile() {

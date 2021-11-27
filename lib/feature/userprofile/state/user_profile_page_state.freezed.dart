@@ -17,16 +17,8 @@ final _privateConstructorUsedError = UnsupportedError(
 class _$UserProfilePageStateTearOff {
   const _$UserProfilePageStateTearOff();
 
-  _Initial initial() {
-    return const _Initial();
-  }
-
   _Loading loading() {
     return const _Loading();
-  }
-
-  _UserProfile userProfile() {
-    return const _UserProfile();
   }
 
   _LoggedOut loggedOut() {
@@ -41,50 +33,38 @@ const $UserProfilePageState = _$UserProfilePageStateTearOff();
 mixin _$UserProfilePageState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function() userProfile,
     required TResult Function() loggedOut,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function()? userProfile,
     TResult Function()? loggedOut,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function()? userProfile,
     TResult Function()? loggedOut,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_Initial value) initial,
     required TResult Function(_Loading value) loading,
-    required TResult Function(_UserProfile value) userProfile,
     required TResult Function(_LoggedOut value) loggedOut,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_Initial value)? initial,
     TResult Function(_Loading value)? loading,
-    TResult Function(_UserProfile value)? userProfile,
     TResult Function(_LoggedOut value)? loggedOut,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Initial value)? initial,
     TResult Function(_Loading value)? loading,
-    TResult Function(_UserProfile value)? userProfile,
     TResult Function(_LoggedOut value)? loggedOut,
     required TResult orElse(),
   }) =>
@@ -106,128 +86,6 @@ class _$UserProfilePageStateCopyWithImpl<$Res>
   final UserProfilePageState _value;
   // ignore: unused_field
   final $Res Function(UserProfilePageState) _then;
-}
-
-/// @nodoc
-abstract class _$InitialCopyWith<$Res> {
-  factory _$InitialCopyWith(_Initial value, $Res Function(_Initial) then) =
-      __$InitialCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$InitialCopyWithImpl<$Res>
-    extends _$UserProfilePageStateCopyWithImpl<$Res>
-    implements _$InitialCopyWith<$Res> {
-  __$InitialCopyWithImpl(_Initial _value, $Res Function(_Initial) _then)
-      : super(_value, (v) => _then(v as _Initial));
-
-  @override
-  _Initial get _value => super._value as _Initial;
-}
-
-/// @nodoc
-
-class _$_Initial with DiagnosticableTreeMixin implements _Initial {
-  const _$_Initial();
-
-  @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'UserProfilePageState.initial()';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'UserProfilePageState.initial'));
-  }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _Initial);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function() userProfile,
-    required TResult Function() loggedOut,
-  }) {
-    return initial();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function()? userProfile,
-    TResult Function()? loggedOut,
-  }) {
-    return initial?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function()? userProfile,
-    TResult Function()? loggedOut,
-    required TResult orElse(),
-  }) {
-    if (initial != null) {
-      return initial();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Initial value) initial,
-    required TResult Function(_Loading value) loading,
-    required TResult Function(_UserProfile value) userProfile,
-    required TResult Function(_LoggedOut value) loggedOut,
-  }) {
-    return initial(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_Initial value)? initial,
-    TResult Function(_Loading value)? loading,
-    TResult Function(_UserProfile value)? userProfile,
-    TResult Function(_LoggedOut value)? loggedOut,
-  }) {
-    return initial?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Initial value)? initial,
-    TResult Function(_Loading value)? loading,
-    TResult Function(_UserProfile value)? userProfile,
-    TResult Function(_LoggedOut value)? loggedOut,
-    required TResult orElse(),
-  }) {
-    if (initial != null) {
-      return initial(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _Initial implements UserProfilePageState {
-  const factory _Initial() = _$_Initial;
 }
 
 /// @nodoc
@@ -276,9 +134,7 @@ class _$_Loading with DiagnosticableTreeMixin implements _Loading {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function() userProfile,
     required TResult Function() loggedOut,
   }) {
     return loading();
@@ -287,9 +143,7 @@ class _$_Loading with DiagnosticableTreeMixin implements _Loading {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function()? userProfile,
     TResult Function()? loggedOut,
   }) {
     return loading?.call();
@@ -298,9 +152,7 @@ class _$_Loading with DiagnosticableTreeMixin implements _Loading {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function()? userProfile,
     TResult Function()? loggedOut,
     required TResult orElse(),
   }) {
@@ -313,9 +165,7 @@ class _$_Loading with DiagnosticableTreeMixin implements _Loading {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_Initial value) initial,
     required TResult Function(_Loading value) loading,
-    required TResult Function(_UserProfile value) userProfile,
     required TResult Function(_LoggedOut value) loggedOut,
   }) {
     return loading(this);
@@ -324,9 +174,7 @@ class _$_Loading with DiagnosticableTreeMixin implements _Loading {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_Initial value)? initial,
     TResult Function(_Loading value)? loading,
-    TResult Function(_UserProfile value)? userProfile,
     TResult Function(_LoggedOut value)? loggedOut,
   }) {
     return loading?.call(this);
@@ -335,9 +183,7 @@ class _$_Loading with DiagnosticableTreeMixin implements _Loading {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Initial value)? initial,
     TResult Function(_Loading value)? loading,
-    TResult Function(_UserProfile value)? userProfile,
     TResult Function(_LoggedOut value)? loggedOut,
     required TResult orElse(),
   }) {
@@ -350,130 +196,6 @@ class _$_Loading with DiagnosticableTreeMixin implements _Loading {
 
 abstract class _Loading implements UserProfilePageState {
   const factory _Loading() = _$_Loading;
-}
-
-/// @nodoc
-abstract class _$UserProfileCopyWith<$Res> {
-  factory _$UserProfileCopyWith(
-          _UserProfile value, $Res Function(_UserProfile) then) =
-      __$UserProfileCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$UserProfileCopyWithImpl<$Res>
-    extends _$UserProfilePageStateCopyWithImpl<$Res>
-    implements _$UserProfileCopyWith<$Res> {
-  __$UserProfileCopyWithImpl(
-      _UserProfile _value, $Res Function(_UserProfile) _then)
-      : super(_value, (v) => _then(v as _UserProfile));
-
-  @override
-  _UserProfile get _value => super._value as _UserProfile;
-}
-
-/// @nodoc
-
-class _$_UserProfile with DiagnosticableTreeMixin implements _UserProfile {
-  const _$_UserProfile();
-
-  @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'UserProfilePageState.userProfile()';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'UserProfilePageState.userProfile'));
-  }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _UserProfile);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function() userProfile,
-    required TResult Function() loggedOut,
-  }) {
-    return userProfile();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function()? userProfile,
-    TResult Function()? loggedOut,
-  }) {
-    return userProfile?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function()? userProfile,
-    TResult Function()? loggedOut,
-    required TResult orElse(),
-  }) {
-    if (userProfile != null) {
-      return userProfile();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_Initial value) initial,
-    required TResult Function(_Loading value) loading,
-    required TResult Function(_UserProfile value) userProfile,
-    required TResult Function(_LoggedOut value) loggedOut,
-  }) {
-    return userProfile(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_Initial value)? initial,
-    TResult Function(_Loading value)? loading,
-    TResult Function(_UserProfile value)? userProfile,
-    TResult Function(_LoggedOut value)? loggedOut,
-  }) {
-    return userProfile?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Initial value)? initial,
-    TResult Function(_Loading value)? loading,
-    TResult Function(_UserProfile value)? userProfile,
-    TResult Function(_LoggedOut value)? loggedOut,
-    required TResult orElse(),
-  }) {
-    if (userProfile != null) {
-      return userProfile(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _UserProfile implements UserProfilePageState {
-  const factory _UserProfile() = _$_UserProfile;
 }
 
 /// @nodoc
@@ -523,9 +245,7 @@ class _$_LoggedOut with DiagnosticableTreeMixin implements _LoggedOut {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function() userProfile,
     required TResult Function() loggedOut,
   }) {
     return loggedOut();
@@ -534,9 +254,7 @@ class _$_LoggedOut with DiagnosticableTreeMixin implements _LoggedOut {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function()? userProfile,
     TResult Function()? loggedOut,
   }) {
     return loggedOut?.call();
@@ -545,9 +263,7 @@ class _$_LoggedOut with DiagnosticableTreeMixin implements _LoggedOut {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function()? userProfile,
     TResult Function()? loggedOut,
     required TResult orElse(),
   }) {
@@ -560,9 +276,7 @@ class _$_LoggedOut with DiagnosticableTreeMixin implements _LoggedOut {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_Initial value) initial,
     required TResult Function(_Loading value) loading,
-    required TResult Function(_UserProfile value) userProfile,
     required TResult Function(_LoggedOut value) loggedOut,
   }) {
     return loggedOut(this);
@@ -571,9 +285,7 @@ class _$_LoggedOut with DiagnosticableTreeMixin implements _LoggedOut {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_Initial value)? initial,
     TResult Function(_Loading value)? loading,
-    TResult Function(_UserProfile value)? userProfile,
     TResult Function(_LoggedOut value)? loggedOut,
   }) {
     return loggedOut?.call(this);
@@ -582,9 +294,7 @@ class _$_LoggedOut with DiagnosticableTreeMixin implements _LoggedOut {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Initial value)? initial,
     TResult Function(_Loading value)? loading,
-    TResult Function(_UserProfile value)? userProfile,
     TResult Function(_LoggedOut value)? loggedOut,
     required TResult orElse(),
   }) {

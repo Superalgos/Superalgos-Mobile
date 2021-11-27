@@ -1,19 +1,22 @@
 
 
 import 'package:app/feature/onboarding/state/profile_creation_state.dart';
+import 'package:app/feature/onboarding/widget/onboarding_widget.dart';
 import 'package:app/services/github_service_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 
 final profileCreationProvider =
 StateNotifierProvider<ProfileCreationProvider, ProfileCreationState>((ref) {
-  return ProfileCreationProvider(ref.read);
+  var userMnemonic = ref.watch(mnemonicProvider).value.text;
+  return ProfileCreationProvider(ref.read, userMnemonic);
 });
 
 class ProfileCreationProvider extends StateNotifier<ProfileCreationState> {
-  ProfileCreationProvider(this._reader) : super(const ProfileCreationState.loading());
+  ProfileCreationProvider(this._reader, this._userMnemonic) : super(ProfileCreationState.loading(_userMnemonic));
 
   final Reader _reader;
+  final String _userMnemonic;
 
   Future<void> startONBActions(){
     return Future.delayed(const Duration(seconds: 3), () {
