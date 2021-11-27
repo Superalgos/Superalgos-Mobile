@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:app/feature/onboarding/provider/onboarding_provider.dart';
 import 'package:app/feature/onboarding/provider/profile_creation_provider.dart';
 import 'package:app/route/router.gr.dart';
@@ -117,6 +119,8 @@ class _CreateProfileLoadingState extends ConsumerState<CreateProfileLoading> {
   Widget build(BuildContext context) {
     final pcp = ref.watch(profileCreationProvider);
 
+    
+
     return Scaffold(
       key: _scaffoldKey,
       body: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -162,7 +166,7 @@ class _CreateProfileLoadingState extends ConsumerState<CreateProfileLoading> {
                 child: Padding(
                     padding: EdgeInsets.all(20),
                     child: Text(
-                      "Before going further, please copy the private key and save it in a secure place",
+                      "Before going further, please make sure you copy the private key and save it in a secure place.",
                       style: TextStyles.onbSmallTextStyle,
                     )))
           ],
@@ -176,22 +180,18 @@ class _CreateProfileLoadingState extends ConsumerState<CreateProfileLoading> {
           children: [
             Flexible(
                 child: Padding(
-                    padding: EdgeInsets.all(10),
-                    child: pcp.maybeWhen(
-                        finalized: (key) {
-                          _textController.text = key;
-                          TextField(
-                              enabled: true,
-                              controller: _textController,
-                              decoration: InputDecoration(
-                                labelText: "Private key",
-                                icon: IconButton(
-                                  icon: Icon(Icons.copy),
-                                  onPressed: _copyToClipboard,
-                                ),
-                              ));
-                        },
-                        orElse: () {}))),
+              padding: EdgeInsets.all(10),
+              child: TextField(
+                  enabled: true,
+                  controller: _textController,
+                  decoration: InputDecoration(
+                    labelText: "Private key",
+                    icon: IconButton(
+                      icon: Icon(Icons.copy),
+                      onPressed: _copyToClipboard,
+                    ),
+                  )),
+            )),
           ],
         )
       ]),

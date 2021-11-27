@@ -15,8 +15,11 @@ class ProfileCreationProvider extends StateNotifier<ProfileCreationState> {
 
   final Reader _reader;
 
-  void startONBActions(){
-    state = const ProfileCreationState.finalized("prvKey");
+  Future<void> startONBActions(){
+    return Future.delayed(const Duration(seconds: 3), () {
+      state = const ProfileCreationState.finalized("prvKey");
+    });
+
 
   }
 
