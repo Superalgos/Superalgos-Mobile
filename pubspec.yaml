@@ -30,6 +30,7 @@ dependencies:
   json_annotation: ^4.3.0
   uuid: ^3.0.5
   bip32: ^2.0.0
+  flutter_screenutil: ^5.0.1
 
 dev_dependencies:
   flutter_test:
@@ -53,5 +54,14 @@ flutter:
     - assets/onboarding.png
     - assets/onboarding_2.png
     - assets/onboarding_3.png
+    - assets/governance.png
+  fonts:
+    - family: Saira
+      fonts:
+      - asset: assets/fonts/Saira-Light.ttf
+      - asset: assets/fonts/Saira-Regular.ttf
+      - asset: assets/fonts/Saira-Regular.ttf
+      - asset: assets/fonts/Saira-Bold.ttf
+
   uses-material-design: true
 

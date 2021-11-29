@@ -17,13 +17,15 @@ final profileCreationProvider =
 
 class ProfileCreationProvider extends StateNotifier<ProfileCreationState> {
   ProfileCreationProvider(this._reader, this._userMnemonic)
-      : super(ProfileCreationState.loading(_userMnemonic));
+      : super(ProfileCreationState.loading(_userMnemonic)) {
+    _init();
+  }
 
   final Reader _reader;
   final String? _userMnemonic;
   final JsonEncoder beautifiedEncoder = const JsonEncoder.withIndent('  ');
 
-  Future<void> startONBActions() async {
+  Future<void> _init() async {
     var fork = await _createSAFork();
     var ethAccount = await _createUserProfile();
     var pr = await _createPullRequest();

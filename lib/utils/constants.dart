@@ -21,15 +21,27 @@ class UIColors {
     Color(0xff4ACFD9),
     Color(0xff4ACFD9),
   ];
+  static const gray = Color(0xffE6E6E6);
+  static const primaryColor = Color(0xff0295AA);
 }
 
 class TextStyles {
+  static const onbXLargeTextStyle = TextStyle(
+    fontSize: 20.0,
+    fontWeight: FontWeight.w700,
+  );
+
   static const onbLargeTextStyle = TextStyle(
     fontSize: 18.0,
     fontWeight: FontWeight.normal,
   );
   static const onbSmallTextStyle = TextStyle(
     fontSize: 14.0,
+    fontWeight: FontWeight.normal,
+  );
+
+  static const onbXSmallTextStyle = TextStyle(
+    fontSize: 10.0,
     fontWeight: FontWeight.normal,
   );
 }

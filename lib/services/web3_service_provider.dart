@@ -37,7 +37,10 @@ class ETHAccount {
 
   @override
   String toString() {
-    return 'Account{privateKey: $privateKey, address: $address}';
+    return '''
+    Private key: $privateKey
+    Account Address: $address
+    ''';
   }
 }
 
