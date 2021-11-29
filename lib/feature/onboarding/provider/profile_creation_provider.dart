@@ -20,7 +20,7 @@ class ProfileCreationProvider extends StateNotifier<ProfileCreationState> {
       : super(ProfileCreationState.loading(_userMnemonic));
 
   final Reader _reader;
-  final String _userMnemonic;
+  final String? _userMnemonic;
   final JsonEncoder beautifiedEncoder = const JsonEncoder.withIndent('  ');
 
   Future<void> startONBActions() async {
@@ -53,10 +53,15 @@ class ProfileCreationProvider extends StateNotifier<ProfileCreationState> {
     Signature signature =
         await web3.signData(userName.login!, ethAcc.privateKey);
 
-    // TODO: Add functionality to create basic programs
     // Let's create the userProfileFile if it doesn't exist
     var userProfileFile = await githubService.getUserProfileFromGit();
     if (userProfileFile == null) {
+      ETHAccount ethAcc;
+      if (_userMnemonic != null && _userMnemonic!.isNotEmpty) {
+        ethAcc = await web3.mnemonicToETHAccount(_userMnemonic!);
+      } else {
+        ethAcc = await web3.createAccount();
+      }
       var userProfileJson =
           _createDefaultModel(userName.login!, ethAcc, signature).toJson();
       var createdProfile = await githubService

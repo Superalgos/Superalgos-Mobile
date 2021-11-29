@@ -64,7 +64,7 @@ class UserProfilePage extends ConsumerWidget {
               children: [
                 ElevatedButton(
                     onPressed: () {
-                      ref.read(web3ServiceProvider).mnemonicToAddr("");
+                      ref.read(web3ServiceProvider).mnemonicToETHAccount("");
                     },
                     child: Text("Addr from mnemonic")),
               ],

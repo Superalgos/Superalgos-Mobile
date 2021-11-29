@@ -14,19 +14,6 @@ class OnboardingProvider extends StateNotifier<OnboardingState> {
 
   void navigate(page) {
 
-
-
-    // state.when(
-    //     initial: (page) {
-    //       state = const OnboardingState.createFork(1);
-    //     },
-    //     createFork: (page) {
-    //       state = const OnboardingState.createProfile(2);
-    //     },
-    //     createProfile: (page) {
-    //       state = const OnboardingState.finalized();
-    //     },
-    //     finalized: () {});
   }
 
   void finalize(){

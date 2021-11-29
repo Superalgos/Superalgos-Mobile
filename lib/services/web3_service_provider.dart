@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 import 'package:app/services/signature.dart';
 import 'package:bip39/bip39.dart' as bip39;
-import 'package:ed25519_hd_key/ed25519_hd_key.dart';
+import 'package:bip32/bip32.dart' as bip32;
 import 'package:eth_sig_util/util/bytes.dart';
 import 'package:eth_sig_util/util/utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,8 +15,6 @@ import 'package:web3dart/web3dart.dart';
 import 'package:convert/convert.dart';
 import 'package:hex/hex.dart';
 
-
-
 abstract class Web3Service {
   Future<BigInt> getWalletBalanceForUserAndSignature(
       String userName, String signature);
@@ -25,7 +23,7 @@ abstract class Web3Service {
 
   Future<ETHAccount> createAccount();
 
-  Future<String> mnemonicToAddr(String mnemonic);
+  Future<ETHAccount> mnemonicToETHAccount(String mnemonic);
 }
 
 final web3ServiceProvider =
@@ -100,17 +98,17 @@ class Web3ServiceProvider implements Web3Service {
   }
 
   @override
-  Future<String> mnemonicToAddr(String mnemonic) async {
-    final normalizedMnemonic = _mnemonicNormalise(mnemonic);
-    final bip39Mnemonic = bip39.mnemonicToEntropy(normalizedMnemonic);
-    final seed = bip39.mnemonicToSeed(bip39Mnemonic);
-    final master = await ED25519_HD_KEY.getMasterKeyFromSeed(seed,
-        masterSecret: 'Bitcoin seed');
-    final privateKey = HEX.encode(master.key);
+  Future<ETHAccount> mnemonicToETHAccount(String mnemonic, {int childIndex = 0}) async {
+
+    final seed = bip39.mnemonicToSeedHex(mnemonic);
+    bip32.BIP32 root = bip32.BIP32.fromSeed(HEX.decode(seed) as Uint8List);
+    bip32.BIP32 child = root.derivePath("m/44'/60'/0'/0/$childIndex");
+    String privateKey = HEX.encode(child.privateKey!);
+
     final private = EthPrivateKey.fromHex(privateKey);
     final address = await private.extractAddress();
-    print('address: ${address.hexEip55}');
-    return address.hexEip55;
+
+    return ETHAccount(privateKey, address.hexEip55);
   }
 
   @override
