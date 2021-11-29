@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:github/github.dart';
 import 'package:oauth2_client/oauth2_helper.dart';
 
-abstract class GithubService {
+ abstract class GithubService {
   Future<Repository?> getSAFork();
 
   Future<Repository> createSAFork();
@@ -14,7 +14,9 @@ abstract class GithubService {
 
   Future<RepositoryContents?> getUserProfileFromGit();
 
-  Future<ContentCreation> addUserProfileToSAFork();
+  Future<ContentCreation> addUserProfileToSAFork(String userProfileContent);
+
+  Future<PullRequest> createPullRequestFromUserFork();
 }
 
 final githubServiceProvider =
@@ -24,9 +26,10 @@ class GithubServiceProvider implements GithubService {
   final Reader _reader;
   late OAuth2Helper oAuth2Helper = _reader(oauth2HelperProvider);
   String jsonFileExt = '.json';
+  String superAlgosOrg = 'Superalgos';
   String userProfileBranch = 'develop';
-  String superAlgosOrg = 'superalgos';
   String userProfileLocation = 'Projects/Governance/Plugins/User-Profiles/';
+  String userProfilePRTitle = 'Contribution: userprofile ';
 
   GithubServiceProvider(this._reader);
 
@@ -79,20 +82,37 @@ class GithubServiceProvider implements GithubService {
   }
 
   @override
-  Future<ContentCreation> addUserProfileToSAFork() async {
+  Future<ContentCreation> addUserProfileToSAFork(
+      String userProfileContent) async {
     var token = await oAuth2Helper.getToken();
     var instance = GitHub(auth: Authentication.withToken(token!.accessToken));
     var currentUser = await instance.users.getCurrentUser();
     var repoSlug = RepositorySlug(currentUser.login!, superAlgosOrg);
-
     final Codec<String, String> stringToBase64 = utf8.fuse(base64);
+
     var file = CreateFile(
         message: "create user profile",
         path: userProfileLocation + currentUser.login! + jsonFileExt,
-        content: stringToBase64.encode("{}"));
+        branch: userProfileBranch,
+        content: stringToBase64.encode(userProfileContent));
 
-    var content =  await instance.repositories.createFile(repoSlug, file);
+    var content = await instance.repositories.createFile(repoSlug, file);
 
     return content;
+  }
+
+  @override
+  Future<PullRequest> createPullRequestFromUserFork() async {
+    var token = await oAuth2Helper.getToken();
+    var instance = GitHub(auth: Authentication.withToken(token!.accessToken));
+    var currentUser = await instance.users.getCurrentUser();
+    var repoSlug = RepositorySlug(superAlgosOrg, superAlgosOrg);
+
+    final prRequest = CreatePullRequest(userProfilePRTitle + currentUser.login!,
+        "${currentUser.login!}:$userProfileBranch", userProfileBranch);
+
+    var pr = await instance.pullRequests.create(repoSlug, prRequest);
+
+    return pr;
   }
 }

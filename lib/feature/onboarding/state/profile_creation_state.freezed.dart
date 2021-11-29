@@ -23,9 +23,9 @@ class _$ProfileCreationStateTearOff {
     );
   }
 
-  _Finalized finalized(String prvKey) {
+  _Finalized finalized(ETHAccount ethAccount) {
     return _Finalized(
-      prvKey,
+      ethAccount,
     );
   }
 }
@@ -38,19 +38,19 @@ mixin _$ProfileCreationState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String? mnemonic) loading,
-    required TResult Function(String prvKey) finalized,
+    required TResult Function(ETHAccount ethAccount) finalized,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(String? mnemonic)? loading,
-    TResult Function(String prvKey)? finalized,
+    TResult Function(ETHAccount ethAccount)? finalized,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String? mnemonic)? loading,
-    TResult Function(String prvKey)? finalized,
+    TResult Function(ETHAccount ethAccount)? finalized,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -156,7 +156,7 @@ class _$_Loading implements _Loading {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String? mnemonic) loading,
-    required TResult Function(String prvKey) finalized,
+    required TResult Function(ETHAccount ethAccount) finalized,
   }) {
     return loading(mnemonic);
   }
@@ -165,7 +165,7 @@ class _$_Loading implements _Loading {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(String? mnemonic)? loading,
-    TResult Function(String prvKey)? finalized,
+    TResult Function(ETHAccount ethAccount)? finalized,
   }) {
     return loading?.call(mnemonic);
   }
@@ -174,7 +174,7 @@ class _$_Loading implements _Loading {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String? mnemonic)? loading,
-    TResult Function(String prvKey)? finalized,
+    TResult Function(ETHAccount ethAccount)? finalized,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -229,7 +229,7 @@ abstract class _$FinalizedCopyWith<$Res> {
   factory _$FinalizedCopyWith(
           _Finalized value, $Res Function(_Finalized) then) =
       __$FinalizedCopyWithImpl<$Res>;
-  $Res call({String prvKey});
+  $Res call({ETHAccount ethAccount});
 }
 
 /// @nodoc
@@ -244,13 +244,13 @@ class __$FinalizedCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? prvKey = freezed,
+    Object? ethAccount = freezed,
   }) {
     return _then(_Finalized(
-      prvKey == freezed
-          ? _value.prvKey
-          : prvKey // ignore: cast_nullable_to_non_nullable
-              as String,
+      ethAccount == freezed
+          ? _value.ethAccount
+          : ethAccount // ignore: cast_nullable_to_non_nullable
+              as ETHAccount,
     ));
   }
 }
@@ -258,14 +258,14 @@ class __$FinalizedCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_Finalized implements _Finalized {
-  const _$_Finalized(this.prvKey);
+  const _$_Finalized(this.ethAccount);
 
   @override
-  final String prvKey;
+  final ETHAccount ethAccount;
 
   @override
   String toString() {
-    return 'ProfileCreationState.finalized(prvKey: $prvKey)';
+    return 'ProfileCreationState.finalized(ethAccount: $ethAccount)';
   }
 
   @override
@@ -273,11 +273,12 @@ class _$_Finalized implements _Finalized {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _Finalized &&
-            (identical(other.prvKey, prvKey) || other.prvKey == prvKey));
+            (identical(other.ethAccount, ethAccount) ||
+                other.ethAccount == ethAccount));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, prvKey);
+  int get hashCode => Object.hash(runtimeType, ethAccount);
 
   @JsonKey(ignore: true)
   @override
@@ -288,29 +289,29 @@ class _$_Finalized implements _Finalized {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String? mnemonic) loading,
-    required TResult Function(String prvKey) finalized,
+    required TResult Function(ETHAccount ethAccount) finalized,
   }) {
-    return finalized(prvKey);
+    return finalized(ethAccount);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(String? mnemonic)? loading,
-    TResult Function(String prvKey)? finalized,
+    TResult Function(ETHAccount ethAccount)? finalized,
   }) {
-    return finalized?.call(prvKey);
+    return finalized?.call(ethAccount);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String? mnemonic)? loading,
-    TResult Function(String prvKey)? finalized,
+    TResult Function(ETHAccount ethAccount)? finalized,
     required TResult orElse(),
   }) {
     if (finalized != null) {
-      return finalized(prvKey);
+      return finalized(ethAccount);
     }
     return orElse();
   }
@@ -348,9 +349,9 @@ class _$_Finalized implements _Finalized {
 }
 
 abstract class _Finalized implements ProfileCreationState {
-  const factory _Finalized(String prvKey) = _$_Finalized;
+  const factory _Finalized(ETHAccount ethAccount) = _$_Finalized;
 
-  String get prvKey;
+  ETHAccount get ethAccount;
   @JsonKey(ignore: true)
   _$FinalizedCopyWith<_Finalized> get copyWith =>
       throw _privateConstructorUsedError;

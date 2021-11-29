@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:math';
+import 'package:app/services/signature.dart';
 import 'package:bip39/bip39.dart' as bip39;
 import 'package:ed25519_hd_key/ed25519_hd_key.dart';
 import 'package:eth_sig_util/util/bytes.dart';
@@ -13,6 +14,7 @@ import 'package:eth_sig_util/util/keccak.dart';
 import 'package:web3dart/web3dart.dart';
 import 'package:convert/convert.dart';
 import 'package:hex/hex.dart';
+
 
 
 abstract class Web3Service {
@@ -41,29 +43,11 @@ class ETHAccount {
   }
 }
 
-class Signature {
-  final String message;
-  final String messageHash;
-  final String v;
-  final String r;
-  final String s;
-  final String signature;
-
-  Signature(
-      this.message, this.messageHash, this.v, this.r, this.s, this.signature);
-
-  @override
-  String toString() {
-    return 'Signature{message: $message, messageHash: $messageHash, v: $v, r: $r, s: $s, signature: $signature}';
-  }
-}
-
 // This class replicates what web3js can do "natively"
 // by extending existing Dart libraries for web3 interaction,
 // It should not be modified unless you really know what are you doing :)
 
 class Web3ServiceProvider implements Web3Service {
-
   @override
   Future<Signature> signData(String message, String privateKey) async {
     Uint8List bytes = Uint8List.fromList(message.codeUnits);
@@ -77,15 +61,13 @@ class Web3ServiceProvider implements Web3Service {
     var stringSigValues = extractStringFromSig(
         ecdsaSignature.r, ecdsaSignature.s, ecdsaSignature.v);
 
-
     var signatureObject = Signature(
-        message,
-        extractStringFromUint8List(_getPersonalMessage(bytes)),
-        stringSigValues["v"]!,
-        stringSigValues["r"]!,
-        stringSigValues["s"]!,
-        signatureString);
-
+        message: message,
+        messageHash: extractStringFromUint8List(_getPersonalMessage(bytes)),
+        v: stringSigValues["v"]!,
+        r: stringSigValues["r"]!,
+        s: stringSigValues["s"]!,
+        signature: signatureString);
 
     return signatureObject;
   }
@@ -129,17 +111,16 @@ class Web3ServiceProvider implements Web3Service {
     final address = await private.extractAddress();
     print('address: ${address.hexEip55}');
     return address.hexEip55;
-
   }
 
   @override
   Future<ETHAccount> createAccount() async {
-
     final rng = Random.secure();
     final key = EthPrivateKey.createRandom(rng);
-    final address =  await key.extractAddress();
+    final address = await key.extractAddress();
 
-    var ethAcc = ETHAccount(extractStringFromUint8List(key.privateKey), address.hexEip55);
+    var ethAcc = ETHAccount(
+        extractStringFromUint8List(key.privateKey), address.hexEip55);
 
     return ethAcc;
   }
@@ -197,6 +178,4 @@ class Web3ServiceProvider implements Web3Service {
         .map((item) => item.trim())
         .toList();
   }
-
-
 }

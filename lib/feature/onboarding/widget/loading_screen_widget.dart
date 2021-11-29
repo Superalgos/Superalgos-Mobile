@@ -1,4 +1,3 @@
-
 import 'package:app/feature/onboarding/provider/profile_creation_provider.dart';
 import 'package:app/utils/constants.dart';
 import 'package:flutter/cupertino.dart';
@@ -31,14 +30,14 @@ class _CreateProfileLoadingState extends ConsumerState<CreateProfileLoading> {
   void initState() {
     super.initState();
     Future.microtask(
-            () => ref.read(profileCreationProvider.notifier).startONBActions());
+        () => ref.read(profileCreationProvider.notifier).startONBActions());
   }
 
   @override
   Widget build(BuildContext context) {
     final pcp = ref.watch(profileCreationProvider);
 
-
+    pcp.maybeWhen(loading: (mnemonic) {_textController.text = mnemonic!;}, orElse: () {});
 
     return Scaffold(
       key: _scaffoldKey,
@@ -99,18 +98,18 @@ class _CreateProfileLoadingState extends ConsumerState<CreateProfileLoading> {
           children: [
             Flexible(
                 child: Padding(
-                  padding: EdgeInsets.all(10),
-                  child: TextField(
-                      enabled: true,
-                      controller: _textController,
-                      decoration: InputDecoration(
-                        labelText: "Private key",
-                        icon: IconButton(
-                          icon: Icon(Icons.copy),
-                          onPressed: _copyToClipboard,
-                        ),
-                      )),
-                )),
+              padding: EdgeInsets.all(10),
+              child: TextField(
+                  enabled: true,
+                  controller: _textController,
+                  decoration: InputDecoration(
+                    labelText: "Private key",
+                    icon: IconButton(
+                      icon: Icon(Icons.copy),
+                      onPressed: _copyToClipboard,
+                    ),
+                  )),
+            )),
           ],
         )
       ]),
