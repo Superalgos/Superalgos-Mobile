@@ -21,13 +21,14 @@ class ProfileCreationProvider extends StateNotifier<ProfileCreationState> {
 
   final Reader _reader;
   final String _userMnemonic;
+  final JsonEncoder beautifiedEncoder = const JsonEncoder.withIndent('  ');
 
   Future<void> startONBActions() async {
     var fork = await _createSAFork();
-    var userProfile = await _createUserProfile();
-    // var pr = await _createPullRequest();
+    var ethAccount = await _createUserProfile();
+    var pr = await _createPullRequest();
 
-    state = ProfileCreationState.finalized(userProfile);
+    state = ProfileCreationState.finalized(ethAccount);
   }
 
   Future<void> _createSAFork() async {
@@ -59,7 +60,7 @@ class ProfileCreationProvider extends StateNotifier<ProfileCreationState> {
       var userProfileJson =
           _createDefaultModel(userName.login!, ethAcc, signature).toJson();
       var createdProfile = await githubService
-          .addUserProfileToSAFork(jsonEncode(userProfileJson));
+          .addUserProfileToSAFork(beautifiedEncoder.convert(userProfileJson));
     }
     return ethAcc;
   }
