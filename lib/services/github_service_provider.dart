@@ -18,6 +18,8 @@ import 'package:oauth2_client/oauth2_helper.dart';
   Future<ContentCreation> addUserProfileToSAFork(String userProfileContent);
 
   Future<PullRequest> createPullRequestFromUserFork();
+
+  Future<bool> deleteFork();
 }
 
 final githubServiceProvider =
@@ -115,5 +117,17 @@ class GithubServiceProvider implements GithubService {
     var pr = await instance.pullRequests.create(repoSlug, prRequest);
 
     return pr;
+  }
+
+  @override
+  Future<bool> deleteFork() async {
+    var token = await oAuth2Helper.getToken();
+    var instance = GitHub(auth: Authentication.withToken(token!.accessToken));
+    var currentUser = await instance.users.getCurrentUser();
+    var repoSlug = RepositorySlug(currentUser.login!, superAlgosOrg);
+
+    var deleted = await instance.repositories.deleteRepository(repoSlug);
+
+    return deleted;
   }
 }

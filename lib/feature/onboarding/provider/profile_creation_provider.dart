@@ -10,7 +10,7 @@ import 'package:uuid/uuid.dart';
 import 'dart:convert';
 
 final profileCreationProvider =
-    StateNotifierProvider<ProfileCreationProvider, ProfileCreationState>((ref) {
+    AutoDisposeStateNotifierProvider<ProfileCreationProvider, ProfileCreationState>((ref) {
   var userMnemonic = ref.watch(mnemonicProvider).value.text;
   return ProfileCreationProvider(ref.read, userMnemonic);
 });

@@ -3,6 +3,8 @@ import 'package:app/feature/auth/model/auth_state.dart';
 import 'package:app/feature/auth/provider/auth_provider.dart';
 import 'package:app/feature/auth/repository/auth_repository.dart';
 import 'package:app/feature/auth/repository/github_oauth_helper.dart';
+import 'package:app/feature/onboarding/provider/onboarding_provider.dart';
+import 'package:app/feature/onboarding/provider/profile_creation_provider.dart';
 import 'package:app/feature/userprofile/provider/user_profile_page_provider.dart';
 import 'package:app/feature/userprofile/provider/user_profile_provider.dart';
 import 'package:app/feature/userprofile/state/user_profile_page_state.dart';
@@ -16,20 +18,20 @@ final appStartProvider =
   final loginState = ref.watch(authProvider);
   final userProfilePageState = ref.watch(userProfilePageProvider);
 
-  late AppStartState appStartState;
-  appStartState = loginState is LoggedIn
-      ? const AppStartState.authenticated()
-      : const AppStartState.initial();
+  AppStartState appStartState = const AppStartState.initial();
+  userProfilePageState.maybeWhen(
+      loggedOut: () {
+        appStartState = const AppStartState.unauthenticated();
+      },
+      orElse: () {});
 
-  return AppStartNotifier(
-      appStartState, ref.read, userProfilePageState, loginState);
+
+  return AppStartNotifier(appStartState, ref.read, loginState);
 });
 
 class AppStartNotifier extends StateNotifier<AppStartState> {
-  AppStartNotifier(AppStartState appStartState, this._reader,
-      this._userProfilePageState, this._authState)
+  AppStartNotifier(AppStartState appStartState, this._reader, this._authState)
       : super(appStartState) {
-    print(appStartState);
     _init();
   }
 
@@ -37,17 +39,13 @@ class AppStartNotifier extends StateNotifier<AppStartState> {
   late final _githubService = _reader(githubServiceProvider);
 
   final AuthState _authState;
-  final UserProfilePageState _userProfilePageState;
   final Reader _reader;
 
+  void finalizedOnboarding() {
+    state = const AppStartState.authenticated();
+  }
+
   Future<void> _init() async {
-
-    _userProfilePageState.maybeWhen(
-        loggedOut: () {
-          state = const AppStartState.unauthenticated();
-        },
-        orElse: () {});
-
     final token = await _oAuth2Helper.getTokenFromStorage();
     if (token != null) {
       try {

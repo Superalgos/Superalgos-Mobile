@@ -21,7 +21,7 @@ GithubOauthHelper oAuth2Helper = GithubOauthHelper(
     clientId: '855f1d6bdce2d9b6fe92',
     clientSecret: 'c88786e93b95f8905f7e05a14786150edafb301a',
     enableState: false,
-    scopes: ['repo', 'user']);
+    scopes: ['repo', 'user', 'delete_repo']);
 
 final oauth2HelperProvider = Provider((ref) => oAuth2Helper);
 

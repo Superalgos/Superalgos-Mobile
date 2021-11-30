@@ -17,10 +17,8 @@ final _privateConstructorUsedError = UnsupportedError(
 class _$OnboardingStateTearOff {
   const _$OnboardingStateTearOff();
 
-  _Initial initial(int page) {
-    return _Initial(
-      page,
-    );
+  _Initial initial() {
+    return const _Initial();
   }
 
   _SlideshowFinalized slideShowFinalized() {
@@ -35,19 +33,19 @@ const $OnboardingState = _$OnboardingStateTearOff();
 mixin _$OnboardingState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(int page) initial,
+    required TResult Function() initial,
     required TResult Function() slideShowFinalized,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(int page)? initial,
+    TResult Function()? initial,
     TResult Function()? slideShowFinalized,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int page)? initial,
+    TResult Function()? initial,
     TResult Function()? slideShowFinalized,
     required TResult orElse(),
   }) =>
@@ -94,7 +92,6 @@ class _$OnboardingStateCopyWithImpl<$Res>
 abstract class _$InitialCopyWith<$Res> {
   factory _$InitialCopyWith(_Initial value, $Res Function(_Initial) then) =
       __$InitialCopyWithImpl<$Res>;
-  $Res call({int page});
 }
 
 /// @nodoc
@@ -105,76 +102,54 @@ class __$InitialCopyWithImpl<$Res> extends _$OnboardingStateCopyWithImpl<$Res>
 
   @override
   _Initial get _value => super._value as _Initial;
-
-  @override
-  $Res call({
-    Object? page = freezed,
-  }) {
-    return _then(_Initial(
-      page == freezed
-          ? _value.page
-          : page // ignore: cast_nullable_to_non_nullable
-              as int,
-    ));
-  }
 }
 
 /// @nodoc
 
 class _$_Initial implements _Initial {
-  const _$_Initial(this.page);
-
-  @override
-  final int page;
+  const _$_Initial();
 
   @override
   String toString() {
-    return 'OnboardingState.initial(page: $page)';
+    return 'OnboardingState.initial()';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _Initial &&
-            (identical(other.page, page) || other.page == page));
+        (other.runtimeType == runtimeType && other is _Initial);
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, page);
-
-  @JsonKey(ignore: true)
-  @override
-  _$InitialCopyWith<_Initial> get copyWith =>
-      __$InitialCopyWithImpl<_Initial>(this, _$identity);
+  int get hashCode => runtimeType.hashCode;
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(int page) initial,
+    required TResult Function() initial,
     required TResult Function() slideShowFinalized,
   }) {
-    return initial(page);
+    return initial();
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(int page)? initial,
+    TResult Function()? initial,
     TResult Function()? slideShowFinalized,
   }) {
-    return initial?.call(page);
+    return initial?.call();
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int page)? initial,
+    TResult Function()? initial,
     TResult Function()? slideShowFinalized,
     required TResult orElse(),
   }) {
     if (initial != null) {
-      return initial(page);
+      return initial();
     }
     return orElse();
   }
@@ -212,12 +187,7 @@ class _$_Initial implements _Initial {
 }
 
 abstract class _Initial implements OnboardingState {
-  const factory _Initial(int page) = _$_Initial;
-
-  int get page;
-  @JsonKey(ignore: true)
-  _$InitialCopyWith<_Initial> get copyWith =>
-      throw _privateConstructorUsedError;
+  const factory _Initial() = _$_Initial;
 }
 
 /// @nodoc
@@ -261,7 +231,7 @@ class _$_SlideshowFinalized implements _SlideshowFinalized {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(int page) initial,
+    required TResult Function() initial,
     required TResult Function() slideShowFinalized,
   }) {
     return slideShowFinalized();
@@ -270,7 +240,7 @@ class _$_SlideshowFinalized implements _SlideshowFinalized {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(int page)? initial,
+    TResult Function()? initial,
     TResult Function()? slideShowFinalized,
   }) {
     return slideShowFinalized?.call();
@@ -279,7 +249,7 @@ class _$_SlideshowFinalized implements _SlideshowFinalized {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int page)? initial,
+    TResult Function()? initial,
     TResult Function()? slideShowFinalized,
     required TResult orElse(),
   }) {

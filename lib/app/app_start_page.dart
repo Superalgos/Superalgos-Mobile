@@ -25,11 +25,12 @@ class AppStartPage extends ConsumerWidget {
           );
         },
         child: state.maybeWhen(
-          initial: () =>  LoadingWidget(key: UniqueKey()),
-          authenticated: () =>  UserProfilePage(key: UniqueKey()),
-          onboarding: () =>  OnboardingPage(key: UniqueKey()),
+          initial: () => LoadingWidget(key: UniqueKey()),
+          authenticated: () => UserProfilePage(key: UniqueKey()),
+          onboarding: () => OnboardingPage(key: UniqueKey()),
           unauthenticated: () => SignInPage(key: UniqueKey()),
-          internetUnAvailable: () =>  ConnectionUnavailableWidget(key: UniqueKey()),
+          internetUnAvailable: () =>
+              ConnectionUnavailableWidget(key: UniqueKey()),
           orElse: () => LoadingWidget(key: UniqueKey()),
         ));
   }
@@ -40,7 +41,28 @@ class LoadingWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: const TextShimmer());
+    return const Scaffold(
+        body: ProfilePageShimmer(hasBottomBox: true, isRectBox: false,));
+        /* Padding( padding: EdgeInsets.symmetric(vertical: 30.0,horizontal: 5),child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(children: [
+              ProfileShimmer(hasBottomLines: true,)
+            ],),
+            Divider(),
+            Row(children: [
+              YoutubeShimmer(hasBottomBox: true,)
+            ],),
+            Divider(),
+            Row(children: [
+              ProfileShimmer()
+            ],),
+            Divider(),
+            Row(children: [
+              PlayStoreShimmer()
+            ],),
+        ],)));*/
   }
 }
 

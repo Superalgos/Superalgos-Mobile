@@ -2,6 +2,7 @@ import 'package:app/app/widgets/app_button.dart';
 import 'package:app/feature/userprofile/model/user_model.dart';
 import 'package:app/feature/userprofile/provider/user_profile_page_provider.dart';
 import 'package:app/feature/userprofile/provider/user_profile_provider.dart';
+import 'package:app/services/github_service_provider.dart';
 import 'package:app/services/web3_service_provider.dart';
 import 'package:app/utils/constants.dart';
 import 'package:flutter/material.dart';
@@ -146,6 +147,14 @@ class UserProfilePage extends ConsumerWidget {
                           ref.read(userProfilePageProvider.notifier).logout();
                         },
                       ),
+                      SizedBox(height: 30),
+                      AppButton(
+                        text: "Delete fork",
+                        type: ButtonType.PLAIN,
+                        onPressed: () {
+                          ref.read(githubServiceProvider).deleteFork();
+                        },
+                      ),
                     ],
                   ),
                 )
@@ -158,6 +167,6 @@ class UserProfilePage extends ConsumerWidget {
   }
 
   Widget _widgetShimmer(BuildContext context, WidgetRef ref) {
-    return const ProfilePageShimmer();
+    return const ProfilePageShimmer(hasBottomBox:true ,);
   }
 }

@@ -1,3 +1,5 @@
+import 'package:app/app/app_start_page.dart';
+import 'package:app/app/provider/app_start_provider.dart';
 import 'package:app/app/widgets/app_button.dart';
 import 'package:app/feature/onboarding/provider/profile_creation_provider.dart';
 import 'package:app/feature/userprofile/widget/user_profile_page.dart';
@@ -20,13 +22,13 @@ class ProfileCreationPage extends ConsumerWidget {
         body: Container(
             child: ref.watch(profileCreationProvider).when(
                 loading: (mnemonic) => _waitingForProfileCreation(context),
-                finalized: (ethAcc) => _finalized(ethAcc, context))));
+                finalized: (ethAcc) => _finalized(ethAcc, context, ref))));
   }
 
-  Widget _finalized(ETHAccount ethAccount, BuildContext context) {
+  Widget _finalized(ETHAccount ethAccount, BuildContext context, WidgetRef ref) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [_topContent(context), _bottomCard(ethAccount, context)],
+      children: [_topContent(context), _bottomCard(ethAccount, context, ref)],
     );
   }
 
@@ -84,7 +86,7 @@ class ProfileCreationPage extends ConsumerWidget {
         ));
   }
 
-  Widget _bottomCard(ETHAccount ethAccount, BuildContext context) {
+  Widget _bottomCard(ETHAccount ethAccount, BuildContext context, WidgetRef ref) {
     return Expanded(
         flex: 3,
         child: Container(
@@ -140,7 +142,7 @@ class ProfileCreationPage extends ConsumerWidget {
                 text: "Go to your profile",
                 type: ButtonType.PRIMARY,
                 onPressed: () {
-                  context.router.push(const UserProfileRoute());
+                  ref.read(appStartProvider.notifier).finalizedOnboarding();
                 },
               ),
             ],

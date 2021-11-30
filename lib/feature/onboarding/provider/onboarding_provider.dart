@@ -3,12 +3,12 @@ import 'package:app/services/github_service_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final onboardingProvider =
-    StateNotifierProvider<OnboardingProvider, OnboardingState>((ref) {
+    AutoDisposeStateNotifierProvider<OnboardingProvider, OnboardingState>((ref) {
   return OnboardingProvider(ref.read);
 });
 
 class OnboardingProvider extends StateNotifier<OnboardingState> {
-  OnboardingProvider(this._reader) : super(const OnboardingState.initial(0));
+  OnboardingProvider(this._reader) : super(const OnboardingState.initial());
 
   final Reader _reader;
 
