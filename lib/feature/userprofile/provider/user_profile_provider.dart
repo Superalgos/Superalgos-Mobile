@@ -1,8 +1,8 @@
-import 'package:app/feature/auth/provider/auth_provider.dart';
 import 'package:app/feature/onboarding/model/config_model.dart';
 import 'package:app/feature/onboarding/model/user_profile_model.dart';
 import 'package:app/feature/userprofile/model/user_model.dart';
 import 'package:app/feature/userprofile/provider/user_profile_page_provider.dart';
+import 'package:app/feature/userprofile/state/user_profile_page_state.dart';
 import 'package:app/feature/userprofile/state/user_profile_state.dart';
 import 'package:app/services/github_service_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,7 +11,7 @@ import 'dart:convert';
 
 
 final userProfileProvider =
-    StateNotifierProvider<UserProfileProvider, UserProfileState>((ref) {
+    AutoDisposeStateNotifierProvider<UserProfileProvider, UserProfileState>((ref) {
   return UserProfileProvider(ref.read);
 });
 

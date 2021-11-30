@@ -14,6 +14,7 @@ class AuthProvider extends StateNotifier<AuthState> {
   late final AuthRepository _authRepository = _reader(authRepositoryProvider);
 
   Future<void> login() async {
+    state = AuthState.loading();
     state = await _authRepository.signIn();
   }
 

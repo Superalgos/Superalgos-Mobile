@@ -4,6 +4,7 @@ import 'package:app/feature/onboarding/widget/onboarding_page.dart';
 import 'package:app/feature/userprofile/widget/user_profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_shimmer/flutter_shimmer.dart';
 
 class AppStartPage extends ConsumerWidget {
   const AppStartPage({Key? key}) : super(key: key);
@@ -39,7 +40,7 @@ class LoadingWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(body: const TextShimmer());
   }
 }
 

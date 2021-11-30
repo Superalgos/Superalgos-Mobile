@@ -26,7 +26,7 @@ GithubOauthHelper oAuth2Helper = GithubOauthHelper(
 final oauth2HelperProvider = Provider((ref) => oAuth2Helper);
 
 class AuthRepository implements AuthRepositoryInterface {
-  AuthRepository(this._reader) {}
+  AuthRepository(this._reader){}
 
   final Reader _reader;
 
@@ -35,6 +35,7 @@ class AuthRepository implements AuthRepositoryInterface {
   Future<AuthState> signIn() async {
     final oAuth2Helper = _reader(oauth2HelperProvider);
     try {
+      print("signIn");
       var token = await oAuth2Helper.getToken();
       return const AuthState.loggedIn();
     } catch (e) {

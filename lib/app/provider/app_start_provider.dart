@@ -12,7 +12,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:oauth2_client/oauth2_helper.dart';
 
 final appStartProvider =
-    AutoDisposeStateNotifierProvider<AppStartNotifier, AppStartState>((ref) {
+    StateNotifierProvider<AppStartNotifier, AppStartState>((ref) {
   final loginState = ref.watch(authProvider);
   final userProfilePageState = ref.watch(userProfilePageProvider);
 
@@ -41,11 +41,6 @@ class AppStartNotifier extends StateNotifier<AppStartState> {
   final Reader _reader;
 
   Future<void> _init() async {
-    _authState.maybeWhen(
-        loggedIn: () {
-          state = const AppStartState.authenticated();
-        },
-        orElse: () {});
 
     _userProfilePageState.maybeWhen(
         loggedOut: () {
