@@ -1,4 +1,5 @@
 import 'package:app/feature/auth/model/auth_state.dart';
+import 'package:app/feature/auth/repository/github_oauth_helper.dart';
 import 'package:app/utils/app_exception.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:oauth2_client/github_oauth2_client.dart';
@@ -14,7 +15,7 @@ abstract class AuthRepositoryInterface {
 // Global, used for DI
 final authRepositoryProvider = Provider((ref) => AuthRepository(ref.read));
 
-OAuth2Helper oAuth2Helper = OAuth2Helper(
+GithubOauthHelper oAuth2Helper = GithubOauthHelper(
     GitHubOAuth2Client(redirectUri: "sa://auth", customUriScheme: "sa"),
     grantType: OAuth2Helper.AUTHORIZATION_CODE,
     clientId: '855f1d6bdce2d9b6fe92',

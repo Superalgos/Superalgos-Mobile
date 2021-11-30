@@ -11,8 +11,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import 'package:auto_route/auto_route.dart';
 
-class CreateProfileLoading extends ConsumerWidget {
-  const CreateProfileLoading({Key? key}) : super(key: key);
+class ProfileCreationPage extends ConsumerWidget {
+  const ProfileCreationPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -106,14 +106,14 @@ class CreateProfileLoading extends ConsumerWidget {
               const Text("Welcome to Superalgos !",
                   style: TextStyle(
                       fontWeight: FontWeight.w600,
-                      color: Color.fromRGBO(19, 22, 33, 1))),
+                      color: UIColors.darkText)),
               const SizedBox(
                 height: 10.0,
               ),
               const Text(
                 "Before proceeding to your User Profile page, please make sure you copy your private key and address and save them in a secure place",
                 style: TextStyle(
-                  color: Color.fromRGBO(74, 77, 84, 1),
+                  color: UIColors.lightText,
                   fontSize: 14.0,
                 ),
               ),

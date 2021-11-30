@@ -1,7 +1,7 @@
 import 'package:app/feature/onboarding/model/config_model.dart';
 import 'package:app/feature/onboarding/model/user_profile_model.dart';
 import 'package:app/feature/onboarding/state/profile_creation_state.dart';
-import 'package:app/feature/onboarding/widget/onboarding_widget.dart';
+import 'package:app/feature/onboarding/widget/onboarding_page.dart';
 import 'package:app/services/github_service_provider.dart';
 import 'package:app/services/signature.dart';
 import 'package:app/services/web3_service_provider.dart';

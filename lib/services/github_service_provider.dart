@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:app/feature/auth/repository/auth_repository.dart';
+import 'package:app/feature/auth/repository/github_oauth_helper.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:github/github.dart';
 import 'package:oauth2_client/oauth2_helper.dart';
@@ -24,7 +25,7 @@ final githubServiceProvider =
 
 class GithubServiceProvider implements GithubService {
   final Reader _reader;
-  late OAuth2Helper oAuth2Helper = _reader(oauth2HelperProvider);
+  late GithubOauthHelper oAuth2Helper = _reader(oauth2HelperProvider);
   String jsonFileExt = '.json';
   String superAlgosOrg = 'Superalgos';
   String userProfileBranch = 'develop';
@@ -35,7 +36,7 @@ class GithubServiceProvider implements GithubService {
 
   @override
   Future<Repository?> getSAFork() async {
-    var token = await oAuth2Helper.getToken();
+    var token = await oAuth2Helper.getTokenFromStorage();
     var instance = GitHub(auth: Authentication.withToken(token!.accessToken));
     var currentUser = await instance.users.getCurrentUser();
     var repoSlug = RepositorySlug(currentUser.login!, superAlgosOrg);

@@ -23,6 +23,8 @@ class UIColors {
   ];
   static const gray = Color(0xffE6E6E6);
   static const primaryColor = Color(0xff0295AA);
+  static const darkText = Color.fromRGBO(19, 22, 33, 1.0);
+  static const lightText = Color.fromRGBO(74, 77, 84, 1);
 }
 
 class TextStyles {

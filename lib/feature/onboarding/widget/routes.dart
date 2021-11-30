@@ -1,4 +1,4 @@
-import 'package:app/feature/onboarding/widget/onboarding_widget.dart';
+import 'package:app/feature/onboarding/widget/onboarding_page.dart';
 
 import 'package:auto_route/auto_route.dart';
 

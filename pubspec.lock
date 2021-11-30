@@ -308,12 +308,19 @@ packages:
     source: hosted
     version: "5.0.1"
   flutter_secure_storage:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: flutter_secure_storage
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.2.1"
+  flutter_shimmer:
+    dependency: "direct main"
+    description:
+      name: flutter_shimmer
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.1.2"
   flutter_test:
     dependency: "direct dev"
     description: flutter

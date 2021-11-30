@@ -10,7 +10,7 @@
 
 import 'package:app/app/app_start_page.dart' as _i1;
 import 'package:app/feature/auth/widget/sign_in_page.dart' as _i2;
-import 'package:app/feature/onboarding/widget/onboarding_widget.dart' as _i4;
+import 'package:app/feature/onboarding/widget/onboarding_page.dart' as _i4;
 import 'package:app/feature/userprofile/widget/user_profile_page.dart' as _i3;
 import 'package:auto_route/auto_route.dart' as _i5;
 import 'package:flutter/material.dart' as _i6;

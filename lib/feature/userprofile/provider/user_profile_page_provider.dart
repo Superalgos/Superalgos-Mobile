@@ -1,3 +1,4 @@
+import 'package:app/feature/auth/provider/auth_provider.dart';
 import 'package:app/feature/auth/repository/auth_repository.dart';
 import 'package:app/feature/onboarding/provider/onboarding_provider.dart';
 import 'package:app/feature/onboarding/state/onboarding_state.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final userProfilePageProvider =
     StateNotifierProvider<UserProfilePageProvider, UserProfilePageState>((ref) {
+      ref.watch(authProvider);
   return UserProfilePageProvider(ref.read);
 });
 

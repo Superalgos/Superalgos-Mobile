@@ -17,14 +17,10 @@ final _privateConstructorUsedError = UnsupportedError(
 class _$UserModelTearOff {
   const _$UserModelTearOff();
 
-  _UserModel call(
-      {required String userName,
-      String? userProfileContent,
-      Repository? saFork}) {
+  _UserModel call({required String userName, required Signature signature}) {
     return _UserModel(
       userName: userName,
-      userProfileContent: userProfileContent,
-      saFork: saFork,
+      signature: signature,
     );
   }
 }
@@ -35,8 +31,7 @@ const $UserModel = _$UserModelTearOff();
 /// @nodoc
 mixin _$UserModel {
   String get userName => throw _privateConstructorUsedError;
-  String? get userProfileContent => throw _privateConstructorUsedError;
-  Repository? get saFork => throw _privateConstructorUsedError;
+  Signature get signature => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $UserModelCopyWith<UserModel> get copyWith =>
@@ -47,7 +42,9 @@ mixin _$UserModel {
 abstract class $UserModelCopyWith<$Res> {
   factory $UserModelCopyWith(UserModel value, $Res Function(UserModel) then) =
       _$UserModelCopyWithImpl<$Res>;
-  $Res call({String userName, String? userProfileContent, Repository? saFork});
+  $Res call({String userName, Signature signature});
+
+  $SignatureCopyWith<$Res> get signature;
 }
 
 /// @nodoc
@@ -61,23 +58,25 @@ class _$UserModelCopyWithImpl<$Res> implements $UserModelCopyWith<$Res> {
   @override
   $Res call({
     Object? userName = freezed,
-    Object? userProfileContent = freezed,
-    Object? saFork = freezed,
+    Object? signature = freezed,
   }) {
     return _then(_value.copyWith(
       userName: userName == freezed
           ? _value.userName
           : userName // ignore: cast_nullable_to_non_nullable
               as String,
-      userProfileContent: userProfileContent == freezed
-          ? _value.userProfileContent
-          : userProfileContent // ignore: cast_nullable_to_non_nullable
-              as String?,
-      saFork: saFork == freezed
-          ? _value.saFork
-          : saFork // ignore: cast_nullable_to_non_nullable
-              as Repository?,
+      signature: signature == freezed
+          ? _value.signature
+          : signature // ignore: cast_nullable_to_non_nullable
+              as Signature,
     ));
+  }
+
+  @override
+  $SignatureCopyWith<$Res> get signature {
+    return $SignatureCopyWith<$Res>(_value.signature, (value) {
+      return _then(_value.copyWith(signature: value));
+    });
   }
 }
 
@@ -87,7 +86,10 @@ abstract class _$UserModelCopyWith<$Res> implements $UserModelCopyWith<$Res> {
           _UserModel value, $Res Function(_UserModel) then) =
       __$UserModelCopyWithImpl<$Res>;
   @override
-  $Res call({String userName, String? userProfileContent, Repository? saFork});
+  $Res call({String userName, Signature signature});
+
+  @override
+  $SignatureCopyWith<$Res> get signature;
 }
 
 /// @nodoc
@@ -102,22 +104,17 @@ class __$UserModelCopyWithImpl<$Res> extends _$UserModelCopyWithImpl<$Res>
   @override
   $Res call({
     Object? userName = freezed,
-    Object? userProfileContent = freezed,
-    Object? saFork = freezed,
+    Object? signature = freezed,
   }) {
     return _then(_UserModel(
       userName: userName == freezed
           ? _value.userName
           : userName // ignore: cast_nullable_to_non_nullable
               as String,
-      userProfileContent: userProfileContent == freezed
-          ? _value.userProfileContent
-          : userProfileContent // ignore: cast_nullable_to_non_nullable
-              as String?,
-      saFork: saFork == freezed
-          ? _value.saFork
-          : saFork // ignore: cast_nullable_to_non_nullable
-              as Repository?,
+      signature: signature == freezed
+          ? _value.signature
+          : signature // ignore: cast_nullable_to_non_nullable
+              as Signature,
     ));
   }
 }
@@ -125,20 +122,17 @@ class __$UserModelCopyWithImpl<$Res> extends _$UserModelCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_UserModel extends _UserModel {
-  const _$_UserModel(
-      {required this.userName, this.userProfileContent, this.saFork})
+  const _$_UserModel({required this.userName, required this.signature})
       : super._();
 
   @override
   final String userName;
   @override
-  final String? userProfileContent;
-  @override
-  final Repository? saFork;
+  final Signature signature;
 
   @override
   String toString() {
-    return 'UserModel(userName: $userName, userProfileContent: $userProfileContent, saFork: $saFork)';
+    return 'UserModel(userName: $userName, signature: $signature)';
   }
 
   @override
@@ -148,14 +142,12 @@ class _$_UserModel extends _UserModel {
             other is _UserModel &&
             (identical(other.userName, userName) ||
                 other.userName == userName) &&
-            (identical(other.userProfileContent, userProfileContent) ||
-                other.userProfileContent == userProfileContent) &&
-            (identical(other.saFork, saFork) || other.saFork == saFork));
+            (identical(other.signature, signature) ||
+                other.signature == signature));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, userName, userProfileContent, saFork);
+  int get hashCode => Object.hash(runtimeType, userName, signature);
 
   @JsonKey(ignore: true)
   @override
@@ -165,17 +157,13 @@ class _$_UserModel extends _UserModel {
 
 abstract class _UserModel extends UserModel {
   const factory _UserModel(
-      {required String userName,
-      String? userProfileContent,
-      Repository? saFork}) = _$_UserModel;
+      {required String userName, required Signature signature}) = _$_UserModel;
   const _UserModel._() : super._();
 
   @override
   String get userName;
   @override
-  String? get userProfileContent;
-  @override
-  Repository? get saFork;
+  Signature get signature;
   @override
   @JsonKey(ignore: true)
   _$UserModelCopyWith<_UserModel> get copyWith =>

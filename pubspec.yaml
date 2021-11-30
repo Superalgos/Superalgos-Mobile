@@ -31,6 +31,8 @@ dependencies:
   uuid: ^3.0.5
   bip32: ^2.0.0
   flutter_screenutil: ^5.0.1
+  flutter_secure_storage: ^4.2.1
+  flutter_shimmer: ^2.1.2
 
 dev_dependencies:
   flutter_test:
@@ -55,6 +57,9 @@ flutter:
     - assets/onboarding_2.png
     - assets/onboarding_3.png
     - assets/governance.png
+    - assets/user-profile.png
+    - assets/sa_logo.png
+    - assets/sa_platform.png
   fonts:
     - family: Saira
       fonts:

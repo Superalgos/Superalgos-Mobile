@@ -1,88 +1,163 @@
+import 'package:app/app/widgets/app_button.dart';
+import 'package:app/feature/userprofile/model/user_model.dart';
 import 'package:app/feature/userprofile/provider/user_profile_page_provider.dart';
 import 'package:app/feature/userprofile/provider/user_profile_provider.dart';
 import 'package:app/services/web3_service_provider.dart';
+import 'package:app/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_shimmer/flutter_shimmer.dart';
 
 class UserProfilePage extends ConsumerWidget {
   const UserProfilePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(userProfilePageProvider);
-
-    return _userProfile(context, ref);
+    final state = ref.watch(userProfileProvider);
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: state.when(
+          loading: () => _widgetShimmer(context, ref),
+          profileLoaded: (userModel) => _userProfile(context, ref, userModel)),
+    );
   }
 
-  Widget _userProfile(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(userProfileProvider);
-
-    return state.when(loading: () {
-      return _widgetShimmer(context, ref);
-    }, profileLoaded: (user) {
-      return Scaffold(
-          key: UniqueKey(),
-          appBar: AppBar(
-            title: Text("User Profile"),
+  Widget _userProfile(context, ref, UserModel userModel) {
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Positioned(
+          left: 250.0,
+          top: 30,
+          child: Opacity(
+            opacity: 0.8,
+            child: Image.asset(
+              "assets/user-profile.png",
+              width: 100,
+              height: 100,
+            ),
           ),
-          body: Column(children: [
-            Row(
+        ),
+        SingleChildScrollView(
+          child: Container(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(user.userName),
+                const SizedBox(
+                  height: kToolbarHeight,
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16.0,
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          RichText(
+                            text: TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: "Welcome Back,\n",
+                                  style: TextStyles.onbLargeTextStyle
+                                      .copyWith(color: UIColors.darkText),
+                                ),
+                                TextSpan(
+                                    text: "${userModel.userName} !",
+                                    style: TextStyles.onbLargeTextStyle
+                                        .copyWith(color: UIColors.darkText)),
+                              ],
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 50.0,
+                ),
+                Container(
+                  width: double.infinity,
+                  constraints: BoxConstraints(
+                    minHeight: MediaQuery.of(context).size.height - 200.0,
+                  ),
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(30.0),
+                      topRight: Radius.circular(30.0),
+                    ),
+                    color: UIColors.gray,
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 24.0,
+                    horizontal: 24.0,
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 24.0,
+                        ),
+                        child: Text(
+                          "Your Blockchain power",
+                          style: TextStyles.onbLargeTextStyle
+                              .copyWith(color: UIColors.darkText),
+                        ),
+                      ),
+                      SizedBox(height: 7.0),
+                      Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 24.0,
+                          ),
+                          child: FutureBuilder(
+                              future: ref
+                                  .read(web3ServiceProvider)
+                                  .getWalletBalanceForUserAndSignature(
+                                      userModel.userName,
+                                      userModel.signature.signature),
+                              builder: (context, snapshot) {
+                                switch (snapshot.connectionState) {
+                                  case ConnectionState.waiting:
+                                    return CircularProgressIndicator();
+                                  default:
+                                    if (snapshot.hasError)
+                                      return Text('Error: ${snapshot.error}');
+                                    else {
+                                      return Text(
+                                        "${snapshot.data!}",
+                                        style: TextStyles.onbXLargeTextStyle
+                                            .copyWith(color: UIColors.darkText),
+                                      );
+                                    }
+                                }
+                              })),
+                      SizedBox(height: 30),
+                      AppButton(
+                        text: "Logout",
+                        type: ButtonType.PRIMARY,
+                        onPressed: () {
+                          ref.read(userProfilePageProvider.notifier).logout();
+                        },
+                      ),
+                    ],
+                  ),
+                )
               ],
             ),
-            Row(
-              children: [
-                ElevatedButton(
-                    onPressed: () {
-                      ref
-                          .read(web3ServiceProvider)
-                          .getWalletBalanceForUserAndSignature(user.userName,
-                              "0x88308dece27d9565ae7c6daf91f8b6aa88893a9f2145d35f4adf872894d7306b74b5bc0a2a981551dbd7158fcb48d2f6d00e8583e6dbb6ad4784fe80990f1afd1c");
-                    },
-                    child: Text("Get balance")),
-              ],
-            ),
-            Row(children: [
-              ElevatedButton(
-                  onPressed: () {
-                    ref.read(web3ServiceProvider).signData(user.userName,
-                        "0x8a50d0f12ccdfd0725479e0727227f79e79b8c08f6a8d07bf6a339cb565de2d0");
-                  },
-                  child: Text("Get signed data")),
-            ]),
-            Row(
-              children: [
-                ElevatedButton(
-                    onPressed: () {
-                      ref.read(web3ServiceProvider).createAccount();
-                    },
-                    child: Text("Gen addr")),
-              ],
-            ),
-            Row(
-              children: [
-                ElevatedButton(
-                    onPressed: () {
-                      ref.read(web3ServiceProvider).mnemonicToETHAccount("");
-                    },
-                    child: Text("Addr from mnemonic")),
-              ],
-            ),
-            Row(
-              children: [
-                ElevatedButton(
-                    onPressed: () {
-                      ref.read(userProfilePageProvider.notifier).logout();
-                    },
-                    child: Text("Logout")),
-              ],
-            )
-          ]));
-    });
+          ),
+        )
+      ],
+    );
   }
 
   Widget _widgetShimmer(BuildContext context, WidgetRef ref) {
-    return Container(child: const Text("Loading user profile"),);
+    return const ProfilePageShimmer();
   }
 }

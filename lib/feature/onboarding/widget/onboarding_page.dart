@@ -9,7 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 
-import 'loading_screen_widget.dart';
+import 'profile_creation_page.dart';
 
 class OnboardingPage extends ConsumerWidget {
   const OnboardingPage({Key? key}) : super(key: key);
@@ -20,7 +20,7 @@ class OnboardingPage extends ConsumerWidget {
     var onbProvider = ref.read(onboardingProvider.notifier);
 
     return state.maybeWhen(slideShowFinalized: () {
-      return const CreateProfileLoading();
+      return const ProfileCreationPage();
     }, orElse: () {
       return _onboardingScreen(context, ref, onbProvider);
     });
