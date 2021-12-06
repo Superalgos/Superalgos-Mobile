@@ -19,7 +19,7 @@ class ProfileCreationPage extends ConsumerWidget {
         body: Container(
             child: ref.watch(profileCreationProvider).when(
                 loading: (mnemonic) => _waitingForProfileCreation(context),
-                finalizedWithoutProfile: () => _goToUserProfile(ref),
+                finalizedWithoutNewProfile: () => _goToUserProfile(ref),
                 finalized: (ethAcc) => _finalized(ethAcc, context, ref))));
   }
 

@@ -51,31 +51,6 @@ Map<String, dynamic> _$UserProfileModelToJson(UserProfileModel instance) {
   return val;
 }
 
-SocialPersonas _$SocialPersonasFromJson(Map<String, dynamic> json) =>
-    SocialPersonas(
-      type: json['type'] as String,
-      name: json['name'] as String,
-      config: json['config'] as String,
-      project: json['project'] as String,
-      id: json['id'] as String,
-      savedPayload:
-          SavedPayload.fromJson(json['savedPayload'] as Map<String, dynamic>),
-      socialPersonas: (json['socialPersonas'] as List<dynamic>)
-          .map((e) => SocialPersona.fromJson(e as Map<String, dynamic>))
-          .toList(),
-    );
-
-Map<String, dynamic> _$SocialPersonasToJson(SocialPersonas instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'type': instance.type,
-      'name': instance.name,
-      'project': instance.project,
-      'config': instance.config,
-      'savedPayload': instance.savedPayload,
-      'socialPersonas': instance.socialPersonas,
-    };
-
 UserApps _$UserAppsFromJson(Map<String, dynamic> json) => UserApps(
       type: json['type'] as String,
       name: json['name'] as String,
@@ -84,11 +59,9 @@ UserApps _$UserAppsFromJson(Map<String, dynamic> json) => UserApps(
       id: json['id'] as String,
       savedPayload:
           SavedPayload.fromJson(json['savedPayload'] as Map<String, dynamic>),
-      socialTradingMobileApps:
-          (json['socialTradingMobileApps'] as List<dynamic>)
-              .map((e) =>
-                  SocialTradingMobileApps.fromJson(e as Map<String, dynamic>))
-              .toList(),
+      mobileApps: json['mobileApps'] == null
+          ? null
+          : MobileApps.fromJson(json['mobileApps'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$UserAppsToJson(UserApps instance) => <String, dynamic>{
@@ -98,12 +71,10 @@ Map<String, dynamic> _$UserAppsToJson(UserApps instance) => <String, dynamic>{
       'project': instance.project,
       'config': instance.config,
       'savedPayload': instance.savedPayload,
-      'socialTradingMobileApps': instance.socialTradingMobileApps,
+      'mobileApps': instance.mobileApps,
     };
 
-SocialTradingMobileApps _$SocialTradingMobileAppsFromJson(
-        Map<String, dynamic> json) =>
-    SocialTradingMobileApps(
+MobileApps _$MobileAppsFromJson(Map<String, dynamic> json) => MobileApps(
       type: json['type'] as String,
       name: json['name'] as String,
       config: json['config'] as String,
@@ -111,12 +82,14 @@ SocialTradingMobileApps _$SocialTradingMobileAppsFromJson(
       id: json['id'] as String,
       savedPayload:
           SavedPayload.fromJson(json['savedPayload'] as Map<String, dynamic>),
-    )..mobileApps = (json['mobileApps'] as List<dynamic>?)
-        ?.map((e) => GenericUIObject.fromJson(e as Map<String, dynamic>))
-        .toList();
+      socialTradingMobileApps: (json['socialTradingMobileApps']
+              as List<dynamic>?)
+          ?.map(
+              (e) => SocialTradingMobileApp.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
 
-Map<String, dynamic> _$SocialTradingMobileAppsToJson(
-        SocialTradingMobileApps instance) =>
+Map<String, dynamic> _$MobileAppsToJson(MobileApps instance) =>
     <String, dynamic>{
       'id': instance.id,
       'type': instance.type,
@@ -124,8 +97,69 @@ Map<String, dynamic> _$SocialTradingMobileAppsToJson(
       'project': instance.project,
       'config': instance.config,
       'savedPayload': instance.savedPayload,
-      'mobileApps': instance.mobileApps,
+      'socialTradingMobileApps': instance.socialTradingMobileApps,
     };
+
+SocialTradingMobileApp _$SocialTradingMobileAppFromJson(
+        Map<String, dynamic> json) =>
+    SocialTradingMobileApp(
+      type: json['type'] as String,
+      name: json['name'] as String,
+      config: json['config'] as String,
+      project: json['project'] as String,
+      id: json['id'] as String,
+      savedPayload:
+          SavedPayload.fromJson(json['savedPayload'] as Map<String, dynamic>),
+    )..signingAccount = json['signingAccount'] == null
+        ? null
+        : SigningAccount.fromJson(
+            json['signingAccount'] as Map<String, dynamic>);
+
+Map<String, dynamic> _$SocialTradingMobileAppToJson(
+        SocialTradingMobileApp instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'type': instance.type,
+      'name': instance.name,
+      'project': instance.project,
+      'config': instance.config,
+      'savedPayload': instance.savedPayload,
+      'signingAccount': instance.signingAccount,
+    };
+
+SocialPersonas _$SocialPersonasFromJson(Map<String, dynamic> json) =>
+    SocialPersonas(
+      type: json['type'] as String,
+      name: json['name'] as String,
+      config: json['config'] as String,
+      project: json['project'] as String,
+      id: json['id'] as String,
+      savedPayload:
+          SavedPayload.fromJson(json['savedPayload'] as Map<String, dynamic>),
+      socialPersonas: (json['socialPersonas'] as List<dynamic>?)
+          ?.map((e) => SocialPersona.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$SocialPersonasToJson(SocialPersonas instance) {
+  final val = <String, dynamic>{
+    'id': instance.id,
+    'type': instance.type,
+    'name': instance.name,
+    'project': instance.project,
+    'config': instance.config,
+    'savedPayload': instance.savedPayload,
+  };
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('socialPersonas', instance.socialPersonas);
+  return val;
+}
 
 SocialPersona _$SocialPersonaFromJson(Map<String, dynamic> json) =>
     SocialPersona(

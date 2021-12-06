@@ -29,7 +29,7 @@ class _$ProfileCreationStateTearOff {
     );
   }
 
-  _FinalizedWithoutProfile finalizedWithoutProfile() {
+  _FinalizedWithoutProfile finalizedWithoutNewProfile() {
     return const _FinalizedWithoutProfile();
   }
 }
@@ -43,21 +43,21 @@ mixin _$ProfileCreationState {
   TResult when<TResult extends Object?>({
     required TResult Function(String? mnemonic) loading,
     required TResult Function(ETHAccount ethAccount) finalized,
-    required TResult Function() finalizedWithoutProfile,
+    required TResult Function() finalizedWithoutNewProfile,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(String? mnemonic)? loading,
     TResult Function(ETHAccount ethAccount)? finalized,
-    TResult Function()? finalizedWithoutProfile,
+    TResult Function()? finalizedWithoutNewProfile,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String? mnemonic)? loading,
     TResult Function(ETHAccount ethAccount)? finalized,
-    TResult Function()? finalizedWithoutProfile,
+    TResult Function()? finalizedWithoutNewProfile,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -66,21 +66,23 @@ mixin _$ProfileCreationState {
     required TResult Function(_Loading value) loading,
     required TResult Function(_Finalized value) finalized,
     required TResult Function(_FinalizedWithoutProfile value)
-        finalizedWithoutProfile,
+        finalizedWithoutNewProfile,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(_Loading value)? loading,
     TResult Function(_Finalized value)? finalized,
-    TResult Function(_FinalizedWithoutProfile value)? finalizedWithoutProfile,
+    TResult Function(_FinalizedWithoutProfile value)?
+        finalizedWithoutNewProfile,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Loading value)? loading,
     TResult Function(_Finalized value)? finalized,
-    TResult Function(_FinalizedWithoutProfile value)? finalizedWithoutProfile,
+    TResult Function(_FinalizedWithoutProfile value)?
+        finalizedWithoutNewProfile,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -168,7 +170,7 @@ class _$_Loading implements _Loading {
   TResult when<TResult extends Object?>({
     required TResult Function(String? mnemonic) loading,
     required TResult Function(ETHAccount ethAccount) finalized,
-    required TResult Function() finalizedWithoutProfile,
+    required TResult Function() finalizedWithoutNewProfile,
   }) {
     return loading(mnemonic);
   }
@@ -178,7 +180,7 @@ class _$_Loading implements _Loading {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(String? mnemonic)? loading,
     TResult Function(ETHAccount ethAccount)? finalized,
-    TResult Function()? finalizedWithoutProfile,
+    TResult Function()? finalizedWithoutNewProfile,
   }) {
     return loading?.call(mnemonic);
   }
@@ -188,7 +190,7 @@ class _$_Loading implements _Loading {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String? mnemonic)? loading,
     TResult Function(ETHAccount ethAccount)? finalized,
-    TResult Function()? finalizedWithoutProfile,
+    TResult Function()? finalizedWithoutNewProfile,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -203,7 +205,7 @@ class _$_Loading implements _Loading {
     required TResult Function(_Loading value) loading,
     required TResult Function(_Finalized value) finalized,
     required TResult Function(_FinalizedWithoutProfile value)
-        finalizedWithoutProfile,
+        finalizedWithoutNewProfile,
   }) {
     return loading(this);
   }
@@ -213,7 +215,8 @@ class _$_Loading implements _Loading {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(_Loading value)? loading,
     TResult Function(_Finalized value)? finalized,
-    TResult Function(_FinalizedWithoutProfile value)? finalizedWithoutProfile,
+    TResult Function(_FinalizedWithoutProfile value)?
+        finalizedWithoutNewProfile,
   }) {
     return loading?.call(this);
   }
@@ -223,7 +226,8 @@ class _$_Loading implements _Loading {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Loading value)? loading,
     TResult Function(_Finalized value)? finalized,
-    TResult Function(_FinalizedWithoutProfile value)? finalizedWithoutProfile,
+    TResult Function(_FinalizedWithoutProfile value)?
+        finalizedWithoutNewProfile,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -308,7 +312,7 @@ class _$_Finalized implements _Finalized {
   TResult when<TResult extends Object?>({
     required TResult Function(String? mnemonic) loading,
     required TResult Function(ETHAccount ethAccount) finalized,
-    required TResult Function() finalizedWithoutProfile,
+    required TResult Function() finalizedWithoutNewProfile,
   }) {
     return finalized(ethAccount);
   }
@@ -318,7 +322,7 @@ class _$_Finalized implements _Finalized {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(String? mnemonic)? loading,
     TResult Function(ETHAccount ethAccount)? finalized,
-    TResult Function()? finalizedWithoutProfile,
+    TResult Function()? finalizedWithoutNewProfile,
   }) {
     return finalized?.call(ethAccount);
   }
@@ -328,7 +332,7 @@ class _$_Finalized implements _Finalized {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String? mnemonic)? loading,
     TResult Function(ETHAccount ethAccount)? finalized,
-    TResult Function()? finalizedWithoutProfile,
+    TResult Function()? finalizedWithoutNewProfile,
     required TResult orElse(),
   }) {
     if (finalized != null) {
@@ -343,7 +347,7 @@ class _$_Finalized implements _Finalized {
     required TResult Function(_Loading value) loading,
     required TResult Function(_Finalized value) finalized,
     required TResult Function(_FinalizedWithoutProfile value)
-        finalizedWithoutProfile,
+        finalizedWithoutNewProfile,
   }) {
     return finalized(this);
   }
@@ -353,7 +357,8 @@ class _$_Finalized implements _Finalized {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(_Loading value)? loading,
     TResult Function(_Finalized value)? finalized,
-    TResult Function(_FinalizedWithoutProfile value)? finalizedWithoutProfile,
+    TResult Function(_FinalizedWithoutProfile value)?
+        finalizedWithoutNewProfile,
   }) {
     return finalized?.call(this);
   }
@@ -363,7 +368,8 @@ class _$_Finalized implements _Finalized {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Loading value)? loading,
     TResult Function(_Finalized value)? finalized,
-    TResult Function(_FinalizedWithoutProfile value)? finalizedWithoutProfile,
+    TResult Function(_FinalizedWithoutProfile value)?
+        finalizedWithoutNewProfile,
     required TResult orElse(),
   }) {
     if (finalized != null) {
@@ -409,7 +415,7 @@ class _$_FinalizedWithoutProfile implements _FinalizedWithoutProfile {
 
   @override
   String toString() {
-    return 'ProfileCreationState.finalizedWithoutProfile()';
+    return 'ProfileCreationState.finalizedWithoutNewProfile()';
   }
 
   @override
@@ -426,9 +432,9 @@ class _$_FinalizedWithoutProfile implements _FinalizedWithoutProfile {
   TResult when<TResult extends Object?>({
     required TResult Function(String? mnemonic) loading,
     required TResult Function(ETHAccount ethAccount) finalized,
-    required TResult Function() finalizedWithoutProfile,
+    required TResult Function() finalizedWithoutNewProfile,
   }) {
-    return finalizedWithoutProfile();
+    return finalizedWithoutNewProfile();
   }
 
   @override
@@ -436,9 +442,9 @@ class _$_FinalizedWithoutProfile implements _FinalizedWithoutProfile {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(String? mnemonic)? loading,
     TResult Function(ETHAccount ethAccount)? finalized,
-    TResult Function()? finalizedWithoutProfile,
+    TResult Function()? finalizedWithoutNewProfile,
   }) {
-    return finalizedWithoutProfile?.call();
+    return finalizedWithoutNewProfile?.call();
   }
 
   @override
@@ -446,11 +452,11 @@ class _$_FinalizedWithoutProfile implements _FinalizedWithoutProfile {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String? mnemonic)? loading,
     TResult Function(ETHAccount ethAccount)? finalized,
-    TResult Function()? finalizedWithoutProfile,
+    TResult Function()? finalizedWithoutNewProfile,
     required TResult orElse(),
   }) {
-    if (finalizedWithoutProfile != null) {
-      return finalizedWithoutProfile();
+    if (finalizedWithoutNewProfile != null) {
+      return finalizedWithoutNewProfile();
     }
     return orElse();
   }
@@ -461,9 +467,9 @@ class _$_FinalizedWithoutProfile implements _FinalizedWithoutProfile {
     required TResult Function(_Loading value) loading,
     required TResult Function(_Finalized value) finalized,
     required TResult Function(_FinalizedWithoutProfile value)
-        finalizedWithoutProfile,
+        finalizedWithoutNewProfile,
   }) {
-    return finalizedWithoutProfile(this);
+    return finalizedWithoutNewProfile(this);
   }
 
   @override
@@ -471,9 +477,10 @@ class _$_FinalizedWithoutProfile implements _FinalizedWithoutProfile {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(_Loading value)? loading,
     TResult Function(_Finalized value)? finalized,
-    TResult Function(_FinalizedWithoutProfile value)? finalizedWithoutProfile,
+    TResult Function(_FinalizedWithoutProfile value)?
+        finalizedWithoutNewProfile,
   }) {
-    return finalizedWithoutProfile?.call(this);
+    return finalizedWithoutNewProfile?.call(this);
   }
 
   @override
@@ -481,11 +488,12 @@ class _$_FinalizedWithoutProfile implements _FinalizedWithoutProfile {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Loading value)? loading,
     TResult Function(_Finalized value)? finalized,
-    TResult Function(_FinalizedWithoutProfile value)? finalizedWithoutProfile,
+    TResult Function(_FinalizedWithoutProfile value)?
+        finalizedWithoutNewProfile,
     required TResult orElse(),
   }) {
-    if (finalizedWithoutProfile != null) {
-      return finalizedWithoutProfile(this);
+    if (finalizedWithoutNewProfile != null) {
+      return finalizedWithoutNewProfile(this);
     }
     return orElse();
   }

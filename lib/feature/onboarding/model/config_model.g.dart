@@ -6,44 +6,54 @@ part of 'config_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_Config _$$_ConfigFromJson(Map<String, dynamic> json) => _$_Config(
-      signature: Signature.fromJson(json['signature'] as Map<String, dynamic>),
+SigningConfig _$SigningConfigFromJson(Map<String, dynamic> json) =>
+    SigningConfig(
       codeName: json['codeName'] as String,
+      signature: Signature.fromJson(json['signature'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$$_ConfigToJson(_$_Config instance) => <String, dynamic>{
-      'signature': instance.signature,
+Map<String, dynamic> _$SigningConfigToJson(SigningConfig instance) =>
+    <String, dynamic>{
       'codeName': instance.codeName,
+      'signature': instance.signature,
     };
 
-_$_SocialMobileAppConfig _$$_SocialMobileAppConfigFromJson(
+SocialMobileAppConfig _$SocialMobileAppConfigFromJson(
         Map<String, dynamic> json) =>
-    _$_SocialMobileAppConfig(
+    SocialMobileAppConfig(
       codeName: json['codeName'] as String,
       host: json['host'] as String?,
       webSocketsPort: json['webSocketsPort'] as String?,
     );
 
-Map<String, dynamic> _$$_SocialMobileAppConfigToJson(
-        _$_SocialMobileAppConfig instance) =>
+Map<String, dynamic> _$SocialMobileAppConfigToJson(
+        SocialMobileAppConfig instance) =>
     <String, dynamic>{
       'codeName': instance.codeName,
       'host': instance.host,
       'webSocketsPort': instance.webSocketsPort,
     };
 
-_$_SocialPersonaConfig _$$_SocialPersonaConfigFromJson(
-        Map<String, dynamic> json) =>
-    _$_SocialPersonaConfig(
-      codeName: json['codeName'] as String,
+SocialPersonaConfig _$SocialPersonaConfigFromJson(Map<String, dynamic> json) =>
+    SocialPersonaConfig(
+      codeName: json['codeName'],
       socialHandle: json['socialHandle'] as String,
       bio: json['bio'] as String,
     );
 
-Map<String, dynamic> _$$_SocialPersonaConfigToJson(
-        _$_SocialPersonaConfig instance) =>
+Map<String, dynamic> _$SocialPersonaConfigToJson(
+        SocialPersonaConfig instance) =>
     <String, dynamic>{
       'codeName': instance.codeName,
       'socialHandle': instance.socialHandle,
       'bio': instance.bio,
+    };
+
+SharedConfig _$SharedConfigFromJson(Map<String, dynamic> json) => SharedConfig(
+      codeName: json['codeName'] as String,
+    );
+
+Map<String, dynamic> _$SharedConfigToJson(SharedConfig instance) =>
+    <String, dynamic>{
+      'codeName': instance.codeName,
     };

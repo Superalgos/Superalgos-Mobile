@@ -1,57 +1,66 @@
 import 'package:app/services/signature.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'dart:convert';
 
-part 'config_model.freezed.dart';
 part 'config_model.g.dart';
 
-SigningConfig configFromJson(String str) => SigningConfig.fromJson(json.decode(str));
+@JsonSerializable()
+class SigningConfig extends SharedConfig {
 
-String configToJson(SigningConfig data) => json.encode(data.toJson());
-
-@freezed
-class SigningConfig with _$SigningConfig {
-  const factory SigningConfig({
-    required Signature signature,
+  SigningConfig({
     required String codeName,
-  }) = _Config;
+    required this.signature,
+  }) : super(codeName: codeName);
 
-  factory SigningConfig.fromJson(Map<String, dynamic> json) => _$SigningConfigFromJson(json);
+  final Signature signature;
+
+  factory SigningConfig.fromJson(Map<String, dynamic> json) =>
+      _$SigningConfigFromJson(json);
+
+  Map<String, dynamic> toJson() => _$SigningConfigToJson(this);
 }
 
+@JsonSerializable()
+class SocialMobileAppConfig extends SharedConfig {
+  SocialMobileAppConfig(
+      {required String codeName, this.host, this.webSocketsPort})
+      : super(codeName: codeName);
 
-SocialMobileAppConfig socialMobileAppConfigFromJson(String str) =>
-    SocialMobileAppConfig.fromJson(json.decode(str));
-
-String socialMobileAppConfigToJson(SocialMobileAppConfig data) =>
-    json.encode(data.toJson());
-
-@freezed
-class SocialMobileAppConfig with _$SocialMobileAppConfig {
-  const factory SocialMobileAppConfig(
-      {required String codeName,
-        String? host,
-        String? webSocketsPort}) = _SocialMobileAppConfig;
+  final String? host;
+  final String? webSocketsPort;
 
   factory SocialMobileAppConfig.fromJson(Map<String, dynamic> json) =>
       _$SocialMobileAppConfigFromJson(json);
+
+  Map<String, dynamic> toJson() => _$SocialMobileAppConfigToJson(this);
 }
 
+@JsonSerializable()
+class SocialPersonaConfig extends SharedConfig {
+  SocialPersonaConfig({
+    required codeName,
+    required this.socialHandle,
+    required this.bio,
+  }) : super(codeName: codeName);
 
-SocialPersonaConfig socialPersonaConfigFromJson(String str) =>
-    SocialPersonaConfig.fromJson(json.decode(str));
-
-String socialPersonaConfigToJson(SocialPersonaConfig data) =>
-    json.encode(data.toJson());
-
-@freezed
-class SocialPersonaConfig with _$SocialPersonaConfig {
-  const factory SocialPersonaConfig({
-    required String codeName,
-    required String socialHandle,
-    required String bio,
-  }) = _SocialPersonaConfig;
+  final String socialHandle;
+  final String bio;
 
   factory SocialPersonaConfig.fromJson(Map<String, dynamic> json) =>
       _$SocialPersonaConfigFromJson(json);
+
+  Map<String, dynamic> toJson() => _$SocialPersonaConfigToJson(this);
+}
+
+@JsonSerializable()
+class SharedConfig {
+  SharedConfig({
+    required this.codeName,
+  });
+
+  final String codeName;
+
+  factory SharedConfig.fromJson(Map<String, dynamic> json) =>
+      _$SharedConfigFromJson(json);
+
+  Map<String, dynamic> toJson() => _$SharedConfigToJson(this);
 }

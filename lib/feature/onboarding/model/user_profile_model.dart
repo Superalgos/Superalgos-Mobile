@@ -1,4 +1,3 @@
-import 'package:github/github.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'user_profile_model.g.dart';
@@ -31,14 +30,17 @@ class UserProfileModel extends GenericUIObject {
   @JsonKey(includeIfNull: false)
   UserApps? userApps;
 
-  factory UserProfileModel.fromJson(Map<String, dynamic> json) => _$UserProfileModelFromJson(json);
+  factory UserProfileModel.fromJson(Map<String, dynamic> json) =>
+      _$UserProfileModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$UserProfileModelToJson(this);
 
   // an utility factory
-  factory UserProfileModel.newInstance(
-          String id, String name, TokenPowerSwitch tokenPowerSwitch, TokensMined tokensMined,
-          {String? config, SocialPersonas? socialPersonas, UserApps? userApps}) =>
+  factory UserProfileModel.newInstance(String id, String name,
+          TokenPowerSwitch tokenPowerSwitch, TokensMined tokensMined,
+          {String? config,
+          SocialPersonas? socialPersonas,
+          UserApps? userApps}) =>
       UserProfileModel(
           type: "User Profile",
           name: name,
@@ -50,6 +52,117 @@ class UserProfileModel extends GenericUIObject {
           tokensMined: tokensMined,
           socialPersonas: socialPersonas,
           userApps: userApps);
+}
+
+@JsonSerializable()
+class UserApps extends GenericUIObject {
+  UserApps({
+    required String type,
+    required String name,
+    required String config,
+    required String project,
+    required String id,
+    required SavedPayload savedPayload,
+    this.mobileApps,
+  }) : super(
+            type: type,
+            project: project,
+            config: config,
+            id: id,
+            name: name,
+            savedPayload: savedPayload);
+
+  MobileApps? mobileApps;
+
+  factory UserApps.fromJson(Map<String, dynamic> json) =>
+      _$UserAppsFromJson(json);
+
+  Map<String, dynamic> toJson() => _$UserAppsToJson(this);
+
+  factory UserApps.newInstance(
+          SavedPayload savedPayload, id, MobileApps mobileApps) =>
+      UserApps(
+          type: "User Apps",
+          name: "New User Apps",
+          config: "{}",
+          project: "Governance",
+          id: id,
+          savedPayload: savedPayload,
+          mobileApps: mobileApps);
+}
+
+@JsonSerializable()
+class MobileApps extends GenericUIObject {
+  MobileApps({
+    required String type,
+    required String name,
+    required String config,
+    required String project,
+    required String id,
+    required SavedPayload savedPayload,
+    this.socialTradingMobileApps,
+  }) : super(
+            type: type,
+            project: project,
+            config: config,
+            id: id,
+            name: name,
+            savedPayload: savedPayload);
+
+  @JsonKey(includeIfNull: true)
+  List<SocialTradingMobileApp>? socialTradingMobileApps;
+
+  factory MobileApps.fromJson(Map<String, dynamic> json) =>
+      _$MobileAppsFromJson(json);
+
+  Map<String, dynamic> toJson() => _$MobileAppsToJson(this);
+
+  factory MobileApps.newInstance(SavedPayload savedPayload, id,
+          String nodeConfig, List<SocialTradingMobileApp> socialTradingMobileApps) =>
+      MobileApps(
+          id: id,
+          type: "Mobile Apps",
+          name: "New Mobile Apps",
+          project: "Governance",
+          config: nodeConfig,
+          savedPayload: savedPayload,
+          socialTradingMobileApps: socialTradingMobileApps);
+}
+
+@JsonSerializable()
+class SocialTradingMobileApp extends GenericUIObject {
+  SocialTradingMobileApp({
+    required String type,
+    required String name,
+    required String config,
+    required String project,
+    required String id,
+    required SavedPayload savedPayload,
+  }) : super(
+            type: type,
+            project: project,
+            config: config,
+            id: id,
+            name: name,
+            savedPayload: savedPayload);
+
+  @JsonKey(includeIfNull: true)
+  SigningAccount? signingAccount;
+
+  factory SocialTradingMobileApp.fromJson(Map<String, dynamic> json) =>
+      _$SocialTradingMobileAppFromJson(json);
+
+  Map<String, dynamic> toJson() => _$SocialTradingMobileAppToJson(this);
+
+  factory SocialTradingMobileApp.toUnsignedSocialTradingMobileApp(
+      SavedPayload savedPayload, id, String nodeConfig) =>
+      SocialTradingMobileApp(
+          id: id,
+          type: "Social Trading Mobile App",
+          name: "New Social Trading Mobile App",
+          project: "Governance",
+          config: nodeConfig,
+          savedPayload: savedPayload);
 }
 
 @JsonSerializable()
@@ -71,14 +184,15 @@ class SocialPersonas extends GenericUIObject {
             savedPayload: savedPayload);
 
   @JsonKey(includeIfNull: false)
-  List<SocialPersona> socialPersonas;
+  List<SocialPersona>? socialPersonas;
 
-  factory SocialPersonas.fromJson(Map<String, dynamic> json) => _$SocialPersonasFromJson(json);
+  factory SocialPersonas.fromJson(Map<String, dynamic> json) =>
+      _$SocialPersonasFromJson(json);
 
   Map<String, dynamic> toJson() => _$SocialPersonasToJson(this);
 
-  factory SocialPersonas.newInstance(
-          String id, SavedPayload savedPayload, List<SocialPersona> socialPersonas) =>
+  factory SocialPersonas.newInstance(String id, SavedPayload savedPayload,
+          List<SocialPersona> socialPersonas) =>
       SocialPersonas(
           type: "Social Personas",
           name: "New Social Personas",
@@ -87,56 +201,6 @@ class SocialPersonas extends GenericUIObject {
           id: id,
           savedPayload: savedPayload,
           socialPersonas: socialPersonas);
-}
-
-@JsonSerializable()
-class UserApps extends GenericUIObject {
-  UserApps({
-    required String type,
-    required String name,
-    required String config,
-    required String project,
-    required String id,
-    required SavedPayload savedPayload,
-    required this.socialTradingMobileApps,
-  }) : super(
-            type: type,
-            project: project,
-            config: config,
-            id: id,
-            name: name,
-            savedPayload: savedPayload);
-
-  List<SocialTradingMobileApps> socialTradingMobileApps;
-
-  factory UserApps.fromJson(Map<String, dynamic> json) => _$UserAppsFromJson(json);
-
-  Map<String, dynamic> toJson() => _$UserAppsToJson(this);
-}
-
-@JsonSerializable()
-class SocialTradingMobileApps extends GenericUIObject {
-  SocialTradingMobileApps({
-    required String type,
-    required String name,
-    required String config,
-    required String project,
-    required String id,
-    required SavedPayload savedPayload,
-  }) : super(
-            type: type,
-            project: project,
-            config: config,
-            id: id,
-            name: name,
-            savedPayload: savedPayload);
-
-  List<GenericUIObject>? mobileApps;
-
-  factory SocialTradingMobileApps.fromJson(Map<String, dynamic> json) =>
-      _$SocialTradingMobileAppsFromJson(json);
-
-  Map<String, dynamic> toJson() => _$SocialTradingMobileAppsToJson(this);
 }
 
 @JsonSerializable()
@@ -160,11 +224,13 @@ class SocialPersona extends GenericUIObject {
   @JsonKey(includeIfNull: false)
   SigningAccount? signingAccount;
 
-  factory SocialPersona.fromJson(Map<String, dynamic> json) => _$SocialPersonaFromJson(json);
+  factory SocialPersona.fromJson(Map<String, dynamic> json) =>
+      _$SocialPersonaFromJson(json);
 
   Map<String, dynamic> toJson() => _$SocialPersonaToJson(this);
 
-  factory SocialPersona.toUnsignedSocialPersona(SavedPayload savedPayload, id, String nodeConfig) =>
+  factory SocialPersona.toUnsignedSocialPersona(
+          SavedPayload savedPayload, id, String nodeConfig) =>
       SocialPersona(
           id: id,
           type: "Social Persona",
@@ -191,11 +257,13 @@ class SigningAccount extends GenericUIObject {
             name: name,
             savedPayload: savedPayload);
 
-  factory SigningAccount.fromJson(Map<String, dynamic> json) => _$SigningAccountFromJson(json);
+  factory SigningAccount.fromJson(Map<String, dynamic> json) =>
+      _$SigningAccountFromJson(json);
 
   Map<String, dynamic> toJson() => _$SigningAccountToJson(this);
 
-  factory SigningAccount.defaultInstance(SavedPayload savedPayload, id, String nodeConfig) =>
+  factory SigningAccount.defaultInstance(
+          SavedPayload savedPayload, id, String nodeConfig) =>
       SigningAccount(
           id: id,
           type: "Signing Account",
@@ -219,7 +287,8 @@ class SavedPayload {
   final FloatingObject floatingObject;
   final UiObject uiObject;
 
-  factory SavedPayload.fromJson(Map<String, dynamic> json) => _$SavedPayloadFromJson(json);
+  factory SavedPayload.fromJson(Map<String, dynamic> json) =>
+      _$SavedPayloadFromJson(json);
 
   Map<String, dynamic> toJson() => _$SavedPayloadToJson(this);
 
@@ -248,7 +317,8 @@ class FloatingObject {
   final int distanceToParent;
   final int arrangementStyle;
 
-  factory FloatingObject.fromJson(Map<String, dynamic> json) => _$FloatingObjectFromJson(json);
+  factory FloatingObject.fromJson(Map<String, dynamic> json) =>
+      _$FloatingObjectFromJson(json);
 
   Map<String, dynamic> toJson() => _$FloatingObjectToJson(this);
 
@@ -271,7 +341,8 @@ class Position {
   final double x;
   final double y;
 
-  factory Position.fromJson(Map<String, dynamic> json) => _$PositionFromJson(json);
+  factory Position.fromJson(Map<String, dynamic> json) =>
+      _$PositionFromJson(json);
 
   Map<String, dynamic> toJson() => _$PositionToJson(this);
 
@@ -286,7 +357,8 @@ class UiObject {
 
   final bool isRunning;
 
-  factory UiObject.fromJson(Map<String, dynamic> json) => _$UiObjectFromJson(json);
+  factory UiObject.fromJson(Map<String, dynamic> json) =>
+      _$UiObjectFromJson(json);
 
   Map<String, dynamic> toJson() => _$UiObjectToJson(this);
 
@@ -313,7 +385,8 @@ class TokenPowerSwitch extends GenericUIObject {
 
   final List<dynamic> tokenPowerSwitch;
 
-  factory TokenPowerSwitch.fromJson(Map<String, dynamic> json) => _$TokenPowerSwitchFromJson(json);
+  factory TokenPowerSwitch.fromJson(Map<String, dynamic> json) =>
+      _$TokenPowerSwitchFromJson(json);
 
   Map<String, dynamic> toJson() => _$TokenPowerSwitchToJson(this);
 
@@ -343,7 +416,8 @@ class TokensMined {
   final String id;
   final SavedPayload savedPayload;
 
-  factory TokensMined.fromJson(Map<String, dynamic> json) => _$TokensMinedFromJson(json);
+  factory TokensMined.fromJson(Map<String, dynamic> json) =>
+      _$TokensMinedFromJson(json);
 
   Map<String, dynamic> toJson() => _$TokensMinedToJson(this);
 
@@ -373,7 +447,8 @@ class GenericUIObject {
   String config;
   final SavedPayload savedPayload;
 
-  factory GenericUIObject.fromJson(Map<String, dynamic> json) => _$GenericUIObjectFromJson(json);
+  factory GenericUIObject.fromJson(Map<String, dynamic> json) =>
+      _$GenericUIObjectFromJson(json);
 
   Map<String, dynamic> toJson() => _$GenericUIObjectToJson(this);
 }
