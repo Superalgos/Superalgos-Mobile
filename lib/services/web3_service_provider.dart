@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:convert';
 import 'dart:math';
 import 'package:app/services/signature.dart';
@@ -27,7 +28,7 @@ abstract class Web3Service {
 }
 
 final web3ServiceProvider =
-    Provider<Web3ServiceProvider>((ref) => Web3ServiceProvider());
+    Provider<Web3Service>((ref) => Web3ServiceProvider());
 
 class ETHAccount {
   final String privateKey;
@@ -42,6 +43,13 @@ class ETHAccount {
     Account Address: $address
     ''';
   }
+}
+
+class LiquidityPoolPower {
+  final SuperAlgoContractType contractType;
+  final BigInt power;
+
+  LiquidityPoolPower(this.contractType, this.power);
 }
 
 // This class replicates what web3js can do "natively"
@@ -85,10 +93,7 @@ class Web3ServiceProvider implements Web3Service {
 
     final ownAddr = EthereumAddress.fromHex(recoveredAddr);
 
-    final contract = DeployedContract(
-      ContractAbi.fromJson(WEB3.saABI, "Superalgos"),
-      EthereumAddress.fromHex(WEB3.saContract),
-    );
+    DeployedContract contract = _getContract(SuperAlgoContractType.defaultContract);
 
     const String functionName = "balanceOf";
     final function = contract.function(functionName);
@@ -98,6 +103,14 @@ class Web3ServiceProvider implements Web3Service {
     await client.dispose();
 
     return EtherAmount.fromUnitAndValue(EtherUnit.wei, balance[0]).getInEther;
+  }
+
+  DeployedContract _getContract(SuperAlgoContractType contractType) {
+    final contract = DeployedContract(
+      ContractAbi.fromJson(WEB3.saABI, "Superalgos"),
+      EthereumAddress.fromHex(contractType.address!),
+    );
+    return contract;
   }
 
   @override

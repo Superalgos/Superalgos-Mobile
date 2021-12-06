@@ -5,18 +5,53 @@ import 'dart:convert';
 part 'config_model.freezed.dart';
 part 'config_model.g.dart';
 
-Config configFromJson(String str) => Config.fromJson(json.decode(str));
+SigningConfig configFromJson(String str) => SigningConfig.fromJson(json.decode(str));
 
-String configToJson(Config data) => json.encode(data.toJson());
+String configToJson(SigningConfig data) => json.encode(data.toJson());
 
 @freezed
-class Config with _$Config {
-  const factory Config({
+class SigningConfig with _$SigningConfig {
+  const factory SigningConfig({
     required Signature signature,
     required String codeName,
   }) = _Config;
 
-  factory Config.fromJson(Map<String, dynamic> json) => _$ConfigFromJson(json);
+  factory SigningConfig.fromJson(Map<String, dynamic> json) => _$SigningConfigFromJson(json);
 }
 
 
+SocialMobileAppConfig socialMobileAppConfigFromJson(String str) =>
+    SocialMobileAppConfig.fromJson(json.decode(str));
+
+String socialMobileAppConfigToJson(SocialMobileAppConfig data) =>
+    json.encode(data.toJson());
+
+@freezed
+class SocialMobileAppConfig with _$SocialMobileAppConfig {
+  const factory SocialMobileAppConfig(
+      {required String codeName,
+        String? host,
+        String? webSocketsPort}) = _SocialMobileAppConfig;
+
+  factory SocialMobileAppConfig.fromJson(Map<String, dynamic> json) =>
+      _$SocialMobileAppConfigFromJson(json);
+}
+
+
+SocialPersonaConfig socialPersonaConfigFromJson(String str) =>
+    SocialPersonaConfig.fromJson(json.decode(str));
+
+String socialPersonaConfigToJson(SocialPersonaConfig data) =>
+    json.encode(data.toJson());
+
+@freezed
+class SocialPersonaConfig with _$SocialPersonaConfig {
+  const factory SocialPersonaConfig({
+    required String codeName,
+    required String socialHandle,
+    required String bio,
+  }) = _SocialPersonaConfig;
+
+  factory SocialPersonaConfig.fromJson(Map<String, dynamic> json) =>
+      _$SocialPersonaConfigFromJson(json);
+}

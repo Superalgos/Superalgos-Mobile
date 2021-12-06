@@ -2,7 +2,6 @@ import 'package:app/feature/onboarding/model/config_model.dart';
 import 'package:app/feature/onboarding/model/user_profile_model.dart';
 import 'package:app/feature/userprofile/model/user_model.dart';
 import 'package:app/feature/userprofile/provider/user_profile_page_provider.dart';
-import 'package:app/feature/userprofile/state/user_profile_page_state.dart';
 import 'package:app/feature/userprofile/state/user_profile_state.dart';
 import 'package:app/services/github_service_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -36,7 +35,7 @@ class UserProfileProvider extends StateNotifier<UserProfileState> {
           stringToBase64.decode(file.replaceAll(RegExp("(\\n)"), ""));
 
       var userModel = UserProfileModel.fromJson(jsonDecode(contents));
-      var userConfig = Config.fromJson(jsonDecode(userModel.config));
+      var userConfig = SigningConfig.fromJson(jsonDecode(userModel.config));
 
       state = UserProfileState.profileLoaded(
           UserModel(userName: userName, signature: userConfig.signature));

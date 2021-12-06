@@ -10,4 +10,5 @@ class ProfileCreationState with _$ProfileCreationState {
 
   const factory ProfileCreationState.loading(String? mnemonic) = _Loading;
   const factory ProfileCreationState.finalized(ETHAccount ethAccount) = _Finalized;
+  const factory ProfileCreationState.finalizedWithoutNewProfile() = _FinalizedWithoutProfile;
 }

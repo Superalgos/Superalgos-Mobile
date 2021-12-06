@@ -1,9 +1,6 @@
-import 'package:app/app/app_start_page.dart';
 import 'package:app/app/provider/app_start_provider.dart';
 import 'package:app/app/widgets/app_button.dart';
 import 'package:app/feature/onboarding/provider/profile_creation_provider.dart';
-import 'package:app/feature/userprofile/widget/user_profile_page.dart';
-import 'package:app/route/router.gr.dart';
 import 'package:app/services/web3_service_provider.dart';
 import 'package:app/utils/constants.dart';
 import 'package:flutter/cupertino.dart';
@@ -22,13 +19,14 @@ class ProfileCreationPage extends ConsumerWidget {
         body: Container(
             child: ref.watch(profileCreationProvider).when(
                 loading: (mnemonic) => _waitingForProfileCreation(context),
+                finalizedWithoutProfile: () => _goToUserProfile(ref),
                 finalized: (ethAcc) => _finalized(ethAcc, context, ref))));
   }
 
   Widget _finalized(ETHAccount ethAccount, BuildContext context, WidgetRef ref) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [_topContent(context), _bottomCard(ethAccount, context, ref)],
+      children: [_topContent(), _bottomCard(ethAccount, context, ref)],
     );
   }
 
@@ -44,8 +42,7 @@ class ProfileCreationPage extends ConsumerWidget {
                 left: 0.0,
                 right: 0.0,
                 child: _centeredRowText(
-                    "Waiting for your profile to be created",
-                    TextStyles.onbXLargeTextStyle),
+                    "Waiting for your profile to be created", TextStyles.onbXLargeTextStyle),
               ),
               const Positioned(
                   top: 150,
@@ -61,7 +58,7 @@ class ProfileCreationPage extends ConsumerWidget {
     ]);
   }
 
-  Widget _topContent(BuildContext context) {
+  Widget _topContent() {
     return Expanded(
         flex: 3,
         child: Stack(
@@ -72,8 +69,7 @@ class ProfileCreationPage extends ConsumerWidget {
               left: 0.0,
               right: 0.0,
               child: _centeredRowText(
-                  "Congratulations! Your profile is ready !",
-                  TextStyles.onbXLargeTextStyle),
+                  "Congratulations! Your profile is ready !", TextStyles.onbXLargeTextStyle),
             ),
             Positioned(
                 top: 150,
@@ -106,9 +102,7 @@ class ProfileCreationPage extends ConsumerWidget {
             children: [
               const SizedBox(height: 20.0),
               const Text("Welcome to Superalgos !",
-                  style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      color: UIColors.darkText)),
+                  style: TextStyle(fontWeight: FontWeight.w600, color: UIColors.darkText)),
               const SizedBox(
                 height: 10.0,
               ),
@@ -127,10 +121,8 @@ class ProfileCreationPage extends ConsumerWidget {
                 text: "Copy keys",
                 type: ButtonType.PLAIN,
                 onPressed: () {
-                  const snackBar =
-                      SnackBar(content: Text('Copied keys to Clipboard'));
-                  Clipboard.setData(ClipboardData(text: ethAccount.toString()))
-                      .then((value) {
+                  const snackBar = SnackBar(content: Text('Copied keys to Clipboard'));
+                  Clipboard.setData(ClipboardData(text: ethAccount.toString())).then((value) {
                     ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   });
                 },
@@ -148,6 +140,59 @@ class ProfileCreationPage extends ConsumerWidget {
             ],
           ),
         ));
+  }
+
+  Widget _goToUserProfile(WidgetRef ref) {
+    return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+      _topContent(),
+      Expanded(
+          flex: 3,
+          child: Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 20.0,
+              vertical: 24.0,
+            ),
+            decoration: const BoxDecoration(
+              color: UIColors.gray,
+              borderRadius: BorderRadius.only(
+                topRight: Radius.circular(30.0),
+                topLeft: Radius.circular(30.0),
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 20.0),
+                const Text("Welcome to Superalgos !",
+                    style: TextStyle(fontWeight: FontWeight.w600, color: UIColors.darkText)),
+                const SizedBox(
+                  height: 10.0,
+                ),
+                const Text(
+                  "Onboarding finished",
+                  style: TextStyle(
+                    color: UIColors.lightText,
+                    fontSize: 14.0,
+                  ),
+                ),
+                const SizedBox(
+                  height: 40.0,
+                ),
+                // Let's create a generic button widget
+                const SizedBox(
+                  height: 20.0,
+                ),
+                AppButton(
+                  text: "Go to your profile",
+                  type: ButtonType.PRIMARY,
+                  onPressed: () {
+                    ref.read(appStartProvider.notifier).finalizedOnboarding();
+                  },
+                ),
+              ],
+            ),
+          ))
+    ]);
   }
 
   Widget _centeredRowText(String text, TextStyle textStyle) {

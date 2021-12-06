@@ -18,7 +18,6 @@ class OnboardingProvider extends StateNotifier<OnboardingState> {
 
   void finalize(){
     state = const OnboardingState.slideShowFinalized();
-    // state = const OnboardingState.profileCreated("prvKey");
   }
 
 
