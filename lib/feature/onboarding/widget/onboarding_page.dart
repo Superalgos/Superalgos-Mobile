@@ -32,7 +32,7 @@ class OnboardingPage extends ConsumerWidget {
         PageViewModel(
           title: "Create your Superalgos profile",
           bodyWidget: const Text(
-            "It seems that it is the first time you are interacting with Superalgos, in order to continue we need to create a new profile for you. Please follow the steps",
+            "It seems that it is the first time you are interacting with Superalgos Mobile, in order to continue we need to create a new profile for you. Please follow the steps",
             style: TextStyles.onbLargeTextStyle,
             textAlign: TextAlign.justify,
           ),
@@ -44,7 +44,7 @@ class OnboardingPage extends ConsumerWidget {
         PageViewModel(
           title: "Create Superalgos Fork",
           bodyWidget: const Text(
-            "First we will create a forked repository for Superalgos under your github account.",
+            "We will create a forked repository for Superalgos under your github account, if we can't find it there already",
             style: TextStyles.onbLargeTextStyle,
             textAlign: TextAlign.justify,
           ),
@@ -54,7 +54,7 @@ class OnboardingPage extends ConsumerWidget {
           useScrollView: true,
         ),
         PageViewModel(
-          title: "... Now let's tallk about your user profile",
+          title: "... Now let's talk about your user profile",
           bodyWidget: const Text(
             "For the onboarding to be fully complete, we need to build an user profile. If you already own a BSC wallet please provide the mnemonic, otherwise we will create a new one for you",
             style: TextStyles.onbLargeTextStyle,
@@ -64,6 +64,19 @@ class OnboardingPage extends ConsumerWidget {
           image: const Center(
               child: Image(
                   image: AssetImage('assets/onboarding_3.png'), height: 175.0)),
+          useScrollView: true,
+        ),
+        PageViewModel(
+          title: "One last thing",
+          bodyWidget: const Text(
+            "What nickname do you want to use inside the Superalgos Social Network",
+            style: TextStyles.onbLargeTextStyle,
+            textAlign: TextAlign.justify,
+          ),
+          footer: const SocialHandleCaptureWidget(),
+          image: const Center(
+              child: Image(
+                  image: AssetImage('assets/onboarding_4.png'), height: 175.0)),
           useScrollView: true,
         ),
       ],
@@ -91,6 +104,12 @@ class OnboardingPage extends ConsumerWidget {
 final mnemonicProvider =
 StateProvider<TextEditingController>((ref) => TextEditingController());
 
+final socialHandleProvider =
+StateProvider<TextEditingController>((ref) {
+  // TODO: Autocomplete with username for convenience
+  return TextEditingController();
+});
+
 class MnemonicCaptureWidget extends ConsumerWidget {
   const MnemonicCaptureWidget({Key? key}) : super(key: key);
 
@@ -101,6 +120,22 @@ class MnemonicCaptureWidget extends ConsumerWidget {
       controller: ctrl,
       decoration: const InputDecoration(
           labelText: "Enter your mnemonic: ",
+      ),
+      autocorrect: false,
+    );
+  }
+}
+
+class SocialHandleCaptureWidget extends ConsumerWidget {
+  const SocialHandleCaptureWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    var ctrl = ref.read(socialHandleProvider);
+    return TextField(
+      controller: ctrl,
+      decoration: const InputDecoration(
+        labelText: "Enter your nickname: ",
       ),
       autocorrect: false,
     );

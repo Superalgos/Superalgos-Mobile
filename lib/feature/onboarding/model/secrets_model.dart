@@ -32,6 +32,34 @@ class Secret {
     required this.userProfileId,
   });
 
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Secret &&
+          runtimeType == other.runtimeType &&
+          nodeId == other.nodeId &&
+          nodeName == other.nodeName &&
+          nodeType == other.nodeType &&
+          nodeCodeName == other.nodeCodeName &&
+          signingAccountNodeId == other.signingAccountNodeId &&
+          blockchainAccount == other.blockchainAccount &&
+          userProfileHandle == other.userProfileHandle &&
+          userProfileId == other.userProfileId;
+
+  @override
+  int get hashCode =>
+      nodeId.hashCode ^
+      nodeName.hashCode ^
+      nodeType.hashCode ^
+      nodeCodeName.hashCode ^
+      signingAccountNodeId.hashCode ^
+      blockchainAccount.hashCode ^
+      privateKey.hashCode ^
+      userProfileHandle.hashCode ^
+      userProfileId.hashCode;
+
+
   final String nodeId;
   final String nodeName;
   final String nodeType;

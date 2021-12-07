@@ -20,6 +20,8 @@ abstract class Web3Service {
   Future<BigInt> getWalletBalanceForUserAndSignature(
       String userName, String signature);
 
+  Future<String> getAccountFromSignature(String message, String signature);
+
   Future<Signature> signData(String message, String privateKey);
 
   Future<ETHAccount> createAccount();
@@ -103,6 +105,20 @@ class Web3ServiceProvider implements Web3Service {
     await client.dispose();
 
     return EtherAmount.fromUnitAndValue(EtherUnit.wei, balance[0]).getInEther;
+  }
+
+  @override
+  Future<String> getAccountFromSignature(String message, String signature) async {
+    final client = Web3Client(WEB3.web3URL, Client());
+
+    final Uint8List bytes = Uint8List.fromList(message.codeUnits);
+
+    final String recoveredAddr = EthSigUtil.ecRecover(
+        signature: signature, message: _getPersonalMessage(bytes));
+
+    final ownAddr = EthereumAddress.fromHex(recoveredAddr);
+
+    return ownAddr.hexEip55;
   }
 
   DeployedContract _getContract(SuperAlgoContractType contractType) {

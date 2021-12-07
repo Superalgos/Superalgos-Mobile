@@ -60,6 +60,29 @@ class UserProfileFactory {
     return ProfileCreationResult(userProfileModel, ethAcc);
   }
 
+  Future<UserProfileModel> addSocialPersonaToUserProfile(UserProfileModel userProfileModel, String socialHandle) async {
+
+    //TODO: Use actual social handle
+    userProfileModel.socialPersonas = _createSocialPersona(socialHandle);
+
+    final updatedUserProfileModel =
+        await _signUnsignedEntitiesAndUpdateConfig(userProfileModel);
+
+    return updatedUserProfileModel;
+
+  }
+
+  Future<UserProfileModel> addMobileAppToUserProfile(UserProfileModel userProfileModel) async {
+
+    userProfileModel.userApps = _createMobileApp();
+
+    final updatedUserProfileModel =
+    await _signUnsignedEntitiesAndUpdateConfig(userProfileModel);
+
+    return updatedUserProfileModel;
+
+  }
+
   SocialPersonas _createSocialPersona(String socialHandle) {
     var randomGenerated =
         generateWordPairs(maxSyllables: 2, random: Random.secure())
@@ -201,6 +224,107 @@ class UserProfileFactory {
   String _newUniqueId() {
     return uuid.v4();
   }
+
+  Future<bool> userProfileHasSocialPersonaForCurrentInstallation(
+      UserProfileModel userProfileModel) async {
+
+    if(userProfileModel.socialPersonas == null) {return false;}
+    if(userProfileModel.socialPersonas!.socialPersonas == null) { return false;}
+    if(userProfileModel.socialPersonas!.socialPersonas!.isEmpty) {return false;}
+
+    final storedSecrets = await storage.read("secrets");
+
+    if(storedSecrets == null) {return false;}
+
+    // Check if one of the secrets matches Userprofile
+    // we will check all fields in the equals implementation of Secrets object
+    // BESIDES privateKey (this one can't be reproduced)
+    Secrets secrets = Secrets.fromJson(jsonDecode(storedSecrets));
+    var userHasExistingSocialPersona = false;
+
+    final existingSocialPersonas = userProfileModel.userApps!.mobileApps!.socialTradingMobileApps!;
+    for(int i = 0; i < existingSocialPersonas.length; i++) {
+      final socialPersona = existingSocialPersonas[i];
+
+      if (socialPersona.signingAccount != null) {
+
+        final socialMobileAppConfig = SocialMobileAppConfig.fromJson(jsonDecode(socialPersona.config));
+        final signingConfig = SigningConfig.fromJson(jsonDecode(socialPersona.signingAccount!.config));
+        final blockChainAccount = await web3.getAccountFromSignature(
+            userProfileModel.name, signingConfig.signature.signature);
+
+        final generatedSecretForComparison = Secret(
+            nodeId: socialPersona.id,
+            nodeCodeName: socialMobileAppConfig.codeName,
+            nodeName: socialPersona.name,
+            nodeType: socialPersona.type,
+            // won't be used for comparison in the equals implementation of Secret obj
+            privateKey: "",
+            blockchainAccount: blockChainAccount,
+            signingAccountNodeId: socialPersona.signingAccount!.id,
+            userProfileHandle: userProfileModel.name,
+            userProfileId: userProfileModel.id);
+
+        if (secrets.secrets.contains(generatedSecretForComparison)){
+          userHasExistingSocialPersona = true;
+        }
+      }
+    }
+
+    return userHasExistingSocialPersona;
+
+  }
+
+  Future<bool> userProfileHasUserAppForCurrentInstallation(
+      UserProfileModel userProfileModel) async {
+
+    if(userProfileModel.userApps == null) {return false;}
+    if(userProfileModel.userApps!.mobileApps == null) { return false;}
+    if(userProfileModel.userApps!.mobileApps!.socialTradingMobileApps == null) {return false;}
+    if(userProfileModel.userApps!.mobileApps!.socialTradingMobileApps!.isEmpty) {return false;}
+
+    final storedSecrets = await storage.read("secrets");
+
+    if(storedSecrets == null) {return false;}
+
+    // Check if one of the secrets matches Userprofile
+    // we will check all fields in the equals implementation of Secrets object
+    // BESIDES privateKey (this one can't be reproduced)
+    Secrets secrets = Secrets.fromJson(jsonDecode(storedSecrets));
+    var userHasValidApp = false;
+
+    final existingMobileApps = userProfileModel.userApps!.mobileApps!.socialTradingMobileApps!;
+    for(int i = 0; i < existingMobileApps.length; i++) {
+      final app = existingMobileApps[i];
+
+      if (app.signingAccount != null) {
+
+        final socialMobileAppConfig = SocialMobileAppConfig.fromJson(jsonDecode(app.config));
+        final signingConfig = SigningConfig.fromJson(jsonDecode(app.signingAccount!.config));
+        final blockChainAccount = await web3.getAccountFromSignature(
+            userProfileModel.name, signingConfig.signature.signature);
+
+        final generatedSecretForComparison = Secret(
+            nodeId: app.id,
+            nodeCodeName: socialMobileAppConfig.codeName,
+            nodeName: app.name,
+            nodeType: app.type,
+            // won't be used for comparison in the equals implementation of Secret obj
+            privateKey: "",
+            blockchainAccount: blockChainAccount,
+            signingAccountNodeId: app.signingAccount!.id,
+            userProfileHandle: userProfileModel.name,
+            userProfileId: userProfileModel.id);
+
+        if (secrets.secrets.contains(generatedSecretForComparison)){
+          userHasValidApp = true;
+        }
+      }
+    }
+
+    return userHasValidApp;
+
+  }
 }
 
 class ProfileCreationResult {
@@ -209,3 +333,4 @@ class ProfileCreationResult {
 
   ProfileCreationResult(this.userProfileModel, this.ethAccount);
 }
+
