@@ -68,12 +68,12 @@ class AppStartNotifier extends StateNotifier<AppStartState> {
                 saFork == null;
 
             if (needsOnboarding) {
-              state = const AppStartState.onboarding();
+              state = const AppStartState.onboarding(fullOnboarding: false);
             } else {
               state = const AppStartState.authenticated();
             }
           } else {
-            state = const AppStartState.onboarding();
+            state = const AppStartState.onboarding(fullOnboarding: true);
           }
         } catch (ex) {
           print(ex);

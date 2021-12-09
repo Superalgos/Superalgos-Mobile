@@ -33,8 +33,10 @@ class _$AppStartStateTearOff {
     return const AppAuthenticated();
   }
 
-  Onboarding onboarding() {
-    return const Onboarding();
+  Onboarding onboarding({required bool fullOnboarding}) {
+    return Onboarding(
+      fullOnboarding: fullOnboarding,
+    );
   }
 }
 
@@ -49,7 +51,7 @@ mixin _$AppStartState {
     required TResult Function() unauthenticated,
     required TResult Function() internetUnAvailable,
     required TResult Function() authenticated,
-    required TResult Function() onboarding,
+    required TResult Function(bool fullOnboarding) onboarding,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -58,7 +60,7 @@ mixin _$AppStartState {
     TResult Function()? unauthenticated,
     TResult Function()? internetUnAvailable,
     TResult Function()? authenticated,
-    TResult Function()? onboarding,
+    TResult Function(bool fullOnboarding)? onboarding,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -67,7 +69,7 @@ mixin _$AppStartState {
     TResult Function()? unauthenticated,
     TResult Function()? internetUnAvailable,
     TResult Function()? authenticated,
-    TResult Function()? onboarding,
+    TResult Function(bool fullOnboarding)? onboarding,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -160,7 +162,7 @@ class _$_Initial implements _Initial {
     required TResult Function() unauthenticated,
     required TResult Function() internetUnAvailable,
     required TResult Function() authenticated,
-    required TResult Function() onboarding,
+    required TResult Function(bool fullOnboarding) onboarding,
   }) {
     return initial();
   }
@@ -172,7 +174,7 @@ class _$_Initial implements _Initial {
     TResult Function()? unauthenticated,
     TResult Function()? internetUnAvailable,
     TResult Function()? authenticated,
-    TResult Function()? onboarding,
+    TResult Function(bool fullOnboarding)? onboarding,
   }) {
     return initial?.call();
   }
@@ -184,7 +186,7 @@ class _$_Initial implements _Initial {
     TResult Function()? unauthenticated,
     TResult Function()? internetUnAvailable,
     TResult Function()? authenticated,
-    TResult Function()? onboarding,
+    TResult Function(bool fullOnboarding)? onboarding,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -283,7 +285,7 @@ class _$Unauthenticated implements Unauthenticated {
     required TResult Function() unauthenticated,
     required TResult Function() internetUnAvailable,
     required TResult Function() authenticated,
-    required TResult Function() onboarding,
+    required TResult Function(bool fullOnboarding) onboarding,
   }) {
     return unauthenticated();
   }
@@ -295,7 +297,7 @@ class _$Unauthenticated implements Unauthenticated {
     TResult Function()? unauthenticated,
     TResult Function()? internetUnAvailable,
     TResult Function()? authenticated,
-    TResult Function()? onboarding,
+    TResult Function(bool fullOnboarding)? onboarding,
   }) {
     return unauthenticated?.call();
   }
@@ -307,7 +309,7 @@ class _$Unauthenticated implements Unauthenticated {
     TResult Function()? unauthenticated,
     TResult Function()? internetUnAvailable,
     TResult Function()? authenticated,
-    TResult Function()? onboarding,
+    TResult Function(bool fullOnboarding)? onboarding,
     required TResult orElse(),
   }) {
     if (unauthenticated != null) {
@@ -406,7 +408,7 @@ class _$_InternetUnAvailable implements _InternetUnAvailable {
     required TResult Function() unauthenticated,
     required TResult Function() internetUnAvailable,
     required TResult Function() authenticated,
-    required TResult Function() onboarding,
+    required TResult Function(bool fullOnboarding) onboarding,
   }) {
     return internetUnAvailable();
   }
@@ -418,7 +420,7 @@ class _$_InternetUnAvailable implements _InternetUnAvailable {
     TResult Function()? unauthenticated,
     TResult Function()? internetUnAvailable,
     TResult Function()? authenticated,
-    TResult Function()? onboarding,
+    TResult Function(bool fullOnboarding)? onboarding,
   }) {
     return internetUnAvailable?.call();
   }
@@ -430,7 +432,7 @@ class _$_InternetUnAvailable implements _InternetUnAvailable {
     TResult Function()? unauthenticated,
     TResult Function()? internetUnAvailable,
     TResult Function()? authenticated,
-    TResult Function()? onboarding,
+    TResult Function(bool fullOnboarding)? onboarding,
     required TResult orElse(),
   }) {
     if (internetUnAvailable != null) {
@@ -529,7 +531,7 @@ class _$AppAuthenticated implements AppAuthenticated {
     required TResult Function() unauthenticated,
     required TResult Function() internetUnAvailable,
     required TResult Function() authenticated,
-    required TResult Function() onboarding,
+    required TResult Function(bool fullOnboarding) onboarding,
   }) {
     return authenticated();
   }
@@ -541,7 +543,7 @@ class _$AppAuthenticated implements AppAuthenticated {
     TResult Function()? unauthenticated,
     TResult Function()? internetUnAvailable,
     TResult Function()? authenticated,
-    TResult Function()? onboarding,
+    TResult Function(bool fullOnboarding)? onboarding,
   }) {
     return authenticated?.call();
   }
@@ -553,7 +555,7 @@ class _$AppAuthenticated implements AppAuthenticated {
     TResult Function()? unauthenticated,
     TResult Function()? internetUnAvailable,
     TResult Function()? authenticated,
-    TResult Function()? onboarding,
+    TResult Function(bool fullOnboarding)? onboarding,
     required TResult orElse(),
   }) {
     if (authenticated != null) {
@@ -612,6 +614,7 @@ abstract class $OnboardingCopyWith<$Res> {
   factory $OnboardingCopyWith(
           Onboarding value, $Res Function(Onboarding) then) =
       _$OnboardingCopyWithImpl<$Res>;
+  $Res call({bool fullOnboarding});
 }
 
 /// @nodoc
@@ -622,26 +625,49 @@ class _$OnboardingCopyWithImpl<$Res> extends _$AppStartStateCopyWithImpl<$Res>
 
   @override
   Onboarding get _value => super._value as Onboarding;
+
+  @override
+  $Res call({
+    Object? fullOnboarding = freezed,
+  }) {
+    return _then(Onboarding(
+      fullOnboarding: fullOnboarding == freezed
+          ? _value.fullOnboarding
+          : fullOnboarding // ignore: cast_nullable_to_non_nullable
+              as bool,
+    ));
+  }
 }
 
 /// @nodoc
 
 class _$Onboarding implements Onboarding {
-  const _$Onboarding();
+  const _$Onboarding({required this.fullOnboarding});
+
+  @override
+  final bool fullOnboarding;
 
   @override
   String toString() {
-    return 'AppStartState.onboarding()';
+    return 'AppStartState.onboarding(fullOnboarding: $fullOnboarding)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is Onboarding);
+        (other.runtimeType == runtimeType &&
+            other is Onboarding &&
+            (identical(other.fullOnboarding, fullOnboarding) ||
+                other.fullOnboarding == fullOnboarding));
   }
 
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode => Object.hash(runtimeType, fullOnboarding);
+
+  @JsonKey(ignore: true)
+  @override
+  $OnboardingCopyWith<Onboarding> get copyWith =>
+      _$OnboardingCopyWithImpl<Onboarding>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -650,9 +676,9 @@ class _$Onboarding implements Onboarding {
     required TResult Function() unauthenticated,
     required TResult Function() internetUnAvailable,
     required TResult Function() authenticated,
-    required TResult Function() onboarding,
+    required TResult Function(bool fullOnboarding) onboarding,
   }) {
-    return onboarding();
+    return onboarding(fullOnboarding);
   }
 
   @override
@@ -662,9 +688,9 @@ class _$Onboarding implements Onboarding {
     TResult Function()? unauthenticated,
     TResult Function()? internetUnAvailable,
     TResult Function()? authenticated,
-    TResult Function()? onboarding,
+    TResult Function(bool fullOnboarding)? onboarding,
   }) {
-    return onboarding?.call();
+    return onboarding?.call(fullOnboarding);
   }
 
   @override
@@ -674,11 +700,11 @@ class _$Onboarding implements Onboarding {
     TResult Function()? unauthenticated,
     TResult Function()? internetUnAvailable,
     TResult Function()? authenticated,
-    TResult Function()? onboarding,
+    TResult Function(bool fullOnboarding)? onboarding,
     required TResult orElse(),
   }) {
     if (onboarding != null) {
-      return onboarding();
+      return onboarding(fullOnboarding);
     }
     return orElse();
   }
@@ -725,5 +751,10 @@ class _$Onboarding implements Onboarding {
 }
 
 abstract class Onboarding implements AppStartState {
-  const factory Onboarding() = _$Onboarding;
+  const factory Onboarding({required bool fullOnboarding}) = _$Onboarding;
+
+  bool get fullOnboarding;
+  @JsonKey(ignore: true)
+  $OnboardingCopyWith<Onboarding> get copyWith =>
+      throw _privateConstructorUsedError;
 }

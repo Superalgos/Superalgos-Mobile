@@ -1,24 +1,30 @@
+import 'package:app/app/provider/app_start_provider.dart';
 import 'package:app/feature/onboarding/state/onboarding_state.dart';
 import 'package:app/services/github_service_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final onboardingProvider =
-    AutoDisposeStateNotifierProvider<OnboardingProvider, OnboardingState>((ref) {
-  return OnboardingProvider(ref.read);
+final onboardingProvider = AutoDisposeStateNotifierProvider<OnboardingProvider, OnboardingState>((ref) {
+
+  OnboardingState state = const OnboardingState.newProfile();
+  final ceva = ref.read(appStartProvider);
+
+  ceva.maybeWhen(
+      onboarding: (fullOnboarding) {
+        state = fullOnboarding ? const OnboardingState.newProfile() : const OnboardingState.updateProfile();
+      },
+      orElse: () {});
+
+  return OnboardingProvider(state, ref.read);
 });
 
 class OnboardingProvider extends StateNotifier<OnboardingState> {
-  OnboardingProvider(this._reader) : super(const OnboardingState.initial());
+  OnboardingProvider(OnboardingState state, this._reader) : super(state);
 
   final Reader _reader;
 
-  void navigate(page) {
+  void navigate(page) {}
 
-  }
-
-  void finalize(){
+  void finalize() {
     state = const OnboardingState.slideShowFinalized();
   }
-
-
 }

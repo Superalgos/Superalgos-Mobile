@@ -17,8 +17,12 @@ final _privateConstructorUsedError = UnsupportedError(
 class _$OnboardingStateTearOff {
   const _$OnboardingStateTearOff();
 
-  _Initial initial() {
-    return const _Initial();
+  _NewProfile newProfile() {
+    return const _NewProfile();
+  }
+
+  _PartialProfile updateProfile() {
+    return const _PartialProfile();
   }
 
   _SlideshowFinalized slideShowFinalized() {
@@ -33,38 +37,44 @@ const $OnboardingState = _$OnboardingStateTearOff();
 mixin _$OnboardingState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() initial,
+    required TResult Function() newProfile,
+    required TResult Function() updateProfile,
     required TResult Function() slideShowFinalized,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? initial,
+    TResult Function()? newProfile,
+    TResult Function()? updateProfile,
     TResult Function()? slideShowFinalized,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
+    TResult Function()? newProfile,
+    TResult Function()? updateProfile,
     TResult Function()? slideShowFinalized,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_Initial value) initial,
+    required TResult Function(_NewProfile value) newProfile,
+    required TResult Function(_PartialProfile value) updateProfile,
     required TResult Function(_SlideshowFinalized value) slideShowFinalized,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_Initial value)? initial,
+    TResult Function(_NewProfile value)? newProfile,
+    TResult Function(_PartialProfile value)? updateProfile,
     TResult Function(_SlideshowFinalized value)? slideShowFinalized,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Initial value)? initial,
+    TResult Function(_NewProfile value)? newProfile,
+    TResult Function(_PartialProfile value)? updateProfile,
     TResult Function(_SlideshowFinalized value)? slideShowFinalized,
     required TResult orElse(),
   }) =>
@@ -89,35 +99,38 @@ class _$OnboardingStateCopyWithImpl<$Res>
 }
 
 /// @nodoc
-abstract class _$InitialCopyWith<$Res> {
-  factory _$InitialCopyWith(_Initial value, $Res Function(_Initial) then) =
-      __$InitialCopyWithImpl<$Res>;
+abstract class _$NewProfileCopyWith<$Res> {
+  factory _$NewProfileCopyWith(
+          _NewProfile value, $Res Function(_NewProfile) then) =
+      __$NewProfileCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$InitialCopyWithImpl<$Res> extends _$OnboardingStateCopyWithImpl<$Res>
-    implements _$InitialCopyWith<$Res> {
-  __$InitialCopyWithImpl(_Initial _value, $Res Function(_Initial) _then)
-      : super(_value, (v) => _then(v as _Initial));
+class __$NewProfileCopyWithImpl<$Res>
+    extends _$OnboardingStateCopyWithImpl<$Res>
+    implements _$NewProfileCopyWith<$Res> {
+  __$NewProfileCopyWithImpl(
+      _NewProfile _value, $Res Function(_NewProfile) _then)
+      : super(_value, (v) => _then(v as _NewProfile));
 
   @override
-  _Initial get _value => super._value as _Initial;
+  _NewProfile get _value => super._value as _NewProfile;
 }
 
 /// @nodoc
 
-class _$_Initial implements _Initial {
-  const _$_Initial();
+class _$_NewProfile implements _NewProfile {
+  const _$_NewProfile();
 
   @override
   String toString() {
-    return 'OnboardingState.initial()';
+    return 'OnboardingState.newProfile()';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _Initial);
+        (other.runtimeType == runtimeType && other is _NewProfile);
   }
 
   @override
@@ -126,30 +139,33 @@ class _$_Initial implements _Initial {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() initial,
+    required TResult Function() newProfile,
+    required TResult Function() updateProfile,
     required TResult Function() slideShowFinalized,
   }) {
-    return initial();
+    return newProfile();
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? initial,
+    TResult Function()? newProfile,
+    TResult Function()? updateProfile,
     TResult Function()? slideShowFinalized,
   }) {
-    return initial?.call();
+    return newProfile?.call();
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
+    TResult Function()? newProfile,
+    TResult Function()? updateProfile,
     TResult Function()? slideShowFinalized,
     required TResult orElse(),
   }) {
-    if (initial != null) {
-      return initial();
+    if (newProfile != null) {
+      return newProfile();
     }
     return orElse();
   }
@@ -157,37 +173,151 @@ class _$_Initial implements _Initial {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_Initial value) initial,
+    required TResult Function(_NewProfile value) newProfile,
+    required TResult Function(_PartialProfile value) updateProfile,
     required TResult Function(_SlideshowFinalized value) slideShowFinalized,
   }) {
-    return initial(this);
+    return newProfile(this);
   }
 
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_Initial value)? initial,
+    TResult Function(_NewProfile value)? newProfile,
+    TResult Function(_PartialProfile value)? updateProfile,
     TResult Function(_SlideshowFinalized value)? slideShowFinalized,
   }) {
-    return initial?.call(this);
+    return newProfile?.call(this);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Initial value)? initial,
+    TResult Function(_NewProfile value)? newProfile,
+    TResult Function(_PartialProfile value)? updateProfile,
     TResult Function(_SlideshowFinalized value)? slideShowFinalized,
     required TResult orElse(),
   }) {
-    if (initial != null) {
-      return initial(this);
+    if (newProfile != null) {
+      return newProfile(this);
     }
     return orElse();
   }
 }
 
-abstract class _Initial implements OnboardingState {
-  const factory _Initial() = _$_Initial;
+abstract class _NewProfile implements OnboardingState {
+  const factory _NewProfile() = _$_NewProfile;
+}
+
+/// @nodoc
+abstract class _$PartialProfileCopyWith<$Res> {
+  factory _$PartialProfileCopyWith(
+          _PartialProfile value, $Res Function(_PartialProfile) then) =
+      __$PartialProfileCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$PartialProfileCopyWithImpl<$Res>
+    extends _$OnboardingStateCopyWithImpl<$Res>
+    implements _$PartialProfileCopyWith<$Res> {
+  __$PartialProfileCopyWithImpl(
+      _PartialProfile _value, $Res Function(_PartialProfile) _then)
+      : super(_value, (v) => _then(v as _PartialProfile));
+
+  @override
+  _PartialProfile get _value => super._value as _PartialProfile;
+}
+
+/// @nodoc
+
+class _$_PartialProfile implements _PartialProfile {
+  const _$_PartialProfile();
+
+  @override
+  String toString() {
+    return 'OnboardingState.updateProfile()';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _PartialProfile);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() newProfile,
+    required TResult Function() updateProfile,
+    required TResult Function() slideShowFinalized,
+  }) {
+    return updateProfile();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? newProfile,
+    TResult Function()? updateProfile,
+    TResult Function()? slideShowFinalized,
+  }) {
+    return updateProfile?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? newProfile,
+    TResult Function()? updateProfile,
+    TResult Function()? slideShowFinalized,
+    required TResult orElse(),
+  }) {
+    if (updateProfile != null) {
+      return updateProfile();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_NewProfile value) newProfile,
+    required TResult Function(_PartialProfile value) updateProfile,
+    required TResult Function(_SlideshowFinalized value) slideShowFinalized,
+  }) {
+    return updateProfile(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_NewProfile value)? newProfile,
+    TResult Function(_PartialProfile value)? updateProfile,
+    TResult Function(_SlideshowFinalized value)? slideShowFinalized,
+  }) {
+    return updateProfile?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_NewProfile value)? newProfile,
+    TResult Function(_PartialProfile value)? updateProfile,
+    TResult Function(_SlideshowFinalized value)? slideShowFinalized,
+    required TResult orElse(),
+  }) {
+    if (updateProfile != null) {
+      return updateProfile(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _PartialProfile implements OnboardingState {
+  const factory _PartialProfile() = _$_PartialProfile;
 }
 
 /// @nodoc
@@ -231,7 +361,8 @@ class _$_SlideshowFinalized implements _SlideshowFinalized {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() initial,
+    required TResult Function() newProfile,
+    required TResult Function() updateProfile,
     required TResult Function() slideShowFinalized,
   }) {
     return slideShowFinalized();
@@ -240,7 +371,8 @@ class _$_SlideshowFinalized implements _SlideshowFinalized {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? initial,
+    TResult Function()? newProfile,
+    TResult Function()? updateProfile,
     TResult Function()? slideShowFinalized,
   }) {
     return slideShowFinalized?.call();
@@ -249,7 +381,8 @@ class _$_SlideshowFinalized implements _SlideshowFinalized {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
+    TResult Function()? newProfile,
+    TResult Function()? updateProfile,
     TResult Function()? slideShowFinalized,
     required TResult orElse(),
   }) {
@@ -262,7 +395,8 @@ class _$_SlideshowFinalized implements _SlideshowFinalized {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_Initial value) initial,
+    required TResult Function(_NewProfile value) newProfile,
+    required TResult Function(_PartialProfile value) updateProfile,
     required TResult Function(_SlideshowFinalized value) slideShowFinalized,
   }) {
     return slideShowFinalized(this);
@@ -271,7 +405,8 @@ class _$_SlideshowFinalized implements _SlideshowFinalized {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_Initial value)? initial,
+    TResult Function(_NewProfile value)? newProfile,
+    TResult Function(_PartialProfile value)? updateProfile,
     TResult Function(_SlideshowFinalized value)? slideShowFinalized,
   }) {
     return slideShowFinalized?.call(this);
@@ -280,7 +415,8 @@ class _$_SlideshowFinalized implements _SlideshowFinalized {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Initial value)? initial,
+    TResult Function(_NewProfile value)? newProfile,
+    TResult Function(_PartialProfile value)? updateProfile,
     TResult Function(_SlideshowFinalized value)? slideShowFinalized,
     required TResult orElse(),
   }) {

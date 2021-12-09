@@ -62,7 +62,6 @@ class UserProfileFactory {
 
   Future<UserProfileModel> addSocialPersonaToUserProfile(UserProfileModel userProfileModel, String socialHandle) async {
 
-    //TODO: Use actual social handle
     userProfileModel.socialPersonas = _createSocialPersona(socialHandle);
 
     final updatedUserProfileModel =

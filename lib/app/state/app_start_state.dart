@@ -12,5 +12,5 @@ class AppStartState with _$AppStartState {
 
   const factory AppStartState.authenticated() = AppAuthenticated;
 
-  const factory AppStartState.onboarding() = Onboarding;
+  const factory AppStartState.onboarding({required bool fullOnboarding}) = Onboarding;
 }

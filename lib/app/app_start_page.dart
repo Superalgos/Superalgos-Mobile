@@ -27,7 +27,7 @@ class AppStartPage extends ConsumerWidget {
         child: state.maybeWhen(
           initial: () => LoadingWidget(key: UniqueKey()),
           authenticated: () => UserProfilePage(key: UniqueKey()),
-          onboarding: () => OnboardingPage(key: UniqueKey()),
+          onboarding: (fullOnboarding) => OnboardingPage(key: UniqueKey()),
           unauthenticated: () => SignInPage(key: UniqueKey()),
           internetUnAvailable: () =>
               ConnectionUnavailableWidget(key: UniqueKey()),

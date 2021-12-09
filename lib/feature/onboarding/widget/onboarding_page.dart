@@ -1,6 +1,6 @@
-
 import 'package:app/feature/onboarding/provider/onboarding_provider.dart';
 import 'package:app/feature/onboarding/provider/profile_creation_provider.dart';
+import 'package:app/feature/onboarding/state/onboarding_state.dart';
 import 'package:app/utils/constants.dart';
 import 'package:app/utils/palette.dart';
 import 'package:flutter/material.dart';
@@ -16,17 +16,20 @@ class OnboardingPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var state = ref.watch(onboardingProvider);
+    OnboardingState state = ref.watch(onboardingProvider);
     var onbProvider = ref.read(onboardingProvider.notifier);
+    var socialHandleCtrlProvider = ref.watch(socialHandleProvider);
 
-    return state.maybeWhen(slideShowFinalized: () {
+    return state.when(slideShowFinalized: () {
       return const ProfileCreationPage();
-    }, orElse: () {
-      return _onboardingScreen(context, ref, onbProvider);
+    }, updateProfile: () {
+      return _updateProfile(context, ref, onbProvider, socialHandleCtrlProvider);
+    }, newProfile: () {
+      return _createProfile(context, ref, onbProvider);
     });
   }
 
-  Widget _onboardingScreen(context, ref, OnboardingProvider onbProvider) {
+  Widget _createProfile(context, ref, OnboardingProvider onbProvider) {
     return IntroductionScreen(
       pages: [
         PageViewModel(
@@ -36,9 +39,7 @@ class OnboardingPage extends ConsumerWidget {
             style: TextStyles.onbLargeTextStyle,
             textAlign: TextAlign.justify,
           ),
-          image: const Center(
-              child: Image(
-                  image: AssetImage('assets/onboarding.png'), height: 175.0)),
+          image: const Center(child: Image(image: AssetImage('assets/onboarding.png'), height: 175.0)),
           useScrollView: true,
         ),
         PageViewModel(
@@ -48,9 +49,7 @@ class OnboardingPage extends ConsumerWidget {
             style: TextStyles.onbLargeTextStyle,
             textAlign: TextAlign.justify,
           ),
-          image: const Center(
-              child: Image(
-                  image: AssetImage('assets/onboarding_2.png'), height: 175.0)),
+          image: const Center(child: Image(image: AssetImage('assets/onboarding_2.png'), height: 175.0)),
           useScrollView: true,
         ),
         PageViewModel(
@@ -61,22 +60,18 @@ class OnboardingPage extends ConsumerWidget {
             textAlign: TextAlign.justify,
           ),
           footer: const MnemonicCaptureWidget(),
-          image: const Center(
-              child: Image(
-                  image: AssetImage('assets/onboarding_3.png'), height: 175.0)),
+          image: const Center(child: Image(image: AssetImage('assets/onboarding_3.png'), height: 175.0)),
           useScrollView: true,
         ),
         PageViewModel(
           title: "One last thing",
           bodyWidget: const Text(
-            "What nickname do you want to use inside the Superalgos Social Network",
+            "What nickname would you like to use within the Superalgos Social Network ?",
             style: TextStyles.onbLargeTextStyle,
             textAlign: TextAlign.justify,
           ),
           footer: const SocialHandleCaptureWidget(),
-          image: const Center(
-              child: Image(
-                  image: AssetImage('assets/onboarding_4.png'), height: 175.0)),
+          image: const Center(child: Image(image: AssetImage('assets/onboarding_4.png'), height: 175.0)),
           useScrollView: true,
         ),
       ],
@@ -95,17 +90,43 @@ class OnboardingPage extends ConsumerWidget {
       onDone: () {
         onbProvider.finalize();
       },
-      done: const Text("Create profile",
-          style: TextStyle(fontWeight: FontWeight.w600)),
+      done: const Text("Create profile", style: TextStyle(fontWeight: FontWeight.w600)),
+    );
+  }
+
+  Widget _updateProfile(context, ref, OnboardingProvider onbProvider, TextEditingController socialHandleCtrl) {
+    return IntroductionScreen(
+      pages: [
+        PageViewModel(
+          title: "Almost there...",
+          bodyWidget: const Text(
+            "What nickname would you like to use within the Superalgos Social Network ?",
+            style: TextStyles.onbLargeTextStyle,
+            textAlign: TextAlign.justify,
+          ),
+          footer: const SocialHandleCaptureWidget(),
+          image: const Center(child: Image(image: AssetImage('assets/onboarding_4.png'), height: 175.0)),
+          useScrollView: true,
+        ),
+      ],
+      isTopSafeArea: true,
+      isProgress: false,
+      showDoneButton: true,
+      showSkipButton: false,
+      showNextButton: false,
+      done: const Text("Go to your profile", style: TextStyle(fontWeight: FontWeight.w600)),
+      onDone: () {
+        if (socialHandleCtrl.value.text.isNotEmpty) {
+          onbProvider.finalize();
+        }
+      },
     );
   }
 }
 
-final mnemonicProvider =
-StateProvider<TextEditingController>((ref) => TextEditingController());
+final mnemonicProvider = StateProvider<TextEditingController>((ref) => TextEditingController());
 
-final socialHandleProvider =
-StateProvider<TextEditingController>((ref) {
+final socialHandleProvider = Provider<TextEditingController>((ref) {
   // TODO: Autocomplete with username for convenience
   return TextEditingController();
 });
@@ -119,7 +140,7 @@ class MnemonicCaptureWidget extends ConsumerWidget {
     return TextField(
       controller: ctrl,
       decoration: const InputDecoration(
-          labelText: "Enter your mnemonic: ",
+        labelText: "Enter your mnemonic: ",
       ),
       autocorrect: false,
     );
@@ -131,12 +152,12 @@ class SocialHandleCaptureWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var ctrl = ref.read(socialHandleProvider);
+    var ctrl = ref.watch(socialHandleProvider);
+    print(ctrl.value.text);
     return TextField(
       controller: ctrl,
-      decoration: const InputDecoration(
-        labelText: "Enter your nickname: ",
-      ),
+      decoration: InputDecoration(
+          labelText: "Enter your nickname: ", errorText: ctrl.value.text.isEmpty ? "Please enter your nickname" : null),
       autocorrect: false,
     );
   }
