@@ -1,21 +1,21 @@
 import 'package:app/feature/auth/repository/base_storage.dart';
-import 'package:app/feature/onboarding/model/config_model.dart';
-import 'package:app/feature/onboarding/model/secrets_model.dart';
 import 'package:app/feature/onboarding/model/user_profile_model.dart';
 import 'package:app/feature/onboarding/provider/user_profile_factory_service.dart';
 import 'package:app/feature/onboarding/state/profile_creation_state.dart';
 import 'package:app/feature/onboarding/widget/onboarding_page.dart';
 import 'package:app/services/github_service_provider.dart';
 import 'package:app/services/web3_service_provider.dart';
+import 'package:app/utils/merge_map.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:convert';
 import 'package:app/feature/auth/repository/storage.dart'
 // ignore: uri_does_not_exist
     if (dart.library.io) 'package:app/feature/auth/repository/secure_storage.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 final profileCreationProvider = AutoDisposeStateNotifierProvider<ProfileCreationProvider, ProfileCreationState>((ref) {
   var userMnemonic = ref.watch(mnemonicProvider).value.text;
-  var socialHandle = ref.watch(socialHandleProvider).value.text;
+  var socialHandle = ref.watch(socialHandleProvider);
   return ProfileCreationProvider(ref.read, userMnemonic, socialHandle);
 });
 
@@ -41,7 +41,7 @@ class ProfileCreationProvider extends StateNotifier<ProfileCreationState> {
 
     var fork = await _createSAFork();
     var ethAccount = await createOrUpdateUserProfile();
-    // var pr = await _createPullRequest();
+    var pr = await _createPullRequest();
 
     if (ethAccount == null) {
       state = const ProfileCreationState.finalizedWithoutNewProfile();
@@ -64,6 +64,7 @@ class ProfileCreationProvider extends StateNotifier<ProfileCreationState> {
 
   // This function will create or update an existing user profile with missing info mobile app
   // and/or social persona
+  // will return an ETHAccount in case it's a new profile
   Future<ETHAccount?> createOrUpdateUserProfile() async {
     var userName = await githubService.userName();
 
@@ -75,38 +76,44 @@ class ProfileCreationProvider extends StateNotifier<ProfileCreationState> {
           userMnemonic: _userMnemonic);
 
       var profileJson = result.userProfileModel.toJson();
-      var createdProfile = await githubService.addUserProfileToSAFork(beautifiedEncoder.convert(profileJson));
+      await githubService.addUserProfileToSAFork(beautifiedEncoder.convert(profileJson));
       return result.ethAccount;
     } else {
       final Codec<String, String> stringToBase64 = utf8.fuse(base64);
-
       final fileContent = userProfileFile.file!.content!;
       final userProfileRawContent = stringToBase64.decode(fileContent.replaceAll(RegExp("(\\n)"), ""));
 
       var userProfileModel = UserProfileModel.fromJson(jsonDecode(userProfileRawContent));
-      UserProfileModel? updatedProfileModel;
+      bool profileModified = false;
 
-      if (!await userProfileFactoryService.userProfileHasUserAppForCurrentInstallation(userProfileModel)) {
-        updatedProfileModel = await userProfileFactoryService.addMobileAppToUserProfile(userProfileModel);
+      var userHasMobileAppNode =
+          await userProfileFactoryService.userProfileHasUserAppForCurrentInstallation(userProfileModel);
+
+      if (!userHasMobileAppNode) {
+        await userProfileFactoryService.addMobileAppToUserProfile(userProfileModel);
+        profileModified = true;
       }
 
-      if (!await userProfileFactoryService
-          .userProfileHasSocialPersonaForCurrentInstallation(updatedProfileModel ?? userProfileModel)) {
-        updatedProfileModel = await userProfileFactoryService.addSocialPersonaToUserProfile(
-            updatedProfileModel ?? userProfileModel, _socialHandle!);
+      var userHasSocialPersonaNode =
+          await userProfileFactoryService.userProfileHasSocialPersonaForCurrentInstallation(userProfileModel);
+
+      if (!userHasSocialPersonaNode) {
+        await userProfileFactoryService.addSocialPersonaToUserProfile(userProfileModel, _socialHandle!);
+        profileModified = true;
       }
 
       // if we managed to update the profile, let's commit it
-      if (updatedProfileModel != null) {
-        // merge the two profiles to preserve integrity
-        var updatedProfileMap = updatedProfileModel.toJson();
-        var existingProfileMap = jsonDecode(userProfileRawContent);
+      if (profileModified) {
+        // merge the two profiles to preserve integrity of the existing nodes
+        Map<String, dynamic> updatedProfileMap = userProfileModel.toJson();
+        Map<String, dynamic> existingProfileMap = jsonDecode(userProfileRawContent);
 
-        final newProfileMap = {...updatedProfileMap, ...existingProfileMap};
+        final newProfileMap = mergeMap([existingProfileMap, updatedProfileMap]);
 
-        await githubService.addUserProfileToSAFork(beautifiedEncoder.convert(newProfileMap));
+        await githubService.updateUserProfileInSAFork(
+            beautifiedEncoder.convert(newProfileMap), userProfileFile.file!.sha!);
 
-        return ETHAccount("privateKey", "");
+        return Future.value(null);
       }
 
       return Future.value(null);

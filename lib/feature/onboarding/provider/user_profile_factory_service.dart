@@ -4,6 +4,7 @@ import 'package:app/feature/auth/repository/base_storage.dart';
 import 'package:app/feature/onboarding/model/config_model.dart';
 import 'package:app/feature/onboarding/model/secrets_model.dart';
 import 'package:app/services/signature.dart';
+import 'package:app/utils/merge_map.dart';
 import 'package:english_words/english_words.dart';
 import 'package:app/feature/onboarding/model/user_profile_model.dart';
 import 'package:app/services/web3_service_provider.dart';
@@ -42,47 +43,55 @@ class UserProfileFactory {
 
     final config =
         SigningConfig(signature: signature, codeName: userName).toJson();
-    final socialPersonas = _createSocialPersona(socialHandle);
-    final userApps = _createMobileApp();
+
 
     var newUserProfile = UserProfileModel.newInstance(
         _newUniqueId(),
         userName,
         TokenPowerSwitch.defaultInstance(_newUniqueId()),
         TokensMined.defaultInstance(_newUniqueId()),
-        config: jsonEncode(config),
-        socialPersonas: socialPersonas,
-        userApps: userApps);
+        config: jsonEncode(config));
 
-    final userProfileModel =
-        await _signUnsignedEntitiesAndUpdateConfig(newUserProfile);
+    _createOrUpdateSocialPersonas(newUserProfile, socialHandle);
+    _createOrUpdateUserApps(newUserProfile);
 
-    return ProfileCreationResult(userProfileModel, ethAcc);
+    await _signUnsignedEntitiesAndUpdateConfig(newUserProfile);
+
+    return ProfileCreationResult(newUserProfile, ethAcc);
   }
 
-  Future<UserProfileModel> addSocialPersonaToUserProfile(UserProfileModel userProfileModel, String socialHandle) async {
+  Future<void> addSocialPersonaToUserProfile(UserProfileModel userProfileModel, String socialHandle) async {
 
-    userProfileModel.socialPersonas = _createSocialPersona(socialHandle);
-
-    final updatedUserProfileModel =
-        await _signUnsignedEntitiesAndUpdateConfig(userProfileModel);
-
-    return updatedUserProfileModel;
-
-  }
-
-  Future<UserProfileModel> addMobileAppToUserProfile(UserProfileModel userProfileModel) async {
-
-    userProfileModel.userApps = _createMobileApp();
-
-    final updatedUserProfileModel =
+    _createOrUpdateSocialPersonas(userProfileModel, socialHandle);
     await _signUnsignedEntitiesAndUpdateConfig(userProfileModel);
 
-    return updatedUserProfileModel;
+  }
+
+  Future<void> addMobileAppToUserProfile(UserProfileModel userProfileModel) async {
+
+    _createOrUpdateUserApps(userProfileModel);
+    await _signUnsignedEntitiesAndUpdateConfig(userProfileModel);
 
   }
 
-  SocialPersonas _createSocialPersona(String socialHandle) {
+  _createOrUpdateSocialPersonas(UserProfileModel userProfileModel, String socialHandle) {
+    SocialPersona socialPersona = _createSocialPersona(socialHandle);
+
+    if(userProfileModel.socialPersonas == null) {
+      userProfileModel.socialPersonas = SocialPersonas.newInstance(
+          _newUniqueId(), SavedPayload.defaultInstance(), [socialPersona]);
+    } else {
+
+      userProfileModel.socialPersonas!.socialPersonas != null
+          ? userProfileModel.socialPersonas!.socialPersonas!.add(socialPersona)
+          : userProfileModel.socialPersonas!.socialPersonas = [socialPersona];
+
+    }
+
+
+  }
+
+  SocialPersona _createSocialPersona(String socialHandle) {
     var randomGenerated =
         generateWordPairs(maxSyllables: 2, random: Random.secure())
             .take(1)
@@ -92,22 +101,58 @@ class UserProfileFactory {
     final socialPersonaCodeName = "Social-Persona-$randomGenerated";
 
     final socialPersonaConfig = SocialPersonaConfig(
-            bio: "",
-            socialHandle: socialHandle,
-            codeName: socialPersonaCodeName)
+        bio: "",
+        socialHandle: socialHandle,
+        codeName: socialPersonaCodeName)
         .toJson();
 
     final socialPersona = SocialPersona.toUnsignedSocialPersona(
         SavedPayload.defaultInstance(),
         _newUniqueId(),
         jsonEncode(socialPersonaConfig));
-
-    return SocialPersonas.newInstance(
-        _newUniqueId(), SavedPayload.defaultInstance(), [socialPersona]);
+    return socialPersona;
   }
 
-  UserApps _createMobileApp() {
-    var randomGenerated =
+  _createOrUpdateUserApps(UserProfileModel userProfileModel) {
+
+    if(userProfileModel.userApps == null) {
+      SocialTradingMobileApp socialTradingMobileApp = _createSocialTradingMobileApp();
+
+      final mobileApps = MobileApps.newInstance(SavedPayload.defaultInstance(),
+          _newUniqueId(), "{}", [socialTradingMobileApp]);
+
+      userProfileModel.userApps =  UserApps.newInstance(
+          SavedPayload.defaultInstance(), _newUniqueId(), mobileApps);
+    } else {
+
+      // if there are no mobile apps declared let's create everything
+      if(userProfileModel.userApps!.mobileApps != null) {
+        SocialTradingMobileApp socialTradingMobileApp = _createSocialTradingMobileApp();
+
+        final mobileApps = MobileApps.newInstance(SavedPayload.defaultInstance(),
+            _newUniqueId(), "{}", [socialTradingMobileApp]);
+        userProfileModel.userApps!.mobileApps = mobileApps;
+
+        // there are already some mobile apps declared, so let's just add the new mobile app
+      } else {
+        SocialTradingMobileApp socialTradingMobileApp = _createSocialTradingMobileApp();
+
+        var mobileApps = userProfileModel.userApps!.mobileApps!;
+
+        // add to existing mobile app list or create a new list with the new mobile app
+
+        mobileApps.socialTradingMobileApps != null
+            ? mobileApps.socialTradingMobileApps!.add(socialTradingMobileApp)
+            : mobileApps.socialTradingMobileApps = [socialTradingMobileApp];
+
+      }
+    }
+
+
+  }
+
+  SocialTradingMobileApp _createSocialTradingMobileApp() {
+     var randomGenerated =
         generateWordPairs(maxSyllables: 2, random: Random.secure())
             .take(1)
             .first
@@ -127,45 +172,38 @@ class UserProfileFactory {
             SavedPayload.defaultInstance(),
             _newUniqueId(),
             jsonEncode(socialTradingMobileAppConfig));
-
-    final mobileApps = MobileApps.newInstance(SavedPayload.defaultInstance(),
-        _newUniqueId(), "{}", [socialTradingMobileApp]);
-
-    return UserApps.newInstance(
-        SavedPayload.defaultInstance(), _newUniqueId(), mobileApps);
+    return socialTradingMobileApp;
   }
 
-  Future<UserProfileModel> _signUnsignedEntitiesAndUpdateConfig(
+  Future<void> _signUnsignedEntitiesAndUpdateConfig(
       UserProfileModel userProfileModel) async {
-    var userProfile = userProfileModel;
 
-    if (userProfile.userApps != null) {
-      if (userProfile.userApps!.mobileApps != null) {
-        if (userProfile.userApps!.mobileApps!.socialTradingMobileApps != null) {
+    if (userProfileModel.userApps != null) {
+      if (userProfileModel.userApps!.mobileApps != null) {
+        if (userProfileModel.userApps!.mobileApps!.socialTradingMobileApps != null) {
           var socialTradingMobileApps =
-              userProfile.userApps!.mobileApps!.socialTradingMobileApps!;
+          userProfileModel.userApps!.mobileApps!.socialTradingMobileApps!;
 
           for (int i = 0; i < socialTradingMobileApps.length; i++) {
             var mobileApp = socialTradingMobileApps[i];
             mobileApp.signingAccount ??=
-                await _createSigningAccount(userProfile, mobileApp);
+                await _createSigningAccount(userProfileModel, mobileApp);
           }
         }
       }
     }
 
-    if (userProfile.socialPersonas != null) {
-      if (userProfile.socialPersonas!.socialPersonas != null) {
-        var socialPersonas = userProfile.socialPersonas!.socialPersonas!;
+    if (userProfileModel.socialPersonas != null) {
+      if (userProfileModel.socialPersonas!.socialPersonas != null) {
+        var socialPersonas = userProfileModel.socialPersonas!.socialPersonas!;
         for (int i = 0; i < socialPersonas.length; i++) {
           var socialPersona = socialPersonas[i];
           socialPersona.signingAccount ??=
-              await _createSigningAccount(userProfile, socialPersona);
+              await _createSigningAccount(userProfileModel, socialPersona);
         }
       }
     }
 
-    return userProfile;
   }
 
   Future<SigningAccount>? _createSigningAccount(
@@ -174,12 +212,11 @@ class UserProfileFactory {
     Signature signature =
         await web3.signData(userProfile.name, ethAcc.privateKey);
 
-    final signingConfig =
-        SigningConfig(signature: signature, codeName: parent.name)
-            .toJson();
+    SharedConfig parentConfig = SharedConfig.fromJson(jsonDecode(parent.config));
 
-    SharedConfig parentConfig =
-        SharedConfig.fromJson(jsonDecode(parent.config));
+    final signingConfig =
+        SigningConfig(signature: signature, codeName: parentConfig.codeName)
+            .toJson();
 
     final signingAcc = SigningAccount.defaultInstance(
         SavedPayload.defaultInstance(),
@@ -198,6 +235,8 @@ class UserProfileFactory {
       ETHAccount ethAccount,
       GenericUIObject signingAcc,
       GenericUIObject userProfile) async {
+    var existingSecrets = await storage.read("secrets");
+
     final secret = Secret(
         nodeId: signingAccParent.id,
         nodeCodeName: signingAccParentCodeName,
@@ -209,15 +248,18 @@ class UserProfileFactory {
         userProfileHandle: userProfile.name,
         userProfileId: userProfile.id);
 
-    final secrets = Secrets(secrets: [secret]).toJson();
-    var existingSecrets = await storage.read("secrets");
+    // Add to existing secrets if we already have something in storage
+    // Otherwise create a new object in the storage
+    if(existingSecrets != null) {
+      var existingSecretsObj = Secrets.fromJson(jsonDecode(existingSecrets));
+      existingSecretsObj.secrets.add(secret);
+      await storage.write("secrets", jsonEncode(existingSecretsObj));
+    } else {
+      final secrets = Secrets(secrets: [secret]).toJson();
+      await storage.write("secrets", jsonEncode(secrets));
+    }
 
-    final mergedSecrets = {
-      ...jsonDecode(existingSecrets ?? "{}"),
-      ...secrets,
-    };
 
-    await storage.write("secrets", jsonEncode(mergedSecrets));
   }
 
   String _newUniqueId() {
@@ -226,7 +268,6 @@ class UserProfileFactory {
 
   Future<bool> userProfileHasSocialPersonaForCurrentInstallation(
       UserProfileModel userProfileModel) async {
-
     if(userProfileModel.socialPersonas == null) {return false;}
     if(userProfileModel.socialPersonas!.socialPersonas == null) { return false;}
     if(userProfileModel.socialPersonas!.socialPersonas!.isEmpty) {return false;}
@@ -238,33 +279,33 @@ class UserProfileFactory {
     // Check if one of the secrets matches Userprofile
     // we will check all fields in the equals implementation of Secrets object
     // BESIDES privateKey (this one can't be reproduced)
-    Secrets secrets = Secrets.fromJson(jsonDecode(storedSecrets));
+    Secrets storedSecretObj = Secrets.fromJson(jsonDecode(storedSecrets));
     var userHasExistingSocialPersona = false;
 
-    final existingSocialPersonas = userProfileModel.userApps!.mobileApps!.socialTradingMobileApps!;
+    final existingSocialPersonas = userProfileModel.socialPersonas!.socialPersonas!;
     for(int i = 0; i < existingSocialPersonas.length; i++) {
-      final socialPersona = existingSocialPersonas[i];
+      final existingSocialPersona = existingSocialPersonas[i];
 
-      if (socialPersona.signingAccount != null) {
+      if (existingSocialPersona.signingAccount != null) {
 
-        final socialMobileAppConfig = SocialMobileAppConfig.fromJson(jsonDecode(socialPersona.config));
-        final signingConfig = SigningConfig.fromJson(jsonDecode(socialPersona.signingAccount!.config));
+        final socialMobileAppConfig = SocialMobileAppConfig.fromJson(jsonDecode(existingSocialPersona.config));
+        final signingConfig = SigningConfig.fromJson(jsonDecode(existingSocialPersona.signingAccount!.config));
         final blockChainAccount = await web3.getAccountFromSignature(
             userProfileModel.name, signingConfig.signature.signature);
 
         final generatedSecretForComparison = Secret(
-            nodeId: socialPersona.id,
+            nodeId: existingSocialPersona.id,
             nodeCodeName: socialMobileAppConfig.codeName,
-            nodeName: socialPersona.name,
-            nodeType: socialPersona.type,
+            nodeName: existingSocialPersona.name,
+            nodeType: existingSocialPersona.type,
             // won't be used for comparison in the equals implementation of Secret obj
             privateKey: "",
             blockchainAccount: blockChainAccount,
-            signingAccountNodeId: socialPersona.signingAccount!.id,
+            signingAccountNodeId: existingSocialPersona.signingAccount!.id,
             userProfileHandle: userProfileModel.name,
             userProfileId: userProfileModel.id);
 
-        if (secrets.secrets.contains(generatedSecretForComparison)){
+        if (storedSecretObj.secrets.contains(generatedSecretForComparison)){
           userHasExistingSocialPersona = true;
         }
       }
@@ -276,7 +317,6 @@ class UserProfileFactory {
 
   Future<bool> userProfileHasUserAppForCurrentInstallation(
       UserProfileModel userProfileModel) async {
-
     if(userProfileModel.userApps == null) {return false;}
     if(userProfileModel.userApps!.mobileApps == null) { return false;}
     if(userProfileModel.userApps!.mobileApps!.socialTradingMobileApps == null) {return false;}
@@ -289,7 +329,7 @@ class UserProfileFactory {
     // Check if one of the secrets matches Userprofile
     // we will check all fields in the equals implementation of Secrets object
     // BESIDES privateKey (this one can't be reproduced)
-    Secrets secrets = Secrets.fromJson(jsonDecode(storedSecrets));
+    Secrets storedSecretObj = Secrets.fromJson(jsonDecode(storedSecrets));
     var userHasValidApp = false;
 
     final existingMobileApps = userProfileModel.userApps!.mobileApps!.socialTradingMobileApps!;
@@ -315,7 +355,7 @@ class UserProfileFactory {
             userProfileHandle: userProfileModel.name,
             userProfileId: userProfileModel.id);
 
-        if (secrets.secrets.contains(generatedSecretForComparison)){
+        if (storedSecretObj.secrets.contains(generatedSecretForComparison)){
           userHasValidApp = true;
         }
       }

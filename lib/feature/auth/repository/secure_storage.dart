@@ -20,4 +20,10 @@ class SecureStorage implements BaseStorage {
     final options = IOSOptions(accessibility: IOSAccessibility.first_unlock);
     return await storage.write(key: key, value: value, iOptions: options);
   }
+
+  @override
+  Future<void> delete(String key) async {
+    final options = IOSOptions(accessibility: IOSAccessibility.first_unlock);
+    return await storage.delete(key: key, iOptions: options);
+  }
 }

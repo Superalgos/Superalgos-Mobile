@@ -6,9 +6,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 final onboardingProvider = AutoDisposeStateNotifierProvider<OnboardingProvider, OnboardingState>((ref) {
 
   OnboardingState state = const OnboardingState.newProfile();
-  final ceva = ref.read(appStartProvider);
+  final appProvider = ref.read(appStartProvider);
 
-  ceva.maybeWhen(
+  appProvider.maybeWhen(
       onboarding: (fullOnboarding) {
         state = fullOnboarding ? const OnboardingState.newProfile() : const OnboardingState.updateProfile();
       },

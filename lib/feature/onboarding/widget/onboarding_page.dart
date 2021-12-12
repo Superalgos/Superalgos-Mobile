@@ -70,7 +70,7 @@ class OnboardingPage extends ConsumerWidget {
             style: TextStyles.onbLargeTextStyle,
             textAlign: TextAlign.justify,
           ),
-          footer: const SocialHandleCaptureWidget(),
+          footer: SocialHandleCaptureWidget(),
           image: const Center(child: Image(image: AssetImage('assets/onboarding_4.png'), height: 175.0)),
           useScrollView: true,
         ),
@@ -94,7 +94,7 @@ class OnboardingPage extends ConsumerWidget {
     );
   }
 
-  Widget _updateProfile(context, ref, OnboardingProvider onbProvider, TextEditingController socialHandleCtrl) {
+  Widget _updateProfile(context, ref, OnboardingProvider onbProvider, String socialHandleText) {
     return IntroductionScreen(
       pages: [
         PageViewModel(
@@ -104,7 +104,7 @@ class OnboardingPage extends ConsumerWidget {
             style: TextStyles.onbLargeTextStyle,
             textAlign: TextAlign.justify,
           ),
-          footer: const SocialHandleCaptureWidget(),
+          footer: SocialHandleCaptureWidget(),
           image: const Center(child: Image(image: AssetImage('assets/onboarding_4.png'), height: 175.0)),
           useScrollView: true,
         ),
@@ -114,9 +114,9 @@ class OnboardingPage extends ConsumerWidget {
       showDoneButton: true,
       showSkipButton: false,
       showNextButton: false,
-      done: const Text("Go to your profile", style: TextStyle(fontWeight: FontWeight.w600)),
+      done: const Text("Update profile", style: TextStyle(fontWeight: FontWeight.w600)),
       onDone: () {
-        if (socialHandleCtrl.value.text.isNotEmpty) {
+        if (socialHandleText.isNotEmpty) {
           onbProvider.finalize();
         }
       },
@@ -125,11 +125,9 @@ class OnboardingPage extends ConsumerWidget {
 }
 
 final mnemonicProvider = StateProvider<TextEditingController>((ref) => TextEditingController());
+final socialHandleEditingController = StateProvider<TextEditingController>((ref) => TextEditingController());
 
-final socialHandleProvider = Provider<TextEditingController>((ref) {
-  // TODO: Autocomplete with username for convenience
-  return TextEditingController();
-});
+final socialHandleProvider = StateProvider((ref) => ""); // TODO: Add username for convenience
 
 class MnemonicCaptureWidget extends ConsumerWidget {
   const MnemonicCaptureWidget({Key? key}) : super(key: key);
@@ -148,17 +146,22 @@ class MnemonicCaptureWidget extends ConsumerWidget {
 }
 
 class SocialHandleCaptureWidget extends ConsumerWidget {
-  const SocialHandleCaptureWidget({Key? key}) : super(key: key);
+  SocialHandleCaptureWidget({Key? key}) : super(key: key);
+
+  // final TextEditingController textEditingController = TextEditingController();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     var ctrl = ref.watch(socialHandleProvider);
-    print(ctrl.value.text);
+
     return TextField(
-      controller: ctrl,
+      // controller: textEditingController,
       decoration: InputDecoration(
-          labelText: "Enter your nickname: ", errorText: ctrl.value.text.isEmpty ? "Please enter your nickname" : null),
+          labelText: "Enter your nickname: ", errorText: ctrl.isEmpty ? "Please enter your nickname" : null),
       autocorrect: false,
+      onChanged: (text){
+        ref.read(socialHandleProvider.state).state = text;
+      },
     );
   }
 }
